@@ -7,7 +7,6 @@ import {
   ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
-  Timestamp,
 } from "typeorm";
 import { User } from "./user";
 
@@ -24,7 +23,7 @@ export class Survey extends BaseEntity {
 
   @Column()
   @Field()
-  description: string;
+  description?: string;
 
   @Column()
   @Field()
@@ -44,39 +43,58 @@ export class Survey extends BaseEntity {
 
   @Column()
   @Field()
-  startDate: Timestamp;
+  startDate?: Date;
 
   @Column()
   @Field()
-  endDate: Timestamp;
+  endDate?: Date;
 
   @Column()
   @Field()
-  deleteDate: Timestamp;
+  deleteDate?: Date;
 
   @Column()
   @Field()
-  creationDate: Timestamp;
+  creationDate: Date;
 
   @Column()
   @Field()
-  publicationDate: Timestamp;
+  publicationDate?: Date;
 
   @Column()
   @Field()
-  archiveDate: Timestamp;
+  archiveDate?: Date;
 
   @Field()
   @ManyToOne(() => User, (user) => user.id)
   userId: string;
 
-  @Field()
-  @ManyToMany(() => User, (user) => user.surveysInvites)
+  @ManyToMany(() => User, {
+    cascade: ["insert"],
+  })
   @JoinTable()
-  invitedUsers?: User[];
+  invitedUsers: User[];
 
-  @Field()
-  @ManyToMany(() => User, (user) => user.surveysEditors)
+  @ManyToMany(() => User, {
+    cascade: ["insert"],
+  })
   @JoinTable()
-  editingUsers?: User[];
+  editingUsers: User[];
+
+  constructor(
+    datas: {
+      title: string;
+      userId: string;
+    } | null = null
+  ) {
+    super();
+    if (datas) {
+      this.title = datas.title;
+      this.creationDate = new Date();
+      this.userId = datas.userId;
+      this.collectingUserData = false;
+      this.private = false;
+      this.archived = false;
+    }
+  }
 }

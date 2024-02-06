@@ -1,5 +1,11 @@
-import { Resolver } from "type-graphql";
+import { Arg, Mutation, Query, Resolver } from "type-graphql";
 import { User } from "../entities/user";
+import * as AuthService from "../services/auth.service";
 
 @Resolver(User)
-export class UserResolver {}
+export class UserResolver {
+  @Query(() => String)
+  helloWorld() {
+    return "Hello World!";
+  }
+}

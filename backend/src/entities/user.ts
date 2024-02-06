@@ -3,8 +3,6 @@ import {
   BaseEntity,
   Column,
   Entity,
-  JoinTable,
-  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
@@ -20,11 +18,11 @@ export class User extends BaseEntity {
 
   @Column()
   @Field()
-  firstname: string;
+  firstname?: string;
 
   @Column()
   @Field()
-  lastname: string;
+  lastname?: string;
 
   @Column()
   @Field()
@@ -32,19 +30,9 @@ export class User extends BaseEntity {
 
   @Column()
   @Field()
-  password: string;
+  hashedPassword: string;
 
   @Field()
   @ManyToOne(() => Role, (role) => role.name)
-  roleID: string;
-
-  @Field()
-  @ManyToMany(() => Survey, (survey) => survey.invitedUsers)
-  @JoinTable()
-  surveysInvites?: Survey[];
-
-  @Field()
-  @ManyToMany(() => Survey, (survey) => survey.editingUsers)
-  @JoinTable()
-  surveysEditors?: Survey[];
+  roleId: string;
 }
