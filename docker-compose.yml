@@ -1,0 +1,39 @@
+services:
+  backend:
+    build: ./backend
+    ports:
+      - 3001:3001
+    command: npm start
+    volumes:
+      - ./backend/.env:/surveyvore/.env:rw
+      - ./backend/src:/surveyvore/src:rw
+      - ./backend/node_modules:/surveyvore/node_modules
+      - ./backend/package.json:/surveyvore/package.json:rw
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      - db
+
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=surveyvore
+      - POSTGRES_USER=surveyvore
+      - POSTGRES_PASSWORD=password
+      - PGDATA=/var/lib/postgresql/data/customDataFolder
+    volumes:
+      - ./dbData:/var/lib/postgresql/data/customDataFolder
+    healthcheck:
+      test: [ "CMD", "pg_isready -U surveyvore -d surveyvore" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
