@@ -2,8 +2,9 @@ import "reflect-metadata";
 import * as dotenv from "dotenv";
 import { dataSource } from "./config/db";
 import { buildSchema } from "type-graphql";
-import { UserResolver } from "./resolvers/UserResolver";
+import { UserResolver } from "./resolvers/user.resolver";
 import { ApolloServer } from "apollo-server";
+import { SurveyResolver } from "./resolvers/survey.resolver";
 
 const start = async () => {
   dotenv.config();
@@ -13,7 +14,7 @@ const start = async () => {
   await dataSource.initialize();
 
   const schema = await buildSchema({
-    resolvers: [UserResolver],
+    resolvers: [UserResolver, SurveyResolver],
     validate: { forbidUnknownValues: false },
   });
 

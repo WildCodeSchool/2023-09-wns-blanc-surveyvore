@@ -4,7 +4,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ts-node-dev ./src/index.ts"
+    "start": "ts-node-dev ./src/index.ts",
+    "migration:create": "typeorm-ts-node-commonjs migration:create",
+    "migration:generate": "typeorm-ts-node-commonjs migration:generate -d src/config/db.ts",
+    "migration:up": "typeorm-ts-node-commonjs migration:run -d src/config/db.ts",
+    "migration:down": "typeorm-ts-node-commonjs migration:revert -d src/config/db.ts"
   },
   "keywords": [],
   "author": "",

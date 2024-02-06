@@ -12,7 +12,7 @@ import { QuestionType } from "./questionType";
 @Entity()
 @ObjectType()
 export class Question extends BaseEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn("uuid")
   @Field()
   id: string;
 

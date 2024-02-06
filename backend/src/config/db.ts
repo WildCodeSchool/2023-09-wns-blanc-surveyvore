@@ -24,5 +24,6 @@ export const dataSource = new DataSource({
     UserAnswer,
   ],
   logging: true,
-  synchronize: true,
+  synchronize: false,
+  migrations: ["migrations/*.ts"],
 });

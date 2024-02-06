@@ -12,7 +12,7 @@ import { Role } from "./role";
 @Entity()
 @ObjectType()
 export class User extends BaseEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn("uuid")
   @Field()
   id: string;
 

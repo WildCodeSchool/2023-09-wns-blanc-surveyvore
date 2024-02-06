@@ -13,7 +13,7 @@ import { User } from "./user";
 @ObjectType()
 @Entity()
 export class Survey extends BaseEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn("uuid")
   @Field()
   id: string;
 
