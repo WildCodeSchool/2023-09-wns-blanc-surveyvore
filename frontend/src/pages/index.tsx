@@ -1,7 +1,7 @@
 export default function Home() {
     return (
-        <a href="" className="button-md-primary-solid">
+        <button className="button-xl-primary-solid font-family-accent">
             Coucou
-        </a>
+        </button>
     );
 }
