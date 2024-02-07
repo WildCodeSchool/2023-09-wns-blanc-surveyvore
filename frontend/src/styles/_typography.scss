@@ -2,9 +2,9 @@
 
 @import url("https://use.typekit.net/ubj2mdm.css");
 
-$font-family: "Inter", sans-serif;
+$font-family-base: "Inter", sans-serif;
 
-$font-accent: "Gopher", sans-serif;
+$font-family-accent: "Gopher", sans-serif;
 
 $titles: (
     xs: (
@@ -39,7 +39,7 @@ $titles: (
     ),
 );
 
-@mixin title($size, $font: $font-family, $weight: 400) {
+@mixin title($size, $font: $font-family-base, $weight: 400) {
     @if (
         $size !=
             xs and
@@ -99,7 +99,7 @@ $texts: (
     ),
 );
 
-@mixin text($size, $font: $font-family, $weight: 400) {
+@mixin text($size, $font: $font-family-base, $weight: 400) {
     @if (
         $size !=
             xs and
@@ -151,4 +151,12 @@ p:last-of-type,
 p:only-of-type,
 p:last-child {
     margin-bottom: 0;
+}
+
+.font-family-accent {
+    font-family: $font-family-accent;
+}
+
+.font-family-base {
+    font-family: $font-family-base;
 }
