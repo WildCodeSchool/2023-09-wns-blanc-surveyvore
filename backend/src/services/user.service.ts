@@ -1,3 +1,4 @@
+import { Role } from "../entities/role";
 import { User } from "../entities/user";
 import * as argon2 from "argon2";
 
@@ -12,7 +13,10 @@ export async function create(
   newUser.hashedPassword = await argon2.hash(password);
   newUser.firstname = firstname;
   newUser.lastname = lastname;
-  newUser.roleId = "USER";
+  const role = await Role.findOneBy({ name: "USER" });
+  if (role) {
+    newUser.roleId = role.id;
+  }
 
   return newUser.save();
 }

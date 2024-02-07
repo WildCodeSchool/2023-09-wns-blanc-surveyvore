@@ -5,7 +5,7 @@ services:
     build: ./backend
     ports:
       - 3001:3001
-    command: sh -c "npm install && npm start"
+    command: sh -c "npm i && npm start && npm run migration:up"
     volumes:
       - ./backend/.env:/surveyvore/.env:rw
       - ./backend/src:/surveyvore/src:rw
