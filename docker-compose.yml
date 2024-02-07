@@ -5,7 +5,6 @@ services:
     build: ./backend
     ports:
       - 3001:3001
-    command: sh -c "npm i && npm start && npm run migration:up"
     volumes:
       - ./backend/.env:/surveyvore/.env:rw
       - ./backend/src:/surveyvore/src:rw
@@ -16,6 +15,7 @@ services:
       - CHOKIDAR_USEPOLLING=true
     depends_on:
       - db
+    command: sh -c "npm i && npm start && npm run migration:up"
 
   db:
     image: postgres
@@ -30,7 +30,7 @@ services:
     volumes:
       - ./dbData:/var/lib/postgresql/data/customDataFolder
     healthcheck:
-      test: ["CMD", "pg_isready -U surveyvore -d surveyvore"]
+      test: [ "CMD", "pg_isready -U surveyvore -d surveyvore" ]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -40,4 +40,3 @@ services:
     restart: always
     ports:
       - 8080:8080
-
