@@ -1,6 +1,6 @@
 FROM node:lts-alpine
 
-WORKDIR /app
+WORKDIR /surveyvoreApp
 
 COPY package.json package.json
 COPY tsconfig.json tsconfig.json
