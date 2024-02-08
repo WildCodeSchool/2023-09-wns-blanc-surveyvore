@@ -8,24 +8,26 @@ function Input({
   labelName,
   inputClassName,
   labelClassName,
-  toggle
+  toggle,
 }: {
   type: string;
   inputName: string;
   placeholder?: string;
   labelName?: string;
+  inputClassName?: string;
+  labelClassName?: string;
   textarea?: boolean;
   inputClassName?: string;
   labelClassName?: string;
   toggle?: boolean;
 }): JSX.Element {
   const [value, setValue] = useState("");
-  const [collectingData, setCollectingData] = useState(false)
+  const [collectingData, setCollectingData] = useState(false);
 
   const switchData = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCollectingData(e.target.checked)
+    setCollectingData(e.target.checked);
     console.log(e.target.checked);
-  }
+  };
 
   const handleChange = (
     e:
@@ -46,6 +48,7 @@ function Input({
           placeholder={placeholder}></textarea>
       ) : (
         <input
+          className={inputClassName}
           type={type}
           name={inputName}
           id={inputName}
@@ -56,10 +59,7 @@ function Input({
           className={inputClassName}
         />
       )}
-      {toggle &&
-        <div className="toggle-switch">
-        </div>
-      }
+      {toggle && <div className="toggle-switch"></div>}
       {labelName && <p>{labelName}</p>}
     </label>
   );

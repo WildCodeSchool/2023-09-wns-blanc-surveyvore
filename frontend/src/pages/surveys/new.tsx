@@ -8,6 +8,8 @@ function NewSurvey() {
         type="text"
         inputName="survey-title"
         placeholder="Formulaire sans titre"
+        labelClassName="input-field"
+        inputClassName="input"
       />
       <div className="input-switch input-switch--sm">
         <Input
