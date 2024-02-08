@@ -19,7 +19,7 @@ services:
 
   frontend:
     build: ./frontend
-    command: npm run dev
+    command: sh -c "npm i && npm run dev"
     ports:
       - 3000:3000
     environment:
@@ -27,8 +27,9 @@ services:
       - WATCHPACK_POLLING=true
       - WDS_SOCKET_HOST=127.0.0.1
     volumes:
-      - ./frontend/src:/app/src:rw
-      - ./frontend/package.json:/app/package.json:rw
+      - ./frontend/src:/surveyvoreApp/src:rw
+      - ./frontend/package.json:/surveyvoreApp/package.json:rw
+      - ./frontend/node_modules:/surveyvoreApp/node_modules
 
   db:
     image: postgres
