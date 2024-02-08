@@ -9,6 +9,14 @@ function NewSurvey() {
         inputName="survey-title"
         placeholder="Formulaire sans titre"
       />
+      <div className="input-switch input-switch--sm">
+        <Input
+          type="checkbox"
+          inputName="collecting-data"
+          labelName="Collecting data"
+          toggle
+        />
+      </div>
     </div>
   );
 }
