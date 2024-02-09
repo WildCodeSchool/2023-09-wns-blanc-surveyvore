@@ -1,14 +1,14 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class Database1707298889310 implements MigrationInterface {
-    name = 'Database1707298889310'
+export class Database1707469906080 implements MigrationInterface {
+    name = 'Database1707469906080'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE "role" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying NOT NULL, CONSTRAINT "PK_b36bcfe02fc8de3c57a8b2391c2" PRIMARY KEY ("id"))`);
-        await queryRunner.query(`CREATE TABLE "user" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "firstname" character varying NOT NULL, "lastname" character varying NOT NULL, "email" character varying NOT NULL, "hashedPassword" character varying NOT NULL, "roleIdId" uuid, CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`);
-        await queryRunner.query(`CREATE TABLE "survey" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "title" character varying NOT NULL, "description" character varying NOT NULL, "link" character varying NOT NULL, "archived" boolean NOT NULL, "private" boolean NOT NULL, "collectingUserData" boolean NOT NULL, "startDate" TIMESTAMP NOT NULL, "endDate" TIMESTAMP NOT NULL, "deleteDate" TIMESTAMP NOT NULL, "creationDate" TIMESTAMP NOT NULL, "publicationDate" TIMESTAMP NOT NULL, "archiveDate" TIMESTAMP NOT NULL, "userIdId" uuid, CONSTRAINT "PK_f0da32b9181e9c02ecf0be11ed3" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "user" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "firstname" character varying, "lastname" character varying, "email" character varying NOT NULL, "hashedPassword" character varying NOT NULL, "roleIdId" uuid, CONSTRAINT "PK_cace4a159ff9f2512dd42373760" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "survey" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "title" character varying NOT NULL, "description" character varying, "link" character varying NOT NULL, "archived" boolean NOT NULL, "private" boolean NOT NULL, "collectingUserData" boolean NOT NULL, "startDate" TIMESTAMP, "endDate" TIMESTAMP, "deleteDate" TIMESTAMP, "creationDate" TIMESTAMP NOT NULL, "publicationDate" TIMESTAMP, "archiveDate" TIMESTAMP, "userIdId" uuid, CONSTRAINT "PK_f0da32b9181e9c02ecf0be11ed3" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "question_type" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "type" character varying NOT NULL, CONSTRAINT "PK_8ee0ca6ea5ac1770d54b7ff5ca4" PRIMARY KEY ("id"))`);
-        await queryRunner.query(`CREATE TABLE "question" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "title" character varying NOT NULL, "description" character varying NOT NULL, "defaultQuestion" boolean NOT NULL, "typeIdId" uuid, "surveyIdId" uuid, CONSTRAINT "PK_21e5786aa0ea704ae185a79b2d5" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "question" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "title" character varying NOT NULL, "description" character varying, "defaultQuestion" boolean NOT NULL, "typeIdId" uuid, "surveyIdId" uuid, CONSTRAINT "PK_21e5786aa0ea704ae185a79b2d5" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "question_answer" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "content" character varying NOT NULL, "questionIdId" uuid, CONSTRAINT "PK_c1e064f8949efd78ad3c66059ba" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "user_answer" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "content" character varying NOT NULL, "questionIdId" uuid, "answerIdId" uuid, "userIdId" uuid, CONSTRAINT "PK_37b32f666e59572775b1b020fb5" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "survey_invited_users_user" ("surveyId" uuid NOT NULL, "userId" uuid NOT NULL, CONSTRAINT "PK_3bf52391e2cdd455c187f5c756d" PRIMARY KEY ("surveyId", "userId"))`);

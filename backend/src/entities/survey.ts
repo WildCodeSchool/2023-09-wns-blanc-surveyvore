@@ -21,8 +21,8 @@ export class Survey extends BaseEntity {
   @Field()
   title: string;
 
-  @Column()
-  @Field()
+  @Column({ nullable: true })
+  @Field({ nullable: true })
   description?: string;
 
   @Column()
@@ -41,28 +41,28 @@ export class Survey extends BaseEntity {
   @Field()
   collectingUserData: boolean;
 
-  @Column()
-  @Field()
+  @Column({ nullable: true })
+  @Field({ nullable: true })
   startDate?: Date;
 
-  @Column()
-  @Field()
+  @Column({ nullable: true })
+  @Field({ nullable: true })
   endDate?: Date;
 
-  @Column()
-  @Field()
+  @Column({ nullable: true })
+  @Field({ nullable: true })
   deleteDate?: Date;
 
   @Column()
   @Field()
   creationDate: Date;
 
-  @Column()
-  @Field()
+  @Column({ nullable: true })
+  @Field({ nullable: true })
   publicationDate?: Date;
 
-  @Column()
-  @Field()
+  @Column({ nullable: true })
+  @Field({ nullable: true })
   archiveDate?: Date;
 
   @Field()
