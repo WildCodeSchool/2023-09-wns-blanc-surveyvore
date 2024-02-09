@@ -1,8 +1,11 @@
 @use "base";
-@use "typography";
-@use "colors";
-@use "shadows";
-@use "checkbox";
-@use "toggle-switch";
-@use "input";
-@use "dropdown";
+@use "elements/typography";
+@use "elements/colors";
+@use "elements/shadows";
+@use "elements/checkbox";
+@use "elements/toggle-switch";
+@use "elements/input";
+@use "elements/dropdown";
+@use "pages/NewSurvey.scss";
+@use "components/DefaultQuestions.scss";
+

@@ -1,22 +1,15 @@
-import Input from "@/components/Input";
+import DefaultQuestions from "@/components/DefaultQuestions";
+import NewQuestion from "@/components/NewQuestion";
+import NewSurveyHeader from "@/components/NewSurveyHeader";
+import { useState } from "react";
 
 function NewSurvey() {
+  const [collectingData, setCollectingData] = useState(false);
   return (
-    <div>
-      <p>new survey page</p>
-      <Input
-        type="text"
-        inputName="survey-title"
-        placeholder="Formulaire sans titre"
-      />
-      <div className="input-switch input-switch--sm">
-        <Input
-          type="checkbox"
-          inputName="collecting-data"
-          labelName="Collecting data"
-          toggle
-        />
-      </div>
+    <div className="new-survey-content">
+      <NewSurveyHeader setCollectingData={setCollectingData} />
+      {collectingData && <DefaultQuestions />}
+      <NewQuestion />
     </div>
   );
 }

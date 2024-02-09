@@ -42,32 +42,32 @@
     i {
       color: var(--grey-500);
     }
-    input,
-    textarea {
-      padding-block: 8px;
-      border: none;
-      height: 100%;
-      width: 100%;
-      outline: none;
-      @include text("md");
-      color: var(--grey-500);
-      resize: none;
-      &:focus {
-        color: var(--grey-800);
-      }
+  }
+  input {
+    padding-block: 8px;
+    border: none;
+    height: 100%;
+    width: 100%;
+    outline: none;
+    @include text("md");
+    color: var(--grey-500);
+    resize: none;
+    &:focus {
+      color: var(--grey-800);
+    }
 
-      &:disabled {
-        background-color: var(--grey-100);
-      }
+    &:disabled {
+      background-color: var(--grey-100);
     }
   }
 
   .textarea {
+    font-family: $font-family-base;
     display: flex;
     flex-direction: row;
     justify-content: stretch;
     align-items: center;
-    min-height: 40px;
+    min-height: 128px;
     gap: 8px;
     background: var(--white);
     border: 1px solid var(--grey-200);
@@ -81,22 +81,23 @@
     i {
       color: var(--grey-500);
     }
-    textarea {
-      padding: 8px 16px;
-      border: none;
-      height: 100%;
-      width: 100%;
-      outline: none;
-      @include text("md");
-      color: var(--grey-500);
-      resize: none;
-      &:focus {
-        color: var(--grey-800);
-      }
+  }
 
-      &:disabled {
-        background-color: var(--grey-100);
-      }
+  textarea {
+    padding: 8px 16px;
+    border: none;
+    height: 100%;
+    width: 100%;
+    outline: none;
+    @include text("md");
+    color: var(--grey-500);
+    resize: none;
+    &:focus {
+      color: var(--grey-800);
+    }
+
+    &:disabled {
+      background-color: var(--grey-100);
     }
   }
 
@@ -147,3 +148,4 @@ input:-webkit-autofill:active {
     flex-direction: row;
   }
 }
+

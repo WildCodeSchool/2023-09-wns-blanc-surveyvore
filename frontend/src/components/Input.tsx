@@ -8,24 +8,26 @@ function Input({
   labelName,
   inputClassName,
   labelClassName,
-  toggle
+  toggle,
+  setToggle,
+  checked,
 }: {
-  type: string;
+  type?: string;
   inputName: string;
   placeholder?: string;
   labelName?: string;
-  textarea?: boolean;
   inputClassName?: string;
   labelClassName?: string;
+  textarea?: boolean;
   toggle?: boolean;
+  setToggle?: React.Dispatch<React.SetStateAction<boolean>>;
+  checked?: boolean;
 }): JSX.Element {
   const [value, setValue] = useState("");
-  const [collectingData, setCollectingData] = useState(false)
 
   const switchData = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCollectingData(e.target.checked)
-    console.log(e.target.checked);
-  }
+    setToggle && setToggle(e.target.checked);
+  };
 
   const handleChange = (
     e:
@@ -37,15 +39,19 @@ function Input({
 
   return (
     <label htmlFor={inputName} className={labelClassName}>
+      {labelName && !toggle && <p>{labelName}</p>}
       {textarea ? (
         <textarea
           name={inputName}
           value={value}
           data-test-id={inputName}
           onChange={handleChange}
-          placeholder={placeholder}></textarea>
+          placeholder={placeholder}
+          className={inputClassName}
+        />
       ) : (
         <input
+          className={inputClassName}
           type={type}
           name={inputName}
           id={inputName}
@@ -53,14 +59,15 @@ function Input({
           value={value}
           data-test-id={inputName}
           onChange={toggle ? switchData : handleChange}
-          className={inputClassName}
+          checked={checked}
         />
       )}
-      {toggle &&
-        <div className="toggle-switch">
-        </div>
-      }
-      {labelName && <p>{labelName}</p>}
+      {toggle && (
+        <>
+          <div className="toggle-switch"></div>
+          <p>{labelName}</p>
+        </>
+      )}
     </label>
   );
 }

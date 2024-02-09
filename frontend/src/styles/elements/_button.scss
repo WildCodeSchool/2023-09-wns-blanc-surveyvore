@@ -117,6 +117,15 @@ $buttons: (
       &:hover {
         background-color: var(--#{$color}-100);
       }
+      // A voir avec le C si ok
+      // ----------------------------------------
+      &:focus {
+        border: 2px solid var(--primary-500);
+        background-color: var(--primary-50);
+        color: var(--primary-800);
+      }
+      // ----------------------------------------
+
       &:disabled {
         border: 1px solid var(--#{$color}-50);
         color: var(--#{$color}-300);
@@ -149,3 +158,4 @@ $buttons: (
     }
   }
 }
+
