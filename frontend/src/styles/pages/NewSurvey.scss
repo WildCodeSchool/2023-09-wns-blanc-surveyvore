@@ -1,0 +1,25 @@
+@use "../elements/colors" as *;
+
+.new-survey-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.survey-section {
+  background-color: var(--white);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 1px solid var(--grey-200);
+  backdrop-filter: blur(8px);
+  width: 70%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  p {
+    font-size: 1rem;
+  }
+}
+
