@@ -11,9 +11,4 @@ export class QuestionType extends BaseEntity {
   @Column()
   @Field()
   type: string;
-
-  @Column()
-  @Field()
-  icon: string;
 }
-

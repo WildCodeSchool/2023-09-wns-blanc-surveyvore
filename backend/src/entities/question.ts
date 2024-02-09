@@ -37,9 +37,9 @@ export class Question extends BaseEntity {
   @Field()
   title: string;
 
-  @Column()
-  @Field()
-  description: string;
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  description?: string;
 
   @Column()
   @Field()
@@ -53,4 +53,3 @@ export class Question extends BaseEntity {
   @ManyToOne(() => Survey, (survey) => survey.id)
   surveyId: string;
 }
-

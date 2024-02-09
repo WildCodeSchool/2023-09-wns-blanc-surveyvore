@@ -5,6 +5,8 @@ import { buildSchema } from "type-graphql";
 import { UserResolver } from "./resolvers/user.resolver";
 import { ApolloServer } from "apollo-server";
 import { SurveyResolver } from "./resolvers/survey.resolver";
+import { QuestionResolver } from "./resolvers/question.resolver";
+import { QuestionTypeResolver } from "./resolvers/questionType.resolver";
 
 const start = async () => {
   dotenv.config();
@@ -14,7 +16,12 @@ const start = async () => {
   await dataSource.initialize();
 
   const schema = await buildSchema({
-    resolvers: [UserResolver, SurveyResolver],
+    resolvers: [
+      UserResolver,
+      SurveyResolver,
+      QuestionResolver,
+      QuestionTypeResolver,
+    ],
     validate: { forbidUnknownValues: false },
   });
 
