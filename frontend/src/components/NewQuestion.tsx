@@ -9,6 +9,7 @@ import QuestionType from "./QuestionType";
  */
 function NewQuestion() {
   const [open, setOpen] = useState(true);
+
   if (!open) {
     return (
       <section className="survey-section">
