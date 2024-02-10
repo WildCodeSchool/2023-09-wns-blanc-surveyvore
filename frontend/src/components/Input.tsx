@@ -11,6 +11,8 @@ function Input({
   toggle,
   setToggle,
   checked,
+  value,
+  setValue,
 }: {
   type?: string;
   inputName: string;
@@ -22,8 +24,10 @@ function Input({
   toggle?: boolean;
   setToggle?: React.Dispatch<React.SetStateAction<boolean>>;
   checked?: boolean;
+  value: string;
+  setValue: React.Dispatch<React.SetStateAction<string>>;
 }): JSX.Element {
-  const [value, setValue] = useState(placeholder);
+  // const [value, setValue] = useState(placeholder);
 
   const switchData = (e: React.ChangeEvent<HTMLInputElement>) => {
     setToggle && setToggle(e.target.checked);

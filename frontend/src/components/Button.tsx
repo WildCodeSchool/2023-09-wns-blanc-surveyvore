@@ -16,8 +16,6 @@ function Button({
   handleClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   className: string;
 }) {
-  const inputRef = useRef<HTMLInputElement>(null);
-
   return (
     <>
       <button
@@ -25,9 +23,7 @@ function Button({
         className={className}
         value={text}
         onClick={handleClick}>
-        {icon && (
-          <Image src={icon} alt={alt ? alt : ""} width={16} height={16} />
-        )}
+        {icon && <img src={icon} alt={alt ? alt : ""} />}
         {text}
       </button>
     </>

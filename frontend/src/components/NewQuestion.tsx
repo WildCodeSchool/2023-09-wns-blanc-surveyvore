@@ -23,7 +23,7 @@ function NewQuestion({
     type: string;
   };
   index: number;
-  questions: any; //créer le type question. suestions est un tableau de Question
+  questions: any; //créer le type question. Questions est un tableau de Question
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setQuestions: React.Dispatch<React.SetStateAction<any>>;
@@ -68,18 +68,6 @@ function NewQuestion({
         },
       ];
     });
-
-    // setQuestions((prev: any) => {
-    //   return [
-    //     {
-    //       isOpen: true,
-    //       title: question.title,
-    //       description: question.description,
-    //       type: question.type,
-    //     },
-    //     ...prev,
-    //   ];
-    // });
   };
 
   if (!question.isOpen) {
