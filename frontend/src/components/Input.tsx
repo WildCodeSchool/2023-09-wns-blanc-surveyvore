@@ -23,7 +23,7 @@ function Input({
   setToggle?: React.Dispatch<React.SetStateAction<boolean>>;
   checked?: boolean;
 }): JSX.Element {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(placeholder);
 
   const switchData = (e: React.ChangeEvent<HTMLInputElement>) => {
     setToggle && setToggle(e.target.checked);

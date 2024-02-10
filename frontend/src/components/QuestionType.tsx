@@ -2,9 +2,19 @@ import { useState } from "react";
 import Button from "./Button";
 import Input from "./Input";
 
-function QuestionType() {
-  const [selectedType, setSelectedType] = useState("Texte libre");
+function QuestionType({
+  selectedType,
+  setSelectedType,
+}: {
+  selectedType: string;
+  setSelectedType: React.Dispatch<React.SetStateAction<string>>;
+}) {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const target = e.target as HTMLButtonElement;
+    setSelectedType(target.value);
+  };
 
+  // remplacer le tableau par GET des questionTypes
   const typeButtons = [
     {
       type: "button" as "button",
@@ -38,8 +48,6 @@ function QuestionType() {
     },
   ];
 
-  console.log(selectedType);
-
   return (
     <>
       <div className="question-type">
@@ -50,10 +58,12 @@ function QuestionType() {
             type={button.type}
             text={button.text}
             alt={button.text}
-            set={setSelectedType}
+            className="button-lg-grey-outline"
+            handleClick={handleClick}
           />
         ))}
       </div>
+      {/* créer un composant et implanter la logique conditionnelle pour l'affichage des différents types de questions */}
       {selectedType === "Choix multiples" && <p>choix multiples</p>}
       {selectedType === "Choix unique" && <p>choix unique</p>}
       {selectedType === "Case à cocher" && <p>case à cocher</p>}

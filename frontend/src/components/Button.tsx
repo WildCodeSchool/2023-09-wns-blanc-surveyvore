@@ -1,33 +1,36 @@
 import Image from "next/image";
+import { useRef } from "react";
 
 function Button({
   icon,
   type,
   alt,
   text,
-  set,
+  handleClick,
+  className,
 }: {
   icon?: string;
   type: "submit" | "reset" | "button" | undefined;
-  alt: string;
+  alt?: string;
   text: string;
-  set: React.Dispatch<React.SetStateAction<string>>;
+  handleClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  className: string;
 }) {
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const target = e.target as HTMLButtonElement;
-    set(target.value);
-    console.log(target.value);
-  };
+  const inputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <button
-      type={type}
-      className="button-xl-grey-outline"
-      value={text}
-      onClick={handleClick}>
-      {icon && <Image src={icon} alt={alt} width={16} height={16} />}
-      {text}
-    </button>
+    <>
+      <button
+        type={type}
+        className={className}
+        value={text}
+        onClick={handleClick}>
+        {icon && (
+          <Image src={icon} alt={alt ? alt : ""} width={16} height={16} />
+        )}
+        {text}
+      </button>
+    </>
   );
 }
 

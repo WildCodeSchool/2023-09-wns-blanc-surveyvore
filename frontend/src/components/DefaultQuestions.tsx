@@ -7,8 +7,6 @@ function DefaultQuestions() {
   const [email, setEmail] = useState(true);
   const [phone, setPhone] = useState(true);
 
-  console.log(lastname, firstname, email, phone);
-
   const questions = [
     {
       inputName: "collecting-lastname",
