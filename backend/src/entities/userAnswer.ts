@@ -23,13 +23,13 @@ export class UserAnswer extends BaseEntity {
 
   @ManyToOne(() => Question, (question) => question.id)
   @Field()
-  questionId: string;
+  question: Question;
 
   @ManyToOne(() => QuestionAnswer, (questionAnswer) => questionAnswer.id)
   @Field()
-  answerId: string;
+  answer: QuestionAnswer;
 
   @ManyToOne(() => User, (user) => user.id)
   @Field()
-  userId: string;
+  user: User;
 }

@@ -67,7 +67,7 @@ export class Survey extends BaseEntity {
 
   @Field()
   @ManyToOne(() => User, (user) => user.id)
-  userId: string;
+  user: User;
 
   @ManyToMany(() => User, {
     cascade: ["insert"],
@@ -84,17 +84,18 @@ export class Survey extends BaseEntity {
   constructor(
     datas: {
       title: string;
-      userId: string;
+      user: User;
     } | null = null
   ) {
     super();
+    console.log(datas);
     if (datas) {
       this.title = datas.title;
       this.creationDate = new Date();
-      this.userId = datas.userId;
       this.collectingUserData = false;
       this.private = false;
       this.archived = false;
+      this.user = datas.user;
     }
   }
 }

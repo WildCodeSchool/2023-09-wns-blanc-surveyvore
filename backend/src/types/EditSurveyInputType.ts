@@ -14,4 +14,3 @@ export class EditSurveyInputType {
   @Field()
   collectingUserData: boolean;
 }
-

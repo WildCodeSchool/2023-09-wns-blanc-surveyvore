@@ -21,5 +21,5 @@ export class QuestionAnswer extends BaseEntity {
 
   @ManyToOne(() => Question, (question) => question.id)
   @Field()
-  questionId: string;
+  question: Question;
 }

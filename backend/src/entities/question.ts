@@ -16,7 +16,6 @@ export class Question extends BaseEntity {
     datas: {
       title: string;
       description: string;
-      typeId: string;
       defaultQuestion: boolean;
     } | null = null
   ) {
@@ -24,7 +23,6 @@ export class Question extends BaseEntity {
     if (datas) {
       this.title = datas.title;
       this.description = datas.description;
-      this.typeId = datas.typeId;
       this.defaultQuestion = datas.defaultQuestion;
     }
   }
@@ -47,9 +45,9 @@ export class Question extends BaseEntity {
 
   @Field()
   @ManyToOne(() => QuestionType, (questionType) => questionType.type)
-  typeId: string;
+  type: QuestionType;
 
   @Field()
   @ManyToOne(() => Survey, (survey) => survey.id)
-  surveyId: string;
+  survey: Survey;
 }

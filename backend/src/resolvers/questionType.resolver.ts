@@ -9,4 +9,3 @@ export class QuestionTypeResolver {
     return QuestionTypeService.getQuestionTypes();
   }
 }
-
