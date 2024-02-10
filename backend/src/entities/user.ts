@@ -4,10 +4,11 @@ import {
   Column,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Survey } from "./survey";
 import { Role } from "./role";
+import { Survey } from "./survey";
 
 @Entity()
 @ObjectType()
@@ -34,5 +35,9 @@ export class User extends BaseEntity {
 
   @Field()
   @ManyToOne(() => Role, (role) => role.name)
-  roleId: string;
+  role: Role;
+
+  @Field(() => [Survey])
+  @OneToMany(() => Survey, (survey) => survey.user)
+  surveys: Survey[];
 }

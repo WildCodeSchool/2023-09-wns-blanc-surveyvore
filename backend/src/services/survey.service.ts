@@ -1,5 +1,7 @@
 import { Survey } from "../entities/survey";
+import { User } from "../entities/user";
 import { EditSurveyInputType } from "../types/EditSurveyInputType";
+// import { EditSurveyInputType } from "../types/EditSurveyInputType";
 
 export function findSurveyById(id: string): Promise<Survey | null> {
   return Survey.findOne({
@@ -11,16 +13,18 @@ export function findSurveyById(id: string): Promise<Survey | null> {
 
 export function findSurveysByOwner(userId: string): Promise<Survey[] | null> {
   return Survey.find({
-    where: {
-      userId: userId,
-    },
+    where: { user: { id: userId } },
   });
 }
 
-export async function create(title: string, userId: string): Promise<string> {
-  const survey = new Survey();
-  survey.title = title;
-  survey.userId = userId;
+export async function create(datas: {
+  title: string;
+  user: User;
+}): Promise<string> {
+  console.log(datas);
+  // TODO : generate a link
+  const survey = new Survey(datas);
+  survey.link = "link";
   const savedSurvey = await survey.save();
   return savedSurvey.id;
 }
@@ -49,4 +53,3 @@ export async function archive(
     return await surveyToArchive.save();
   }
 }
-

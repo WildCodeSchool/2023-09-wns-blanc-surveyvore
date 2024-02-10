@@ -1,7 +1,8 @@
-import { Arg, Mutation, Query, Resolver } from "type-graphql";
-import { Survey } from "../entities/survey";
+import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import * as SurveyService from "../services/survey.service";
 import { EditSurveyInputType } from "../types/EditSurveyInputType";
+import { User } from "../entities/user";
+import { Survey } from "../entities/survey";
 
 @Resolver()
 export class SurveyResolver {
@@ -9,18 +10,17 @@ export class SurveyResolver {
   getSurveyById(@Arg("surveyId") surveyId: string): Promise<Survey | null> {
     return SurveyService.findSurveyById(surveyId);
   }
-
   @Query(() => [Survey])
   getSurveysByOwner(@Arg("userId") userId: string): Promise<Survey[] | null> {
     return SurveyService.findSurveysByOwner(userId);
   }
-
+  @Authorized()
   @Mutation(() => String)
   createSurvey(
     @Arg("title") title: string,
-    @Arg("userId") userId: string
+    @Ctx("user") user: User
   ): Promise<string> {
-    return SurveyService.create(title, userId);
+    return SurveyService.create({ title, user });
   }
 
   @Mutation(() => Survey)
@@ -39,4 +39,3 @@ export class SurveyResolver {
     return SurveyService.archive(id, archive);
   }
 }
-

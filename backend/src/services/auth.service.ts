@@ -27,7 +27,8 @@ export async function signIn(email: string, password: string): Promise<string> {
       // Créer un nouveau token => signer un token
       const token = signJwt({
         email: userFromDB.email,
-        role: userFromDB.roleId,
+        role: userFromDB.role,
+        id: userFromDB.id,
       });
       // Renvoyer le token
       return token;
