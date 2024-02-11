@@ -29,6 +29,8 @@ function NewQuestion({
   setQuestions: React.Dispatch<React.SetStateAction<any>>;
 }) {
   const [selectedType, setSelectedType] = useState("Texte libre");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
 
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -85,6 +87,8 @@ function NewQuestion({
           placeholder={question.title}
           labelClassName="input-field"
           inputClassName="input"
+          value={title}
+          setValue={setTitle}
         />
         <Input
           textarea
@@ -93,6 +97,8 @@ function NewQuestion({
           labelName="Description (facultatif)"
           placeholder={question.description}
           inputClassName="textarea"
+          value={description}
+          setValue={setDescription}
         />
         <QuestionType
           selectedType={question.type}

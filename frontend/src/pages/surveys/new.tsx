@@ -24,7 +24,10 @@ function NewSurvey() {
 
   return (
     <div className="new-survey-content">
-      <NewSurveyHeader setCollectingData={setCollectingData} />
+      <NewSurveyHeader
+        collectingData={collectingData}
+        setCollectingData={setCollectingData}
+      />
       {collectingData && <DefaultQuestions />}
       {questions.map((question, index) => (
         <NewQuestion

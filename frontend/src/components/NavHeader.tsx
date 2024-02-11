@@ -1,7 +1,6 @@
 import Link from "next/link";
-import Image from "next/image";
-import { useRouter } from "next/router";
 import { gql, useMutation } from "@apollo/client";
+import { useRouter } from "next/router";
 import Button from "./Button";
 
 const CREATE_SURVEY = gql`
@@ -15,16 +14,15 @@ function NavHeader() {
 
   console.log("router", router);
 
-  if (router.pathname === "/signin" || router.pathname === "/signup") {
-    return null;
-  }
-
   const [createSurvey] = useMutation(CREATE_SURVEY, {
     variables: { title: "Formulaire sans titre" },
     onCompleted: () => {
       router.push("/surveys/new");
     },
   });
+  if (router.pathname === "/signin" || router.pathname === "/signup") {
+    return null;
+  }
 
   return (
     <nav className="nav-container">
@@ -39,7 +37,7 @@ function NavHeader() {
         type="button"
         alt="add icon to create a new survey"
         handleClick={() => createSurvey()}
-        icon="/plus.svg"
+        icon={"/plus.svg"}
         className="button-md-primary-solid font-family-base"
       />
     </nav>

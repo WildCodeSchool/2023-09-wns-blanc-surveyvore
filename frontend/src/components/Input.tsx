@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 function Input({
   type,
   inputName,
@@ -8,9 +6,6 @@ function Input({
   labelName,
   inputClassName,
   labelClassName,
-  toggle,
-  setToggle,
-  checked,
   value,
   setValue,
 }: {
@@ -21,18 +16,9 @@ function Input({
   inputClassName?: string;
   labelClassName?: string;
   textarea?: boolean;
-  toggle?: boolean;
-  setToggle?: React.Dispatch<React.SetStateAction<boolean>>;
-  checked?: boolean;
   value: string;
   setValue: React.Dispatch<React.SetStateAction<string>>;
 }): JSX.Element {
-  // const [value, setValue] = useState(placeholder);
-
-  const switchData = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setToggle && setToggle(e.target.checked);
-  };
-
   const handleChange = (
     e:
       | React.ChangeEvent<HTMLInputElement>
@@ -43,7 +29,7 @@ function Input({
 
   return (
     <label htmlFor={inputName} className={labelClassName}>
-      {labelName && !toggle && <p>{labelName}</p>}
+      {labelName && <p>{labelName}</p>}
       {textarea ? (
         <textarea
           name={inputName}
@@ -62,15 +48,8 @@ function Input({
           placeholder={placeholder}
           value={value}
           data-test-id={inputName}
-          onChange={toggle ? switchData : handleChange}
-          checked={checked}
+          onChange={handleChange}
         />
-      )}
-      {toggle && (
-        <>
-          <div className="toggle-switch"></div>
-          <p>{labelName}</p>
-        </>
       )}
     </label>
   );

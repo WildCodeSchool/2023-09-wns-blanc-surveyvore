@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Input from "./Input";
+import Toggle from "./Toggle";
 
 function DefaultQuestions() {
   const [lastname, setLastname] = useState(true);
@@ -42,11 +43,9 @@ function DefaultQuestions() {
           <div
             className="input-switch input-switch--sm"
             key={question.inputName}>
-            <Input
-              type="checkbox"
+            <Toggle
               inputName={question.inputName}
               labelName={question.labelName}
-              toggle
               setToggle={question.setToggle}
               checked={question.checked}
             />
