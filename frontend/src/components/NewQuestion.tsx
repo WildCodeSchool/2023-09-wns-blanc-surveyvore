@@ -42,7 +42,6 @@ function NewQuestion({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const newSetQuestions = [...questions];
 
     if (formRef.current === null) {
       console.error("Form ref is not attached to a form element");

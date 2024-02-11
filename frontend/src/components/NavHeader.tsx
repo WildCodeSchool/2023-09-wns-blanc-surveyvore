@@ -12,12 +12,10 @@ const CREATE_SURVEY = gql`
 function NavHeader() {
   const router = useRouter();
 
-  console.log("router", router);
-
   const [createSurvey] = useMutation(CREATE_SURVEY, {
     variables: { title: "Formulaire sans titre" },
-    onCompleted: () => {
-      router.push("/surveys/new");
+    onCompleted: (data) => {
+      router.push(`/surveys/${data.createSurvey}`);
     },
   });
   if (router.pathname === "/signin" || router.pathname === "/signup") {
