@@ -26,6 +26,8 @@ function NewSurveyHeader({
   setTitle,
   description,
   setDescription,
+  isPrivate,
+  setIsPrivate,
 }: {
   setCollectingData: React.Dispatch<React.SetStateAction<boolean>>;
   collectingData: boolean;
@@ -33,9 +35,9 @@ function NewSurveyHeader({
   setTitle: React.Dispatch<React.SetStateAction<string>>;
   description: string;
   setDescription: React.Dispatch<React.SetStateAction<string>>;
+  isPrivate: boolean;
+  setIsPrivate: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const [isPrivate, setIsPrivate] = useState<boolean>(false);
-
   const router = useRouter();
   const { id } = router.query;
 

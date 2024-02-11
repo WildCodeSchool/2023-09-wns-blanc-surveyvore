@@ -21,7 +21,6 @@ const GET_SURVEY_BY_ID = gql`
 `;
 
 function NewSurvey() {
-  const [collectingData, setCollectingData] = useState(false);
   const [open, setOpen] = useState(true);
   const [questions, setQuestions] = useState([
     {
@@ -34,10 +33,15 @@ function NewSurvey() {
 
   const [title, setTitle] = useState("Formulaire sans titre");
   const [description, setDescription] = useState("");
+  const [collectingData, setCollectingData] = useState(false);
+  const [isPrivate, setIsPrivate] = useState<boolean>(false);
 
   const router = useRouter();
   const { id } = router.query;
 
+  console.log(id);
+
+  // TODO: l'id est undefines au début et génère une erreur de fetch
   const { loading, error } = useQuery(GET_SURVEY_BY_ID, {
     variables: {
       surveyId: id,
@@ -46,6 +50,7 @@ function NewSurvey() {
       setTitle(data.getSurveyById.title);
       setDescription(data.getSurveyById.description);
       setCollectingData(data.getSurveyById.collectingUserData);
+      setIsPrivate(data.getSurveyById.private);
     },
   });
 
@@ -66,6 +71,8 @@ function NewSurvey() {
         description={description}
         setTitle={setTitle}
         setDescription={setDescription}
+        isPrivate={isPrivate}
+        setIsPrivate={setIsPrivate}
       />
       {collectingData && <DefaultQuestions />}
       {questions.map((question, index) => (
