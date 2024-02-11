@@ -6,6 +6,13 @@
 @use "elements/toggle-switch";
 @use "elements/input";
 @use "elements/dropdown";
-@use "pages/NewSurvey.scss";
+
+// Use components styles
 @use "components/DefaultQuestions.scss";
+@use "components/NavHeader.scss";
+
+// Use pages styles
+@use "pages/NewSurvey.scss";
+@use "pages/SignIn.scss";
+@use "pages/SignUp.scss";
 

@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 
 function Input({
+  focus,
   type,
   inputName,
   textarea,
@@ -8,10 +9,11 @@ function Input({
   labelName,
   inputClassName,
   labelClassName,
-  toggle,
-  setToggle,
-  checked,
+  value,
+  setValue,
+  onBlur,
 }: {
+  focus?: boolean;
   type?: string;
   inputName: string;
   placeholder?: string;
@@ -19,16 +21,10 @@ function Input({
   inputClassName?: string;
   labelClassName?: string;
   textarea?: boolean;
-  toggle?: boolean;
-  setToggle?: React.Dispatch<React.SetStateAction<boolean>>;
-  checked?: boolean;
+  value: string;
+  setValue: React.Dispatch<React.SetStateAction<string>>;
+  onBlur?: (e: React.FocusEvent) => void;
 }): JSX.Element {
-  const [value, setValue] = useState("");
-
-  const switchData = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setToggle && setToggle(e.target.checked);
-  };
-
   const handleChange = (
     e:
       | React.ChangeEvent<HTMLInputElement>
@@ -37,20 +33,31 @@ function Input({
     setValue(e.target.value);
   };
 
+  const ref = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (focus && ref.current) {
+      ref.current.focus();
+    }
+  }, []);
+
   return (
     <label htmlFor={inputName} className={labelClassName}>
-      {labelName && !toggle && <p>{labelName}</p>}
+      {labelName && <p>{labelName}</p>}
       {textarea ? (
         <textarea
+          ref={ref as React.RefObject<HTMLTextAreaElement>}
           name={inputName}
-          value={value}
+          value={value ? value : ""}
           data-test-id={inputName}
           onChange={handleChange}
           placeholder={placeholder}
           className={inputClassName}
+          onBlur={onBlur}
         />
       ) : (
         <input
+          ref={ref as React.RefObject<HTMLInputElement>}
           className={inputClassName}
           type={type}
           name={inputName}
@@ -58,15 +65,9 @@ function Input({
           placeholder={placeholder}
           value={value}
           data-test-id={inputName}
-          onChange={toggle ? switchData : handleChange}
-          checked={checked}
+          onChange={handleChange}
+          onBlur={onBlur}
         />
-      )}
-      {toggle && (
-        <>
-          <div className="toggle-switch"></div>
-          <p>{labelName}</p>
-        </>
       )}
     </label>
   );

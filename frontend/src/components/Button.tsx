@@ -1,33 +1,34 @@
-import Image from "next/image";
-
 function Button({
   icon,
   type,
   alt,
   text,
-  set,
+  additionalText,
+  handleClick,
+  className,
 }: {
   icon?: string;
   type: "submit" | "reset" | "button" | undefined;
-  alt: string;
+  alt?: string;
   text: string;
-  set: React.Dispatch<React.SetStateAction<string>>;
+  additionalText?: string;
+  handleClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  className: string;
 }) {
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const target = e.target as HTMLButtonElement;
-    set(target.value);
-    console.log(target.value);
-  };
-
   return (
-    <button
-      type={type}
-      className="button-xl-grey-outline"
-      value={text}
-      onClick={handleClick}>
-      {icon && <Image src={icon} alt={alt} width={16} height={16} />}
-      {text}
-    </button>
+    <>
+      <button
+        type={type}
+        className={className}
+        value={text}
+        onClick={handleClick}>
+        {icon && <img src={icon} alt={alt ? alt : ""} />}
+        {text}
+        {additionalText && (
+          <span className="additional-text">{additionalText}</span>
+        )}
+      </button>
+    </>
   );
 }
 

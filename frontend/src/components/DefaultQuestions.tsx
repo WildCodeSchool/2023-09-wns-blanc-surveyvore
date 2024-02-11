@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Input from "./Input";
+import Toggle from "./Toggle";
 
 function DefaultQuestions() {
   const [lastname, setLastname] = useState(true);
@@ -7,31 +8,44 @@ function DefaultQuestions() {
   const [email, setEmail] = useState(true);
   const [phone, setPhone] = useState(true);
 
-  console.log(lastname, firstname, email, phone);
+  const onToggleChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    set: React.Dispatch<React.SetStateAction<boolean>>
+  ) => {
+    set(e.target.checked);
+  };
 
   const questions = [
     {
       inputName: "collecting-lastname",
       labelName: "Nom",
-      setToggle: setLastname,
+      onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+        setLastname(e.target.checked);
+      },
       checked: lastname,
     },
     {
       inputName: "collecting-firstname",
       labelName: "Prénom",
-      setToggle: setFirstname,
+      onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFirstname(e.target.checked);
+      },
       checked: firstname,
     },
     {
       inputName: "collecting-email",
       labelName: "Email",
-      setToggle: setEmail,
+      onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+        setEmail(e.target.checked);
+      },
       checked: email,
     },
     {
       inputName: "collecting-phone",
       labelName: "Téléphone",
-      setToggle: setPhone,
+      onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+        setPhone(e.target.checked);
+      },
       checked: phone,
     },
   ];
@@ -44,12 +58,10 @@ function DefaultQuestions() {
           <div
             className="input-switch input-switch--sm"
             key={question.inputName}>
-            <Input
-              type="checkbox"
+            <Toggle
               inputName={question.inputName}
               labelName={question.labelName}
-              toggle
-              setToggle={question.setToggle}
+              onChange={question.onChange}
               checked={question.checked}
             />
           </div>

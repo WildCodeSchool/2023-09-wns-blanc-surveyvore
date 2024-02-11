@@ -15,7 +15,7 @@ export async function createUser(
   newUser.lastname = lastname;
   const role = await Role.findOneBy({ name: "USER" });
   if (role) {
-    newUser.role.id = role.id;
+    newUser.role = role;
   }
 
   return newUser.save();
@@ -29,3 +29,4 @@ export function getByEmail(email: string): Promise<User | null> {
     },
   });
 }
+

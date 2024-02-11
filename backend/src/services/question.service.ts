@@ -43,7 +43,6 @@ export async function editQuestion(
   question: EditQuestionInputType
 ): Promise<Question | undefined> {
   const questionToEdit = await getQuestionById(id);
-  console.log("[DEBUG] questionToEdit : ", questionToEdit);
   if (questionToEdit) {
     questionToEdit.title = question.title;
     questionToEdit.type.id = question.type;
@@ -73,3 +72,4 @@ export async function getQuestionById(id: string): Promise<Question | null> {
     },
   });
 }
+

@@ -24,9 +24,35 @@
 
   .question-type {
     display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
     gap: 8px;
     button {
       width: 100%;
+      max-width: 200px;
+    }
+  }
+
+  .actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+
+  .private-public-buttons {
+    display: flex;
+    gap: 8px;
+    button {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      grid-template-rows: 1fr 1fr;
+      height: auto;
+      text-align: left;
+      .additional-text {
+        font-size: 0.75rem;
+        grid-row: 2;
+        grid-column: 2 / 3;
+      }
     }
   }
 }

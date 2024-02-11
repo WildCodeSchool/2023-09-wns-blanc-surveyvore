@@ -21,7 +21,6 @@ export async function create(datas: {
   title: string;
   user: User;
 }): Promise<string> {
-  console.log(datas);
   // TODO : generate a link
   const survey = new Survey(datas);
   survey.link = "link";
@@ -53,3 +52,4 @@ export async function archive(
     return await surveyToArchive.save();
   }
 }
+

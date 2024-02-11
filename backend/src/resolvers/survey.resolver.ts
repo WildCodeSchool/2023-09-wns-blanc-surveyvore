@@ -14,6 +14,7 @@ export class SurveyResolver {
   getSurveysByOwner(@Arg("userId") userId: string): Promise<Survey[] | null> {
     return SurveyService.findSurveysByOwner(userId);
   }
+
   @Authorized()
   @Mutation(() => String)
   createSurvey(
@@ -39,3 +40,4 @@ export class SurveyResolver {
     return SurveyService.archive(id, archive);
   }
 }
+

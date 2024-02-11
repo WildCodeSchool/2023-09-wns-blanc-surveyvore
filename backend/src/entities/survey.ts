@@ -88,7 +88,6 @@ export class Survey extends BaseEntity {
     } | null = null
   ) {
     super();
-    console.log(datas);
     if (datas) {
       this.title = datas.title;
       this.creationDate = new Date();
@@ -99,3 +98,4 @@ export class Survey extends BaseEntity {
     }
   }
 }
+
