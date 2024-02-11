@@ -53,7 +53,7 @@ function Input({
           onChange={handleChange}
           placeholder={placeholder}
           className={inputClassName}
-          onBlur={onBlur && onBlur}
+          onBlur={onBlur}
         />
       ) : (
         <input
@@ -66,7 +66,7 @@ function Input({
           value={value}
           data-test-id={inputName}
           onChange={handleChange}
-          onBlur={onBlur && onBlur}
+          onBlur={onBlur}
         />
       )}
     </label>
