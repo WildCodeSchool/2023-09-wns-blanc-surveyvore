@@ -3,6 +3,7 @@ import Input from "./Input";
 import Toggle from "./Toggle";
 import { gql, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
+import Button from "./Button";
 
 // TODO: gérer les états de loading pendant la mutation et les erreurs
 
@@ -33,38 +34,47 @@ function NewSurveyHeader({
   description: string;
   setDescription: React.Dispatch<React.SetStateAction<string>>;
 }) {
+  const [isPrivate, setIsPrivate] = useState<boolean>(false);
+
   const router = useRouter();
   const { id } = router.query;
+
+  const privateOrPublic = [
+    {
+      icon: "/unlock.svg",
+      text: "Public",
+      alt: "padlock unlocked wich represents public form",
+      additionalText: "Il sera accessible à tout le monde.",
+      isPrivate: false,
+    },
+    {
+      icon: "/lock.svg",
+      text: "Privé",
+      alt: "padlock locked wich represents private form",
+      additionalText:
+        "Il ne sera visible que par les personnes que vous invitez.",
+      isPrivate: true,
+    },
+  ];
+  console.log(isPrivate);
 
   const [editSurvey] = useMutation(EDIT_SURVEY, {
     variables: {
       editSurveyId: id,
       survey: {
-        title,
+        title: title,
         description: description ? description : "",
         collectingUserData: collectingData,
-        private: false,
+        private: isPrivate,
       },
     },
-    onCompleted: (data) => {
-      setTitle(data.editSurvey.title);
-      setCollectingData(data.editSurvey.collectingUserData);
-    },
+    // onCompleted: (data) => {
+    //   setTitle(data.editSurvey.title);
+    //   setCollectingData(data.editSurvey.collectingUserData);
+    //   setDescription(data.editSurvey.description);
+    //   setIsPrivate(data.editSurvey.private);
+    // },
   });
-
-  const EditOnBlur = () => {
-    editSurvey({
-      variables: {
-        editSurveyId: id,
-        survey: {
-          title,
-          description: description ? description : "",
-          collectingUserData: collectingData,
-          private: false,
-        },
-      },
-    });
-  };
 
   const onToggleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCollectingData(e.target.checked);
@@ -75,7 +85,21 @@ function NewSurveyHeader({
           title,
           description: description ? description : "",
           collectingUserData: e.target.checked,
-          private: false,
+          private: isPrivate,
+        },
+      },
+    });
+  };
+
+  const onPrivateClick = (isPrivate: boolean) => {
+    editSurvey({
+      variables: {
+        editSurveyId: id,
+        survey: {
+          title,
+          description: description ? description : "",
+          collectingUserData: collectingData,
+          private: isPrivate,
         },
       },
     });
@@ -92,9 +116,26 @@ function NewSurveyHeader({
         inputClassName="input"
         value={title}
         setValue={setTitle}
-        onBlur={EditOnBlur}
+        onBlur={() => editSurvey()}
       />
       {/* TODO: add public and privte buttons */}
+      <div className="private-public-buttons">
+        {privateOrPublic.map((button, index) => (
+          <Button
+            key={index}
+            alt={button.alt}
+            icon={button.icon}
+            text={button.text}
+            type="button"
+            additionalText={button.additionalText}
+            className="button-xl-grey-outline"
+            handleClick={() => {
+              setIsPrivate(button.isPrivate), onPrivateClick(button.isPrivate);
+            }}
+          />
+        ))}
+      </div>
+
       <Input
         textarea
         inputName="survey-description"
@@ -104,7 +145,7 @@ function NewSurveyHeader({
         inputClassName="textarea"
         value={description}
         setValue={setDescription}
-        onBlur={EditOnBlur}
+        onBlur={() => editSurvey()}
       />
       <div className="input-switch input-switch--sm">
         <Toggle

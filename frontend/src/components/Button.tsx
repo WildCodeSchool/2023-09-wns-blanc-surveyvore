@@ -1,10 +1,9 @@
-import Image from "next/image";
-
 function Button({
   icon,
   type,
   alt,
   text,
+  additionalText,
   handleClick,
   className,
 }: {
@@ -12,6 +11,7 @@ function Button({
   type: "submit" | "reset" | "button" | undefined;
   alt?: string;
   text: string;
+  additionalText?: string;
   handleClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   className: string;
 }) {
@@ -24,6 +24,9 @@ function Button({
         onClick={handleClick}>
         {icon && <img src={icon} alt={alt ? alt : ""} />}
         {text}
+        {additionalText && (
+          <span className="additional-text">{additionalText}</span>
+        )}
       </button>
     </>
   );
