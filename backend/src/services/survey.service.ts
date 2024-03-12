@@ -1,7 +1,6 @@
 import { Survey } from "../entities/survey";
 import { User } from "../entities/user";
 import { EditSurveyInputType } from "../types/EditSurveyInputType";
-// import { EditSurveyInputType } from "../types/EditSurveyInputType";
 
 export function findSurveyById(id: string): Promise<Survey | null> {
   return Survey.findOne({
