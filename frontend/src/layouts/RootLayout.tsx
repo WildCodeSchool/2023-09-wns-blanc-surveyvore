@@ -1,4 +1,4 @@
-import NavHeader from "@/components/NavHeader";
+import NavHeader from "@/components/NavHeader/NavHeader";
 import Head from "next/head";
 
 function RootLayout({ children }: { children: React.ReactNode }) {

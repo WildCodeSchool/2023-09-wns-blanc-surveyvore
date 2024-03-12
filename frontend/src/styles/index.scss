@@ -9,10 +9,10 @@
 
 // Use components styles
 @use "components/DefaultQuestions.scss";
-@use "components/NavHeader.scss";
+@use "../components/NavHeader/NavHeader.scss";
+@use "../components/Icon/Icon.scss";
 
 // Use pages styles
 @use "pages/NewSurvey.scss";
 @use "pages/SignIn.scss";
 @use "pages/SignUp.scss";
-
