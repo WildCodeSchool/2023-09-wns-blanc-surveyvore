@@ -26,18 +26,18 @@ export class SurveyResolver {
 
   @Mutation(() => Survey)
   editSurvey(
-    @Arg("id") id: string,
+    @Arg("link") link: string,
     @Arg("survey") survey: EditSurveyInputType
   ): Promise<Survey | undefined> {
-    return SurveyService.edit(id, survey);
+    return SurveyService.edit(link, survey);
   }
 
   @Mutation(() => Survey)
   archiveSurvey(
-    @Arg("id") id: string,
+    @Arg("link") link: string,
     @Arg("archive") archive: boolean
   ): Promise<Survey | undefined> {
-    return SurveyService.archive(id, archive);
+    return SurveyService.archive(link, archive);
   }
 }
 

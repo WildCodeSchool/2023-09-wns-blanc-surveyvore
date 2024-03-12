@@ -30,10 +30,10 @@ export async function create(datas: {
 }
 
 export async function edit(
-    id: string,
+    link: string,
     survey: EditSurveyInputType
 ): Promise<Survey | undefined> {
-    const surveyToEdit = await Survey.findOne({ where: { id: id } });
+    const surveyToEdit = await Survey.findOne({ where: { link: link } });
     if (surveyToEdit) {
         surveyToEdit.title = survey.title;
         surveyToEdit.description = survey.description;
@@ -44,10 +44,10 @@ export async function edit(
 }
 
 export async function archive(
-    id: string,
+    link: string,
     archive: boolean
 ): Promise<Survey | undefined> {
-    const surveyToArchive = await Survey.findOne({ where: { id: id } });
+    const surveyToArchive = await Survey.findOne({ where: { link: link } });
     if (surveyToArchive) {
         surveyToArchive.archived = archive;
         return await surveyToArchive.save();

@@ -48,6 +48,6 @@ export class Question extends BaseEntity {
   type: QuestionType;
 
   @Field()
-  @ManyToOne(() => Survey, (survey) => survey.id)
+  @ManyToOne(() => Survey, (survey) => survey.link)
   survey: Survey;
 }

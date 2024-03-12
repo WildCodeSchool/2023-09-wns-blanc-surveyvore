@@ -8,13 +8,13 @@ import Button from "./Button";
 // TODO: gérer les états de loading pendant la mutation et les erreurs
 
 const EDIT_SURVEY = gql`
-    mutation Mutation($survey: EditSurveyInputType!, $editSurveyId: String!) {
-        editSurvey(survey: $survey, id: $editSurveyId) {
+    mutation Mutation($survey: EditSurveyInputType!, $editSurveyLink: String!) {
+        editSurvey(survey: $survey, link: $editSurveyLink) {
             title
             description
             collectingUserData
             private
-            id
+            link
         }
     }
 `;
@@ -39,7 +39,7 @@ function NewSurveyHeader({
     setIsPrivate: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
     const router = useRouter();
-    const { id } = router.query;
+    const { link } = router.query;
 
     const privateOrPublic = [
         {
@@ -61,7 +61,7 @@ function NewSurveyHeader({
 
     const [editSurvey] = useMutation(EDIT_SURVEY, {
         variables: {
-            editSurveyId: id,
+            editSurveyLink: link,
             survey: {
                 title: title,
                 description: description ? description : "",
@@ -75,7 +75,7 @@ function NewSurveyHeader({
         setCollectingData(e.target.checked);
         editSurvey({
             variables: {
-                editSurveyId: id,
+                editSurveyLink: link,
                 survey: {
                     title,
                     description: description ? description : "",
@@ -89,7 +89,7 @@ function NewSurveyHeader({
     const onPrivateClick = (isPrivate: boolean) => {
         editSurvey({
             variables: {
-                editSurveyId: id,
+                editSurveyLink: link,
                 survey: {
                     title,
                     description: description ? description : "",

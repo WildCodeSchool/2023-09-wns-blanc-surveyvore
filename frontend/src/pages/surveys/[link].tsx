@@ -1,9 +1,9 @@
 import DefaultQuestions from "@/components/DefaultQuestions";
 import NewQuestion from "@/components/NewQuestion";
 import NewSurveyHeader from "@/components/NewSurveyHeader";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useLazyQuery, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // Get les questions d'un survey
 // ajouter les question du survey au state "questions" pour l'affichage
@@ -39,18 +39,24 @@ function NewSurvey() {
     const router = useRouter();
     const { link } = router.query as { link: string };
 
-    // TODO: l'id est undefines au début et génère une erreur de fetch
-    const { loading, error } = useQuery(GET_SURVEY_BY_LINK, {
-        variables: {
-            surveyLink: link,
-        },
-        onCompleted: (data) => {
-            setTitle(data.getSurveyByLink.title);
-            setDescription(data.getSurveyByLink.description);
-            setCollectingData(data.getSurveyByLink.collectingUserData);
-            setIsPrivate(data.getSurveyByLink.private);
-        },
-    });
+    const [getSurveyByLink, { loading, error }] =
+        useLazyQuery(GET_SURVEY_BY_LINK);
+
+    useEffect(() => {
+        if (link) {
+            getSurveyByLink({
+                variables: {
+                    surveyLink: link,
+                },
+                onCompleted: (data) => {
+                    setTitle(data.getSurveyByLink.title);
+                    setDescription(data.getSurveyByLink.description);
+                    setCollectingData(data.getSurveyByLink.collectingUserData);
+                    setIsPrivate(data.getSurveyByLink.private);
+                },
+            });
+        }
+    }, []);
 
     if (loading) {
         return <div>Loading...</div>;
