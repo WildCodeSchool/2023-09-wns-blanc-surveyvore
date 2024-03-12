@@ -1,6 +1,7 @@
 import { Survey } from "../entities/survey";
 import { User } from "../entities/user";
 import { EditSurveyInputType } from "../types/EditSurveyInputType";
+import { cryptoHash } from "../tools/hash.tools";
 
 export function findSurveyById(id: string): Promise<Survey | null> {
   return Survey.findOne({
@@ -20,11 +21,12 @@ export async function create(datas: {
   title: string;
   user: User;
 }): Promise<string> {
-  // TODO: generate a link
   const survey = new Survey(datas);
-  survey.link = "link";
+  survey.link = "LinkToCreate";
   const savedSurvey = await survey.save();
-  return savedSurvey.id;
+  savedSurvey.link = cryptoHash(savedSurvey.id);
+  const savedSurveyWithId = await survey.save();
+  return savedSurveyWithId.link;
 }
 
 export async function edit(
@@ -51,4 +53,3 @@ export async function archive(
     return await surveyToArchive.save();
   }
 }
-
