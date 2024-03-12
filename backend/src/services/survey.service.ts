@@ -1,7 +1,7 @@
 import { Survey } from "../entities/survey";
 import { User } from "../entities/user";
 import { EditSurveyInputType } from "../types/EditSurveyInputType";
-import * as argon2 from "argon2";
+import { cryptoHash } from "../tools/hash.tools";
 
 export function findSurveyById(id: string): Promise<Survey | null> {
   return Survey.findOne({
@@ -22,14 +22,11 @@ export async function create(datas: {
   user: User;
 }): Promise<string> {
   const survey = new Survey(datas);
-  survey.link = "link";
+  survey.link = "LinkToCreate";
   const savedSurvey = await survey.save();
-  return savedSurvey.id;
-}
-
-export async function createLink(id: string): Promise<string> {
-  const link = await argon2.hash(id);
-  return link;
+  savedSurvey.link = cryptoHash(savedSurvey.id);
+  const savedSurveyWithId = await survey.save();
+  return savedSurveyWithId.link;
 }
 
 export async function edit(
