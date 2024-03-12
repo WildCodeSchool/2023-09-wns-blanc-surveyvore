@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watchAll",
+    "test": "jest",
     "start": "ts-node-dev ./src/index.ts",
     "migration:create": "typeorm-ts-node-commonjs migration:create",
     "migration:generate": "typeorm-ts-node-commonjs migration:generate -d src/config/db.ts",
