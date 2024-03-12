@@ -52,7 +52,7 @@ function DefaultQuestions() {
   return (
     <section className="survey-section">
       <p>Données utilisateur·rice</p>
-      {/* TODO : voir si possible de remplacer cette div par un autre élément HTML */}
+      {/* TODO: voir si possible de remplacer cette div par un autre élément HTML */}
       <div className="default-questions-container">
         {questions.map((question) => (
           <div

@@ -37,7 +37,7 @@ function NewSurvey() {
   const [isPrivate, setIsPrivate] = useState<boolean>(false);
 
   const router = useRouter();
-  const { id } = router.query;
+  const { id } = router.query as { id: string };
 
   console.log(id);
 
@@ -84,6 +84,7 @@ function NewSurvey() {
           setQuestions={setQuestions}
           questions={questions}
           index={index}
+          surveyId={id}
         />
       ))}
     </div>

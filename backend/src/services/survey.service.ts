@@ -21,7 +21,7 @@ export async function create(datas: {
   title: string;
   user: User;
 }): Promise<string> {
-  // TODO : generate a link
+  // TODO: generate a link
   const survey = new Survey(datas);
   survey.link = "link";
   const savedSurvey = await survey.save();
