@@ -34,7 +34,7 @@ function NewQuestion({
   question,
   questions,
   index,
-  surveyId,
+  surveyLink,
 }: {
   question: {
     isOpen: boolean;
@@ -47,7 +47,7 @@ function NewQuestion({
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setQuestions: React.Dispatch<React.SetStateAction<any>>;
-  surveyId: string;
+  surveyLink: string;
 }) {
   const [types, setTypes] = useState([]);
   const [selectedType, setSelectedType] = useState("Texte libre");
@@ -100,7 +100,7 @@ function NewQuestion({
           title: form.title,
           description: form.description,
           type: form.type,
-          survey: surveyId,
+          survey: surveyLink,
           defaultQuestion: false,
         },
       },

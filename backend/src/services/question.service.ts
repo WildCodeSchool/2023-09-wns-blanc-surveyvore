@@ -4,11 +4,11 @@ import { Survey } from "../entities/survey";
 import { QuestionType } from "../entities/questionType";
 import { EditQuestionInputType } from "../types/EditQuestionInputType";
 
-export async function getQuestionsBySurveyId(
-  surveyId: string
+export async function getQuestionsBySurveyLink(
+  surveyLink: string
 ): Promise<Question[]> {
   return Question.find({
-    where: { survey: { id: surveyId } },
+    where: { survey: { link: surveyLink } },
     relations: {
       type: true,
       survey: true,
@@ -25,7 +25,7 @@ export async function createQuestion(questionData: {
 }): Promise<Question> {
   const newQuestion = new Question(questionData);
 
-  const survey = await Survey.findOneBy({ id: questionData.survey });
+  const survey = await Survey.findOneBy({ link: questionData.survey });
   if (survey) {
     newQuestion.survey = survey;
   }

@@ -7,8 +7,8 @@ import { EditQuestionInputType } from "../types/EditQuestionInputType";
 @Resolver()
 export class QuestionResolver {
   @Query(() => [Question])
-  getQuestions(@Arg("surveyId") surveyId: string): Promise<Question[]> {
-    return QuestionService.getQuestionsBySurveyId(surveyId);
+  getQuestions(@Arg("surveyLink") surveyLink: string): Promise<Question[]> {
+    return QuestionService.getQuestionsBySurveyLink(surveyLink);
   }
 
   @Mutation(() => Question)
