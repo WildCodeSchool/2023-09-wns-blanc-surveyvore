@@ -39,8 +39,6 @@ function NewSurvey() {
   const router = useRouter();
   const { id } = router.query as { id: string };
 
-  console.log(id);
-
   // TODO: l'id est undefines au début et génère une erreur de fetch
   const { loading, error } = useQuery(GET_SURVEY_BY_ID, {
     variables: {

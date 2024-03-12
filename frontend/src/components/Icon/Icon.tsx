@@ -35,8 +35,6 @@ export default function Icon({
 
     const currentIcon = icons.find((icon) => icon.name === name);
 
-    console.log(currentIcon);
-
     return (
         <i>
             <svg

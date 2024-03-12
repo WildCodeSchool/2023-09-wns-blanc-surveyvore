@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { gql, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
-import Button from "../Button";
 import Icon from "../Icon/Icon";
 
 const CREATE_SURVEY = gql`
@@ -32,7 +31,10 @@ function NavHeader() {
                 />
             </Link>
             <div className="nav-buttons">
-                <button className="button-md-primary-solid">
+                <button
+                    className="button-md-primary-solid"
+                    onClick={() => createSurvey()}
+                >
                     <Icon name="plus" />
                     Nouveau formulaire
                 </button>
