@@ -70,12 +70,6 @@ function NewSurveyHeader({
         private: isPrivate,
       },
     },
-    // onCompleted: (data) => {
-    //   setTitle(data.editSurvey.title);
-    //   setCollectingData(data.editSurvey.collectingUserData);
-    //   setDescription(data.editSurvey.description);
-    //   setIsPrivate(data.editSurvey.private);
-    // },
   });
 
   const onToggleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,13 +1,32 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Input from "./Input";
 import QuestionType from "./QuestionType";
 import Button from "./Button";
+import { gql, useMutation, useQuery } from "@apollo/client";
 
 /**
  * conservation des données quand on édite une question alors qu'une autre est en cours d'édition mais non validée
  * meme composant pour l'édition et la création (get dans le cas de l'édition et valeurs par défaut en création)
  *
  */
+
+const GET_TYPES = gql`
+  query Query {
+    getAllTypes {
+      id
+      type
+    }
+  }
+`;
+
+const CREATE_QUESTION = gql`
+  mutation Mutation($question: CreateQuestionInputType!) {
+    createQuestion(question: $question) {
+      title
+    }
+  }
+`;
+
 function NewQuestion({
   open,
   setOpen,
@@ -15,6 +34,7 @@ function NewQuestion({
   question,
   questions,
   index,
+  surveyId,
 }: {
   question: {
     isOpen: boolean;
@@ -27,7 +47,9 @@ function NewQuestion({
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setQuestions: React.Dispatch<React.SetStateAction<any>>;
+  surveyId: string;
 }) {
+  const [types, setTypes] = useState([]);
   const [selectedType, setSelectedType] = useState("Texte libre");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -39,6 +61,22 @@ function NewQuestion({
     newSetQuestions[index].isOpen = false;
     setQuestions(newSetQuestions);
   };
+
+  const [createQuestion] = useMutation(CREATE_QUESTION);
+
+  const { loading, error } = useQuery(GET_TYPES, {
+    onCompleted: (data) => {
+      setTypes(data.getAllTypes);
+    },
+  });
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -55,6 +93,18 @@ function NewQuestion({
       description: formData.get("survey-description"),
       type: selectedType,
     };
+
+    createQuestion({
+      variables: {
+        question: {
+          title: form.title,
+          description: form.description,
+          type: form.type,
+          survey: surveyId,
+          defaultQuestion: false,
+        },
+      },
+    });
 
     question.isOpen = false;
 
@@ -100,6 +150,7 @@ function NewQuestion({
           setValue={setDescription}
         />
         <QuestionType
+          types={types}
           selectedType={question.type}
           setSelectedType={setSelectedType}
         />

@@ -47,6 +47,7 @@ export async function editQuestion(
     questionToEdit.title = question.title;
     questionToEdit.type.id = question.type;
     questionToEdit.description = question.description;
+
     return questionToEdit.save();
   }
 }
