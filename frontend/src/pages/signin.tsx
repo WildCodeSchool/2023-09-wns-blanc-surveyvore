@@ -10,7 +10,7 @@ const SIGN_IN = gql`
   }
 `;
 
-function signIn() {
+function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -50,7 +50,7 @@ function signIn() {
           type="password"
           inputName="password"
           placeholder="********"
-          labelName="Password"
+          labelName="Mot de passe"
           labelClassName="input-field"
           inputClassName="input"
           value={password}
@@ -71,5 +71,5 @@ function signIn() {
   );
 }
 
-export default signIn;
+export default SignIn;
 
