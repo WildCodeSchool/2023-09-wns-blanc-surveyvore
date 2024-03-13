@@ -1,8 +1,11 @@
+import { IconName } from "@/types/iconName.type";
 import RadioGroup, { RadioElement } from "./RadioGroup/RadioGroup";
 
 type Type = {
     id: string;
     type: string;
+    icon: IconName;
+    slug: string;
 };
 
 function QuestionType({
@@ -17,9 +20,9 @@ function QuestionType({
     const elements: RadioElement[] = types.map((type) => ({
         id: type.id,
         title: type.type,
-        icon: "plus",
-        onClick: () => setSelectedType(type.id),
-        isChecked: selectedType === type.id,
+        icon: type.icon,
+        onClick: () => setSelectedType(type.slug),
+        isChecked: selectedType === type.slug,
     }));
     return (
         <>

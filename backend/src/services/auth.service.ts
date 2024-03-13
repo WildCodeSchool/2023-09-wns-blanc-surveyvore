@@ -22,7 +22,7 @@ export async function signIn(email: string, password: string): Promise<string> {
     // Vérifier que ce sont les même mots de passe
     if (
       userFromDB &&
-      (await verifyPassword(password, userFromDB.hashedPassword))
+      (await verifyPassword(password, userFromDB.password))
     ) {
       // Créer un nouveau token => signer un token
       const token = signJwt({

@@ -31,7 +31,7 @@ export class User extends BaseEntity {
 
   @Column()
   @Field()
-  hashedPassword: string;
+  password: string;
 
   @Field()
   @ManyToOne(() => Role, (role) => role.name)

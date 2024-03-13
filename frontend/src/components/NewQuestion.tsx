@@ -15,6 +15,8 @@ const GET_TYPES = gql`
         getAllTypes {
             id
             type
+            icon
+            slug
         }
     }
 `;
