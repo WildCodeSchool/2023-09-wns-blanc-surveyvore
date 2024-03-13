@@ -1,8 +1,9 @@
 import Input from "@/components/Input";
+import LogLayout from "@/layouts/LogLayout";
 import { gql, useMutation } from "@apollo/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { ReactElement, useState } from "react";
 
 const SIGN_UP = gql`
   mutation CreateUser($lastname: String!, $firstname: String!, $password: String!, $email: String!) {
@@ -94,6 +95,12 @@ function SignUp() {
       </p>
     </div>
   );
+}
+
+SignUp.getLayout = function getLayout(page: ReactElement) {
+  return (
+    <LogLayout>{page}</LogLayout>
+  )
 }
 
 export default SignUp;

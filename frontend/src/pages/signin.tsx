@@ -2,7 +2,7 @@ import Input from "@/components/Input";
 import { gql, useMutation } from "@apollo/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { ReactElement, useState } from "react";
 
 const SIGN_IN = gql`
   mutation Mutation($password: String!, $email: String!) {
@@ -69,6 +69,12 @@ function SignIn() {
       </p>
     </div>
   );
+}
+
+SignIn.getLayout = function getLayout(page: ReactElement) {
+  return (
+    <LogLayout>{page}</LogLayout>
+  )
 }
 
 export default SignIn;

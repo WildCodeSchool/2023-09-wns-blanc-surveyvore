@@ -1,4 +1,3 @@
-import NavHeader from "@/components/NavHeader/NavHeader";
 import Head from "next/head";
 
 function RootLayout({ children }: { children: React.ReactNode }) {
@@ -10,8 +9,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <NavHeader />
-      <main className="container">{children}</main>
+      {children}
     </>
   );
 }
