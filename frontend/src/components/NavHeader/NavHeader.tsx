@@ -11,16 +11,12 @@ const CREATE_SURVEY = gql`
 
 function NavHeader() {
     const router = useRouter();
-
     const [createSurvey] = useMutation(CREATE_SURVEY, {
         variables: { title: "Formulaire sans titre" },
         onCompleted: (data) => {
             router.push(`/surveys/${data.createSurvey}`);
         },
     });
-    if (router.pathname === "/signin" || router.pathname === "/signup") {
-        return null;
-    }
 
     return (
         <nav className="nav-container">

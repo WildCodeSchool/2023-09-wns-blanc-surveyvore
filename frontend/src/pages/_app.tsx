@@ -12,6 +12,16 @@ import {
 } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
 import { setContext } from "@apollo/client/link/context";
+import { ReactElement, ReactNode } from "react";
+import { NextPage } from "next";
+
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode
+}
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout
+}
 
 const httpLink = createHttpLink({
   // TODO: create dotenv for the backend url --> résoudre le bug du .env et .gitignore
@@ -44,11 +54,12 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-function App({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }: AppPropsWithLayout) {
+  const getLayout = Component.getLayout ?? ((page) => page)
   return (
     <ApolloProvider client={client}>
       <RootLayout>
-        <Component {...pageProps} />
+        {getLayout(<Component {...pageProps} />)}
       </RootLayout>
     </ApolloProvider>
   );

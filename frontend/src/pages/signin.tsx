@@ -1,8 +1,9 @@
 import Input from "@/components/Input";
+import LogLayout from "@/layouts/LogLayout";
 import { gql, useMutation } from "@apollo/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { ReactElement, useState } from "react";
 
 const SIGN_IN = gql`
   mutation Mutation($password: String!, $email: String!) {
@@ -10,7 +11,7 @@ const SIGN_IN = gql`
   }
 `;
 
-function signIn() {
+function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -50,7 +51,7 @@ function signIn() {
           type="password"
           inputName="password"
           placeholder="********"
-          labelName="Password"
+          labelName="Mot de passe"
           labelClassName="input-field"
           inputClassName="input"
           value={password}
@@ -71,5 +72,11 @@ function signIn() {
   );
 }
 
-export default signIn;
+SignIn.getLayout = function getLayout(page: ReactElement) {
+  return (
+    <LogLayout>{page}</LogLayout>
+  )
+}
+
+export default SignIn;
 

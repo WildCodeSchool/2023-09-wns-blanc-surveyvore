@@ -1,9 +1,10 @@
 import DefaultQuestions from "@/components/DefaultQuestions";
 import NewQuestion from "@/components/NewQuestion";
 import NewSurveyHeader from "@/components/NewSurveyHeader";
+import NavLayout from "@/layouts/NavLayout";
 import { gql, useLazyQuery, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 
 // Get les questions d'un survey
 // ajouter les question du survey au state "questions" pour l'affichage
@@ -93,6 +94,12 @@ function NewSurvey() {
             ))}
         </div>
     );
+}
+
+NewSurvey.getLayout = function getLayout(page: ReactElement) {
+    return (
+        <NavLayout>{page}</NavLayout>
+    )
 }
 
 export default NewSurvey;
