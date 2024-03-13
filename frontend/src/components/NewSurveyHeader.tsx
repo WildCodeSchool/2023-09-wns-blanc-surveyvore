@@ -1,11 +1,10 @@
-import { useState } from "react";
 import Input from "./Input";
 import Toggle from "./Toggle";
 import { gql, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
-import Button from "./Button";
+import RadioGroup, { RadioElement } from "./RadioGroup/RadioGroup";
 
-// TODO: gérer les états de loading pendant la mutation et les erreurs
+// TODO: gérer les états de loading pendant la mutation et les er  reurs
 
 const EDIT_SURVEY = gql`
     mutation Mutation($survey: EditSurveyInputType!, $editSurveyLink: String!) {
@@ -41,21 +40,23 @@ function NewSurveyHeader({
     const router = useRouter();
     const { link } = router.query;
 
-    const privateOrPublic = [
+    const privacyChoices: RadioElement[] = [
         {
-            icon: "/unlock.svg",
-            text: "Public",
-            alt: "padlock unlocked wich represents public form",
-            additionalText: "Il sera accessible à tout le monde.",
-            isPrivate: false,
+            id: "public",
+            title: "Public",
+            icon: "unlock",
+            description: "Il sera accessible à tout le monde.",
+            onClick: () => setIsPrivate(false),
+            isChecked: !isPrivate,
         },
         {
-            icon: "/lock.svg",
-            text: "Privé",
-            alt: "padlock locked wich represents private form",
-            additionalText:
+            id: "private",
+            title: "Privé",
+            icon: "lock",
+            description:
                 "Il ne sera visible que par les personnes que vous invitez.",
-            isPrivate: true,
+            onClick: () => setIsPrivate(true),
+            isChecked: isPrivate,
         },
     ];
 
@@ -113,23 +114,8 @@ function NewSurveyHeader({
                 setValue={setTitle}
                 onBlur={() => editSurvey()}
             />
-            {/* TODO: add public and privte buttons */}
             <div className="private-public-buttons">
-                {privateOrPublic.map((button, index) => (
-                    <Button
-                        key={index}
-                        alt={button.alt}
-                        icon={button.icon}
-                        text={button.text}
-                        type="button"
-                        additionalText={button.additionalText}
-                        className="button-xl-grey-outline"
-                        handleClick={() => {
-                            setIsPrivate(button.isPrivate),
-                                onPrivateClick(button.isPrivate);
-                        }}
-                    />
-                ))}
+                <RadioGroup elements={privacyChoices} name="survey-privacy" />
             </div>
 
             <Input

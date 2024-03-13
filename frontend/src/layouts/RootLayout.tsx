@@ -11,7 +11,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <NavHeader />
-      <main className="main-content">{children}</main>
+      <main className="container">{children}</main>
     </>
   );
 }
