@@ -10,7 +10,7 @@ export async function createUser(
 ): Promise<User> {
   const newUser = new User();
   newUser.email = email;
-  newUser.hashedPassword = await argon2.hash(password);
+  newUser.password = await argon2.hash(password);
   newUser.firstname = firstname;
   newUser.lastname = lastname;
   const role = await Role.findOneBy({ name: "USER" });
