@@ -1,12 +1,13 @@
-import { IconName } from "@/types/IconName.type";
+import { IconName } from "@/types/iconName.type";
 import Icon from "../Icon/Icon";
 
-type RadioElement = {
+export type RadioElement = {
     id: string;
     title: string;
     icon: IconName;
     description?: string;
     onClick: () => void;
+    isChecked: boolean;
 };
 
 export default function RadioGroup({ elements, name }: { elements: RadioElement[], name: string }) {
@@ -20,6 +21,7 @@ export default function RadioGroup({ elements, name }: { elements: RadioElement[
                         id={element.id}
                         value={element.title}
                         onChange={element.onClick}
+                        checked={element.isChecked}
                     />
                     <label htmlFor={element.id}>
                         <div className="header">

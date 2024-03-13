@@ -1,9 +1,7 @@
-import { useState } from "react";
 import Input from "./Input";
 import Toggle from "./Toggle";
 import { gql, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
-import Button from "./Button";
 import RadioGroup, { RadioElement } from "./RadioGroup/RadioGroup";
 
 // TODO: gérer les états de loading pendant la mutation et les er  reurs
@@ -48,8 +46,8 @@ function NewSurveyHeader({
             title: "Public",
             icon: "unlock",
             description: "Il sera accessible à tout le monde.",
-            isChecked: false,
             onClick: () => setIsPrivate(false),
+            isChecked: !isPrivate,
         },
         {
             id: "private",
@@ -57,26 +55,8 @@ function NewSurveyHeader({
             icon: "lock",
             description:
                 "Il ne sera visible que par les personnes que vous invitez.",
-            isChecked: true,
             onClick: () => setIsPrivate(true),
-        },
-    ];
-
-    const privateOrPublic = [
-        {
-            icon: "/unlock.svg",
-            text: "Public",
-            alt: "padlock unlocked wich represents public form",
-            additionalText: "Il sera accessible à tout le monde.",
-            isPrivate: false,
-        },
-        {
-            icon: "/lock.svg",
-            text: "Privé",
-            alt: "padlock locked wich represents private form",
-            additionalText:
-                "Il ne sera visible que par les personnes que vous invitez.",
-            isPrivate: true,
+            isChecked: isPrivate,
         },
     ];
 

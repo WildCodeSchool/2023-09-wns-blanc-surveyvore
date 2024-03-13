@@ -27,7 +27,7 @@ function NewSurvey() {
             isOpen: true,
             title: "Question sans titre",
             description: "Description de ma question",
-            type: "Texte libre",
+            type: "",
         },
     ]);
 

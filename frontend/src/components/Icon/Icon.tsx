@@ -1,4 +1,4 @@
-import { IconName } from "@/types/IconName.type";
+import { IconName } from "@/types/iconName.type";
 
 type ColorType = "primary" | "success" | "error" | "warning" | "current";
 

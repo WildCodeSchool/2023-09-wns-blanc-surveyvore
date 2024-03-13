@@ -1,44 +1,31 @@
-import { useState } from "react";
-import Button from "./Button";
-import Input from "./Input";
+import RadioGroup, { RadioElement } from "./RadioGroup/RadioGroup";
 
 type Type = {
-  id: string;
-  type: string;
+    id: string;
+    type: string;
 };
 
 function QuestionType({
-  types,
-  selectedType,
-  setSelectedType,
+    types,
+    selectedType,
+    setSelectedType,
 }: {
-  types: Type[];
-  selectedType: string;
-  setSelectedType: React.Dispatch<React.SetStateAction<string>>;
+    types: Type[];
+    selectedType: string;
+    setSelectedType: React.Dispatch<React.SetStateAction<string>>;
 }) {
-  return (
-    <>
-      <div className="question-type">
-        {types.map((type) => (
-          <Button
-            key={type.id}
-            type="button"
-            text={type.type}
-            className="button-lg-grey-outline"
-            handleClick={() => {
-              setSelectedType(type.id);
-            }}
-          />
-        ))}
-      </div>
-      {/* créer un composant et implanter la logique conditionnelle pour l'affichage des différents types de questions */}
-      {selectedType === "Choix multiples" && <p>choix multiples</p>}
-      {selectedType === "Choix unique" && <p>choix unique</p>}
-      {selectedType === "Case à cocher" && <p>case à cocher</p>}
-      {selectedType === "Date / période" && <p>date / période</p>}
-    </>
-  );
+    const elements: RadioElement[] = types.map((type) => ({
+        id: type.id,
+        title: type.type,
+        icon: "plus",
+        onClick: () => setSelectedType(type.id),
+        isChecked: selectedType === type.id,
+    }));
+    return (
+        <>
+            <RadioGroup elements={elements} name="question-type" />
+        </>
+    );
 }
 
 export default QuestionType;
-
