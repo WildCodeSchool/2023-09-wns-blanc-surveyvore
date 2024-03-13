@@ -1,4 +1,5 @@
 import Input from "@/components/Input";
+import LogLayout from "@/layouts/LogLayout";
 import { gql, useMutation } from "@apollo/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
