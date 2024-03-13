@@ -26,8 +26,14 @@ function NavHeader() {
         <nav className="nav-container">
             <Link href="/" className="logo">
                 <img
-                    src={"/Logo-baseline.svg"}
+                    src="/Logo-baseline.svg"
                     alt="Surveyvore's logo linked to home page"
+                    className="logo logo-desktop"
+                />
+                <img
+                    src="/Logo.svg"
+                    alt="Surveyvore's logo linked to home page"
+                    className="logo logo-mobile"
                 />
             </Link>
             <div className="nav-buttons">
@@ -36,11 +42,11 @@ function NavHeader() {
                     onClick={() => createSurvey()}
                 >
                     <Icon name="plus" />
-                    Nouveau formulaire
+                    <span className="hidden-mobile">Nouveau formulaire</span>
                 </button>
                 <button className="button-md-grey-outline">
                     <Icon name="user" />
-                    Mon profil
+                    <span className="hidden-mobile">Mon profil</span>
                 </button>
             </div>
         </nav>

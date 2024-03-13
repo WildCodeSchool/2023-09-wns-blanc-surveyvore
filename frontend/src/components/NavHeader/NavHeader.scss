@@ -5,10 +5,44 @@
     align-items: center;
     padding: 0.5rem 1rem;
     background-color: var(--white);
-    @include shadow("xs");
+    @include shadow("xs", "error");
+    border: 1px solid var(--grey-200);
+    height: 5rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
 
-    .nav-buttons{
-      display: flex;
-      gap: 0.5rem;
+    .nav-buttons {
+        display: flex;
+        gap: 0.5rem;
+    }
+    .logo {
+        height: 100%;
+        max-width: 16rem;
+        &.logo-desktop {
+            display: none;
+        }
+        &.logo-mobile {
+            display: block;
+        }
+    }
+}
+
+body {
+    margin-top: 5rem;
+}
+
+@media screen and (min-width: 768px) {
+    .nav-container {
+        .logo {
+            &.logo-desktop {
+                display: block;
+            }
+            &.logo-mobile {
+                display: none;
+            }
+        }
     }
 }
