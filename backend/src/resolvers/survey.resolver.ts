@@ -7,7 +7,9 @@ import { Survey } from "../entities/survey";
 @Resolver()
 export class SurveyResolver {
   @Query(() => Survey)
-  getSurveyByLink(@Arg("surveyLink") surveyLink: string): Promise<Survey | null> {
+  getSurveyByLink(
+    @Arg("surveyLink") surveyLink: string
+  ): Promise<Survey | null> {
     return SurveyService.findSurveyByLink(surveyLink);
   }
   @Query(() => [Survey])
@@ -40,4 +42,3 @@ export class SurveyResolver {
     return SurveyService.archive(link, archive);
   }
 }
-

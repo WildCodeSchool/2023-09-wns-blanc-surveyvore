@@ -6,6 +6,7 @@ import { Role } from "../entities/role";
 import { Survey } from "../entities/survey";
 import { User } from "../entities/user";
 import { UserAnswer } from "../entities/userAnswer";
+import { SurveyState } from "../entities/surveyState";
 
 export const dataSource = new DataSource({
   type: "postgres",
@@ -22,6 +23,7 @@ export const dataSource = new DataSource({
     Survey,
     User,
     UserAnswer,
+    SurveyState,
   ],
   logging: true,
   synchronize: false,
