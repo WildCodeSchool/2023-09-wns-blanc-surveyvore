@@ -73,18 +73,29 @@ export default function Home() {
 
   return (
     <div className="home-page">
-      <h2 className="text--medium">Mes formulaires</h2>
-      <label className="search-surveys-label" htmlFor="search-surveys">
-        <Icon name="search" height="1rem" width="1rem" />
-        <input
-          type="search"
-          name="search-surveys"
-          id="search-surveys"
-          placeholder="Rechercher..."
-          onChange={(e) => searchSurveys(e)}
-        />
-      </label>
-      <section className="my-forms forms">
+      <section className="my-surveys-header">
+        <h2 className="text--medium">Mes formulaires</h2>
+        <label className="search-surveys-label" htmlFor="search-surveys">
+          <Icon name="search" height="1rem" width="1rem" />
+          <input
+            type="search"
+            name="search-surveys"
+            id="search-surveys"
+            placeholder="Rechercher..."
+            onChange={(e) => searchSurveys(e)}
+          />
+        </label>
+        <button>
+          <Icon name="filter" height="1rem" width="1rem" />
+          Filtrer
+        </button>
+        <div className="filters-dropdown"></div>
+        <button>
+          <Icon name="sort-alt" height="1rem" width="1rem" />
+          Trier
+        </button>
+      </section>
+      <section className="my-surveys surveys">
         {filteredResults.map((survey: Survey) => (
           <Link
             className="survey-card"

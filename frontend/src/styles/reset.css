@@ -133,3 +133,17 @@ table {
 *::after {
   box-sizing: border-box;
 }
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+  font-family: "Red Hat Display", sans-serif;
+  border-radius: 8px;
+}
+
+input {
+  font-family: "Red Hat Display", sans-serif;
+}
+

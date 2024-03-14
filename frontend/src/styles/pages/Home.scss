@@ -1,12 +1,12 @@
 .home-page,
-.my-forms,
+.my-surveys,
 .survey-card,
 .card-header,
 .search-surveys-label {
   display: flex;
 }
 
-.forms {
+.surveys {
   display: grid;
   grid-template: auto / repeat(auto-fit, minmax(calc(300px - 2rem), 1fr));
   gap: calc(var(--gap) * 0.75);
@@ -17,35 +17,58 @@
   flex-direction: column;
   gap: var(--gap);
 
-  & > h2 {
-    font-size: clamp(20px, calc(3vw + 0.5rem), 30px);
-  }
+  .my-surveys-header {
+    display: grid;
+    grid-template: auto/1fr 1fr;
+    gap: calc(var(--gap) * 0.25);
 
-  .search-surveys-label {
-    --padding: 10px;
+    & > h2,
+    .search-surveys-label {
+      grid-column: span 2;
+    }
 
-    width: 100%;
-    background-color: var(--white);
-    padding: var(--padding) calc(var(--padding) * 1.2);
-    gap: calc(var(--padding) * 0.8);
+    & > h2 {
+      font-size: clamp(20px, calc(3vw + 0.5rem), 30px);
+      margin-bottom: 1rem;
+    }
 
-    border: 1px solid var(--grey-200);
-    border-radius: 8px;
-    color: var(--grey-500);
+    .search-surveys-label {
+      --padding: 10px;
 
-    & > input {
       width: 100%;
-      background: none;
-      border: none;
-      font-family: "Red Hat Display";
+      background-color: var(--white);
+      padding: var(--padding) calc(var(--padding) * 1.2);
+      gap: calc(var(--padding) * 0.8);
 
-      &:focus {
-        outline: none;
+      border: 1px solid var(--grey-200);
+      border-radius: 8px;
+      color: var(--grey-500);
+
+      & > input {
+        width: 100%;
+        background: none;
+        border: none;
+
+        &:focus {
+          outline: none;
+        }
       }
+    }
+
+    & > button {
+      --padding: 10px;
+
+      display: flex;
+      align-items: center;
+      gap: calc(var(--padding) * 0.8);
+      padding: var(--padding) calc(var(--padding) * 2);
+      color: var(--grey-800);
+      background-color: var(--white);
+      border: 1px solid var(--grey-200);
     }
   }
 
-  .my-forms.forms {
+  .my-surveys {
     .survey-card {
       flex-direction: column;
       gap: calc(var(--gap) * 0.25);
@@ -58,12 +81,6 @@
       .card-header {
         justify-content: space-between;
         color: var(--grey-700);
-
-        button {
-          background: none;
-          border: none;
-          padding: 0;
-        }
       }
 
       .title {
@@ -88,8 +105,23 @@
 }
 
 @media screen and (min-width: 768px) {
-  .forms {
+  .surveys {
     grid-template: auto / repeat(auto-fit, minmax(344px, 1fr));
+  }
+
+  .home-page {
+    .my-surveys-header {
+      grid-template: 1fr / 1fr repeat(3, auto);
+
+      & > h2,
+      .search-surveys-label {
+        grid-column: span 1;
+      }
+
+      .search-surveys-label {
+        max-width: 400px;
+      }
+    }
   }
 }
 
