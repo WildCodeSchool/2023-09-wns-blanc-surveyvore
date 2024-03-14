@@ -29,6 +29,7 @@ const GET_SURVEY_BY_OWNER = gql`
 
 export default function Home() {
   const [surveys, setSurveys] = useState([]);
+  const [searchSurveysValue, setSearchSurveysValue] = useState("");
   const user = useLoggedUser();
 
   const [getSurveys, { data, loading, error }] =
@@ -51,6 +52,25 @@ export default function Home() {
     return format(new Date(date), "dd/MM/yyyy");
   };
 
+  const removeAccents = (str: string) => {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  };
+
+  const filteredResults = surveys.filter(
+    (survey: Survey) =>
+      removeAccents(survey.title.toLowerCase()).includes(
+        searchSurveysValue.toLowerCase().trim()
+      ) ||
+      (survey.description &&
+        removeAccents(survey.description.toLowerCase()).includes(
+          searchSurveysValue.toLowerCase().trim()
+        ))
+  );
+
+  const searchSurveys = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchSurveysValue(e.target.value);
+  };
+
   return (
     <div className="home-page">
       <h2 className="text--medium">Mes formulaires</h2>
@@ -61,11 +81,11 @@ export default function Home() {
           name="search-surveys"
           id="search-surveys"
           placeholder="Rechercher..."
-          onChange={(e) => console.log(e.target.value)}
+          onChange={(e) => searchSurveys(e)}
         />
       </label>
       <section className="my-forms forms">
-        {surveys.map((survey: Survey) => (
+        {filteredResults.map((survey: Survey) => (
           <Link
             className="survey-card"
             href={`/surveys/${survey.link}`}
