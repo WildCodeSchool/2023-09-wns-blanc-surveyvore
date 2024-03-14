@@ -10,6 +10,7 @@ import { QuestionTypeResolver } from "./resolvers/questionType.resolver";
 import { GraphQLError } from "graphql";
 import { getByEmail } from "./services/user.service";
 import { verifyToken } from "./services/auth.service";
+import { SurveyStateResolver } from "./resolvers/surveyState.resolver";
 
 const start = async () => {
   dotenv.config();
@@ -24,6 +25,7 @@ const start = async () => {
       SurveyResolver,
       QuestionResolver,
       QuestionTypeResolver,
+      SurveyStateResolver,
     ],
     validate: { forbidUnknownValues: false },
     authChecker: async ({ context }, roles) => {

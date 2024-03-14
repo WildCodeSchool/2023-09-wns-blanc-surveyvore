@@ -9,6 +9,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { User } from "./user";
+import { SurveyState } from "./surveyState";
 
 @ObjectType()
 @Entity()
@@ -81,6 +82,10 @@ export class Survey extends BaseEntity {
   @JoinTable()
   editingUsers: User[];
 
+  @Field()
+  @ManyToOne(() => SurveyState, (state) => state.id)
+  state: SurveyState;
+
   constructor(
     datas: {
       title: string;
@@ -98,4 +103,3 @@ export class Survey extends BaseEntity {
     }
   }
 }
-
