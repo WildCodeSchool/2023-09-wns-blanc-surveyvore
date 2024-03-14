@@ -39,3 +39,4 @@ export class UpdateQuestionTypeAndUser1710325754170
 
   public async down(queryRunner: QueryRunner): Promise<void> {}
 }
+

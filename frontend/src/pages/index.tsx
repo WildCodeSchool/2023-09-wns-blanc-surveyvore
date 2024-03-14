@@ -1,10 +1,11 @@
 import NavLayout from "@/layouts/NavLayout";
-import { ReactElement } from "react";
-
+import { ReactElement, useEffect, useState } from "react";
 import { Survey } from "@/types/survey.type";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useLazyQuery } from "@apollo/client";
 import Link from "next/link";
-import { useEffect } from "react";
+import useLoggedUser from "@/hooks/useLoggedUser";
+import Icon from "@/components/Icon/Icon";
+import { format } from "date-fns";
 
 const GET_SURVEY_BY_OWNER = gql`
   query GetSurveysByOwner($userId: String!) {
@@ -27,37 +28,69 @@ const GET_SURVEY_BY_OWNER = gql`
 `;
 
 export default function Home() {
-  const { data, loading, error } = useQuery(GET_SURVEY_BY_OWNER, {
-    variables: { userId: "1c661984-597c-4c46-8f23-28bef526b760" },
-  });
+  const [surveys, setSurveys] = useState([]);
+  const user = useLoggedUser();
+
+  const [getSurveys, { data, loading, error }] =
+    useLazyQuery(GET_SURVEY_BY_OWNER);
+
+  useEffect(() => {
+    if (user) {
+      getSurveys({
+        variables: { userId: user?.id },
+        fetchPolicy: "network-only",
+        onCompleted: (data) => setSurveys(data.getSurveysByOwner),
+      });
+    }
+  }, [user]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
-  console.log(data);
+  const formatDate = (date: Date) => {
+    return format(new Date(date), "dd/MM/yyyy");
+  };
 
   return (
-    <>
+    <div className="home-page">
+      <h2 className="text--medium">Mes formulaires</h2>
+      <label className="search-surveys-label" htmlFor="search-surveys">
+        <Icon name="search" height="1rem" width="1rem" />
+        <input
+          type="search"
+          name="search-surveys"
+          id="search-surveys"
+          placeholder="Rechercher..."
+          onChange={(e) => console.log(e.target.value)}
+        />
+      </label>
       <section className="my-forms forms">
-        <h2>Mes formulaires</h2>
-
-        {data?.getSurveysByOwner.map((survey: Survey) => (
+        {surveys.map((survey: Survey) => (
           <Link
             className="survey-card"
             href={`/surveys/${survey.link}`}
             key={survey.id}>
             {/* TODO: make a badge component with conditional rendering */}
-            <div className="badge">
-              <div className="dot" />
-              <p>publié</p>
+            <div className="card-header">
+              <div className="badge">
+                <div className="dot" />
+                <p className="text-xs text--medium">publié</p>
+              </div>
+              <button className="settings" type="button">
+                <Icon name="dots" height="1rem" width="1rem"></Icon>
+              </button>
             </div>
-            <span className="creation-date">
-              {survey.creationDate.toString()}
+
+            <h3 className="title text-lg text--medium">{survey.title}</h3>
+            <p className="description text-sm">{survey.description}</p>
+
+            <span className="creation-date text-sm">
+              {formatDate(survey.creationDate)}
             </span>
           </Link>
         ))}
       </section>
-    </>
+    </div>
   );
 }
 

@@ -26,6 +26,7 @@ export function getByEmail(email: string): Promise<User | null> {
     where: { email },
     relations: {
       surveys: true,
+      role: true,
     },
   });
 }
