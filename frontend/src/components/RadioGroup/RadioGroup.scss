@@ -3,8 +3,10 @@
 .radio-group {
     display: flex;
     gap: 0.5rem;
+    flex-wrap: wrap;
     .radio-element {
-        max-width: 50%;
+        flex-grow: 1;
+        flex-shrink: 0;
         width: 100%;
         input {
             display: none;
@@ -44,6 +46,9 @@
 @media screen and (min-width: 768px) {
     .radio-group {
         .radio-element {
+            width: auto;
+            flex-basis: auto;
+            flex-grow: 1;
             max-width: 30%;
         }
     }
