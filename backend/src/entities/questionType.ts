@@ -15,8 +15,4 @@ export class QuestionType extends BaseEntity {
     @Column()
     @Field()
     icon: string;
-
-    @Column()
-    @Field()
-    slug: string;
 }

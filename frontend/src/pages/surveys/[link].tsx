@@ -31,7 +31,6 @@ const GET_QUESTIONS = gql`
             type {
                 icon
                 id
-                slug
                 type
             }
             answer {
@@ -67,7 +66,6 @@ function NewSurvey() {
         type: {
             icon: "",
             id: "",
-            slug: "",
             type: "",
         },
         answer: [],
@@ -128,8 +126,6 @@ function NewSurvey() {
             },
         });
     };
-
-    console.log(questions);
 
     if (loading) {
         return <div>Loading...</div>;

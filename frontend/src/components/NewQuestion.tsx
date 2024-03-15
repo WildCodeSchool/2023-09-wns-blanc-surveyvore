@@ -20,7 +20,6 @@ const GET_TYPES = gql`
             id
             type
             icon
-            slug
         }
     }
 `;
@@ -197,6 +196,7 @@ function NewQuestion({
                     selectedType={selectedType}
                     setSelectedType={setSelectedType}
                 />
+                
                 <div className="actions">
                     <button
                         className="button-md-grey-outline"

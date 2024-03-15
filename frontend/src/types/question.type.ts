@@ -13,7 +13,6 @@ export type QuestionType = {
     id: string;
     type: string;
     icon: IconName;
-    slug: string;
 };
 
 export type Answer = {
