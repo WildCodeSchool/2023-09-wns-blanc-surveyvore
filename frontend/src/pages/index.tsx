@@ -5,7 +5,16 @@ import { gql, useLazyQuery } from "@apollo/client";
 import Link from "next/link";
 import useLoggedUser from "@/hooks/useLoggedUser";
 import Icon from "@/components/Icon/Icon";
-import { format } from "date-fns";
+import { formatDate, removeAccents } from "@/tools/format.tools";
+
+// faire un composant badge
+// get les états des formulaires pour les afficher dans les filtres
+// créer un composant  filters avec tableau en prop pour display les filtres
+// faire une requête dynamique en fonction du state qui est passé au clic sur un filtre pour filtrer les formulaires
+
+// trier en fonction des dates
+
+// créer un composant tag pour afficher le nombre de questions
 
 const GET_SURVEY_BY_OWNER = gql`
   query GetSurveysByOwner($userId: String!) {
@@ -48,14 +57,6 @@ export default function Home() {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
-  const formatDate = (date: Date) => {
-    return format(new Date(date), "dd/MM/yyyy");
-  };
-
-  const removeAccents = (str: string) => {
-    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-  };
-
   const filteredResults = surveys.filter(
     (survey: Survey) =>
       removeAccents(survey.title.toLowerCase()).includes(
@@ -68,29 +69,33 @@ export default function Home() {
   );
 
   const searchSurveys = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchSurveysValue(e.target.value);
+    setSearchSurveysValue(removeAccents(e.target.value));
   };
 
   return (
     <div className="home-page">
       <section className="my-surveys-header">
         <h2 className="text--medium">Mes formulaires</h2>
-        <label className="search-surveys-label" htmlFor="search-surveys">
-          <Icon name="search" height="1rem" width="1rem" />
-          <input
-            type="search"
-            name="search-surveys"
-            id="search-surveys"
-            placeholder="Rechercher..."
-            onChange={(e) => searchSurveys(e)}
-          />
+        <label
+          className="search-surveys-label input-field"
+          htmlFor="search-surveys">
+          <div className="input">
+            <Icon name="search" height="1rem" width="1rem" />
+            <input
+              type="search"
+              name="search-surveys"
+              id="search-surveys"
+              placeholder="Rechercher..."
+              onChange={(e) => searchSurveys(e)}
+            />
+          </div>
         </label>
-        <button>
+        <button className="button-md-white-outline">
           <Icon name="filter" height="1rem" width="1rem" />
           Filtrer
         </button>
-        <div className="filters-dropdown"></div>
-        <button>
+        {/* <div className="filters-dropdown"></div> */}
+        <button className="button-md-white-outline">
           <Icon name="sort-alt" height="1rem" width="1rem" />
           Trier
         </button>

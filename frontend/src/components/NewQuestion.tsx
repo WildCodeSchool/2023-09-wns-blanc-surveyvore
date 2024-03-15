@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Input from "./Input";
 import QuestionType from "./QuestionType";
-import Button from "./Button";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { RadioElement } from "./RadioGroup/RadioGroup";
 import { IconName } from "@/types/iconName.type";

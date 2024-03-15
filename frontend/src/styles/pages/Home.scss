@@ -31,41 +31,6 @@
       font-size: clamp(20px, calc(3vw + 0.5rem), 30px);
       margin-bottom: 1rem;
     }
-
-    .search-surveys-label {
-      --padding: 10px;
-
-      width: 100%;
-      background-color: var(--white);
-      padding: var(--padding) calc(var(--padding) * 1.2);
-      gap: calc(var(--padding) * 0.8);
-
-      border: 1px solid var(--grey-200);
-      border-radius: 8px;
-      color: var(--grey-500);
-
-      & > input {
-        width: 100%;
-        background: none;
-        border: none;
-
-        &:focus {
-          outline: none;
-        }
-      }
-    }
-
-    & > button {
-      --padding: 10px;
-
-      display: flex;
-      align-items: center;
-      gap: calc(var(--padding) * 0.8);
-      padding: var(--padding) calc(var(--padding) * 2);
-      color: var(--grey-800);
-      background-color: var(--white);
-      border: 1px solid var(--grey-200);
-    }
   }
 
   .my-surveys {
@@ -99,6 +64,9 @@
       .creation-date {
         color: var(--grey-500);
         align-self: flex-end;
+        flex-grow: 1;
+        display: flex;
+        align-items: flex-end;
       }
     }
   }
@@ -116,6 +84,7 @@
       & > h2,
       .search-surveys-label {
         grid-column: span 1;
+        margin: 0;
       }
 
       .search-surveys-label {
