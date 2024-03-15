@@ -16,7 +16,7 @@ services:
       - CHOKIDAR_USEPOLLING=true
     depends_on:
       - db
-    command: sh -c "npm i && npm start && npm run migration:up"
+    command: sh -c "npm i && npm run migration:up && npm start"
 
   frontend:
     build: ./frontend
