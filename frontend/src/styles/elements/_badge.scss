@@ -1,0 +1,87 @@
+@use "./colors" as *;
+@use "./typography" as *;
+
+$badges: (
+  "sm": (
+    padding: 2px 8px,
+    gap: 4px,
+    text: xs,
+  ),
+  "md": (
+    padding: 2px 10px,
+    gap: 4px,
+    text: sm,
+  ),
+  "lg": (
+    padding: 4px 12px,
+    gap: 4px,
+    text: sm,
+  ),
+);
+
+@mixin badge($size, $style: "pale", $color: "primary", $radius: "round") {
+  @if ($size != "sm" and $size != "md" and $size != "lg") {
+    @error "Invalid button size: #{$size}";
+  }
+
+  @if ($style != "pale" and $style != "colored") {
+    @error "Invalid button style: #{$style}";
+  }
+
+  @if ($radius != "round" and $radius != "square") {
+    @error "Invalid button radius: #{$radius}";
+  }
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  $badge-size: map-get($badges, $size);
+  gap: map-get($badge-size, gap);
+  padding: map-get($badge-size, padding);
+
+  @if ($style == "colored") {
+    color: var(--#{$color}-700);
+    background-color: var(--#{$color}-50);
+    border: 1px solid var(--#{$color}-200);
+  } @else if ($style == "pale") {
+    color: var(--grey-700);
+    background-color: var(--white-500);
+    border: 1px solid var(--grey-200);
+  }
+
+  @if ($radius == "round") {
+    border-radius: 999px;
+  } @else if ($radius == "square") {
+    border-radius: 4px;
+  }
+
+  .dot {
+    --width: 6px;
+    background-color: var(--#{$color}-500);
+    width: var(--width);
+    height: var(--width);
+    border-radius: 50%;
+  }
+  p {
+    @include text(map-get($badge-size, text), $weight: 500);
+  }
+}
+
+@each $size, $sizeValue in $badges {
+  @each $style in ("pale", "colored") {
+    @each $color, $themeColors in $colors {
+      @each $radius in ("round", "square") {
+        .badge-#{$size}-#{$style}-#{$color}-#{$radius} {
+          @include badge(
+            #{"#{$size}"},
+            #{"#{$style}"},
+            #{"#{$color}"},
+            #{"#{$radius}"}
+          );
+        }
+      }
+    }
+  }
+}
+

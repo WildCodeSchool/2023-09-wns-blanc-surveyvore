@@ -7,7 +7,6 @@ import useLoggedUser from "@/hooks/useLoggedUser";
 import Icon from "@/components/Icon/Icon";
 import { formatDate, removeAccents } from "@/tools/format.tools";
 
-// faire un composant badge
 // get les états des formulaires pour les afficher dans les filtres
 // créer un composant  filters avec tableau en prop pour display les filtres
 // faire une requête dynamique en fonction du state qui est passé au clic sur un filtre pour filtrer les formulaires
@@ -32,6 +31,10 @@ const GET_SURVEY_BY_OWNER = gql`
       creationDate
       publicationDate
       archiveDate
+      state {
+        color
+        state
+      }
     }
   }
 `;
@@ -106,13 +109,12 @@ export default function Home() {
             className="survey-card"
             href={`/surveys/${survey.link}`}
             key={survey.id}>
-            {/* TODO: make a badge component with conditional rendering */}
             <div className="card-header">
-              <div className="badge">
-                <div className="dot" />
-                <p className="text-xs text--medium">publié</p>
+              <div className="badge-md-pale-indigo-round">
+                <span className="dot" />
+                <p>publié</p>
               </div>
-              <button className="settings" type="button">
+              <button className="settings " type="button">
                 <Icon name="dots" height="1rem" width="1rem"></Icon>
               </button>
             </div>

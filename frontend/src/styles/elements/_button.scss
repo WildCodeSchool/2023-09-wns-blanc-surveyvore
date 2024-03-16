@@ -180,7 +180,6 @@ $buttons: (
       color: var(--#{$color}-900);
     }
     &:disabled {
-      //   border-color: $grey-500;
       color: var(--#{$color}-400);
     }
   }

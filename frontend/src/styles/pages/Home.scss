@@ -46,6 +46,10 @@
       .card-header {
         justify-content: space-between;
         color: var(--grey-700);
+
+        .settings {
+          background: none;
+        }
       }
 
       .title {
@@ -74,7 +78,7 @@
 
 @media screen and (min-width: 768px) {
   .surveys {
-    grid-template: auto / repeat(auto-fit, minmax(344px, 1fr));
+    grid-template: auto / repeat(auto-fit, minmax(336px, 1fr));
   }
 
   .home-page {
@@ -89,6 +93,16 @@
 
       .search-surveys-label {
         max-width: 400px;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .home-page {
+    .my-surveys {
+      .survey-card {
+        max-width: 448px;
       }
     }
   }
