@@ -6,10 +6,12 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { User } from "./user";
 import { SurveyState } from "./surveyState";
+import { Question } from "./question";
 
 @ObjectType()
 @Entity()
@@ -86,6 +88,10 @@ export class Survey extends BaseEntity {
   @ManyToOne(() => SurveyState, (state) => state.id)
   state: SurveyState;
 
+  @Field(() => [Question], { nullable: true })
+  @OneToMany(() => Question, (question) => question.survey)
+  question: Question[];
+
   constructor(
     datas: {
       title: string;
@@ -103,3 +109,4 @@ export class Survey extends BaseEntity {
     }
   }
 }
+

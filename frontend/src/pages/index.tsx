@@ -35,6 +35,12 @@ const GET_SURVEY_BY_OWNER = gql`
         color
         state
       }
+      question {
+        title
+        answer {
+          content
+        }
+      }
     }
   }
 `;
@@ -43,6 +49,23 @@ export default function Home() {
   const [surveys, setSurveys] = useState([]);
   const [searchSurveysValue, setSearchSurveysValue] = useState("");
   const user = useLoggedUser();
+
+  console.log(surveys);
+
+  const displayState = (state: string) => {
+    switch (state) {
+      case "draft":
+        return "Brouillon";
+      case "published":
+        return "Publié";
+      case "in-progress":
+        return "En cours";
+      case "Closed":
+        return "Clotûré";
+      case "archived":
+        return "Archivé";
+    }
+  };
 
   const [getSurveys, { data, loading, error }] =
     useLazyQuery(GET_SURVEY_BY_OWNER);
@@ -110,9 +133,9 @@ export default function Home() {
             href={`/surveys/${survey.link}`}
             key={survey.id}>
             <div className="card-header">
-              <div className="badge-md-pale-indigo-round">
+              <div className={`badge-md-pale-${survey.state.color}-square`}>
                 <span className="dot" />
-                <p>publié</p>
+                <p>{displayState(survey.state.state)}</p>
               </div>
               <button className="settings " type="button">
                 <Icon name="dots" height="1rem" width="1rem"></Icon>
@@ -122,9 +145,16 @@ export default function Home() {
             <h3 className="title text-lg text--medium">{survey.title}</h3>
             <p className="description text-sm">{survey.description}</p>
 
-            <span className="creation-date text-sm">
+            <div className="badge-sm-colored-primary-round">
+              <p>
+                {survey.question ? `${survey.question.length} ` : "0 "}
+                questions
+              </p>
+            </div>
+
+            <p className="creation-date text-sm">
               {formatDate(survey.creationDate)}
-            </span>
+            </p>
           </Link>
         ))}
       </section>

@@ -1,16 +1,4 @@
-// id;
-// title;
-// description;
-// link;
-// archived;
-// private;
-// collectingUserData;
-// startDate;
-// endDate;
-// deleteDate;
-// creationDate;
-// publicationDate;
-// archiveDate;
+import { SurveyState } from "./surveyState.type";
 
 export type Survey = {
   id: number;
@@ -26,5 +14,6 @@ export type Survey = {
   creationDate: Date;
   publicationDate?: Date;
   archiveDate?: Date;
+  state: SurveyState;
 };
 
