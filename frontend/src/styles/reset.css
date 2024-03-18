@@ -135,3 +135,10 @@ table {
   box-sizing: border-box;
 }
 
+/* reset button when not using sass template */
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+

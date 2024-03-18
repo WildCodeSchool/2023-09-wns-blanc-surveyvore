@@ -1,8 +1,12 @@
+@use "../elements/shadows" as *;
+
 .home-page,
 .my-surveys,
 .survey-card,
 .card-header,
-.search-surveys-label {
+.search-surveys-label,
+.dropdown-wrapper,
+.dropdown-item {
   display: flex;
 }
 
@@ -21,6 +25,33 @@
     display: grid;
     grid-template: auto/1fr 1fr;
     gap: calc(var(--gap) * 0.25);
+    position: relative;
+
+    .dropdown-wrapper {
+      width: 200px;
+      flex-direction: column;
+      border-radius: 8px;
+      border: 1px solid var(--grey-200);
+      background-color: var(--white);
+      overflow: hidden;
+      position: absolute;
+      top: calc(100% + 4px);
+      @include shadow("md");
+
+      .dropdown-item {
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 12px;
+        &:not(:last-child) {
+          border-bottom: 1px solid var(--grey-200);
+        }
+        & > div {
+          border: none;
+          background: none;
+          cursor: pointer;
+        }
+      }
+    }
 
     & > h2,
     .search-surveys-label {
@@ -46,6 +77,16 @@
       .card-header {
         justify-content: space-between;
         color: var(--grey-700);
+
+        &.private {
+          display: grid;
+          grid-template-columns: auto auto 1fr;
+          gap: 8px;
+
+          .settings {
+            justify-self: flex-end;
+          }
+        }
 
         .settings {
           background: none;

@@ -22,9 +22,19 @@ export function findSurveysByOwner(userId: string): Promise<Survey[] | null> {
     where: { user: { id: userId } },
     relations: {
       state: true,
+      question: true,
     },
   });
 }
+
+// export function findSurveyByState(state: string) {
+//   return Survey.find({
+//     where: { state: { state: state } },
+//     relations: {
+//       state: true,
+//     },
+//   });
+// }
 
 export async function create(datas: {
   title: string;

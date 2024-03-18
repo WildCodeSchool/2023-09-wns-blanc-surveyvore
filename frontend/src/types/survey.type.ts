@@ -1,3 +1,4 @@
+import { Question } from "./question.type";
 import { SurveyState } from "./surveyState.type";
 
 export type Survey = {
@@ -15,5 +16,6 @@ export type Survey = {
   publicationDate?: Date;
   archiveDate?: Date;
   state: SurveyState;
+  question: Question[];
 };
 

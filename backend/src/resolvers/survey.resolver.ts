@@ -17,6 +17,11 @@ export class SurveyResolver {
     return SurveyService.findSurveysByOwner(userId);
   }
 
+  // @Query(() => [Survey])
+  // getSurveysByState(@Arg("state") state: string): Promise<Survey[] | null> {
+  //   return SurveyService.findSurveyByState(state);
+  // }
+
   @Authorized()
   @Mutation(() => String)
   createSurvey(
@@ -42,3 +47,4 @@ export class SurveyResolver {
     return SurveyService.archive(link, archive);
   }
 }
+

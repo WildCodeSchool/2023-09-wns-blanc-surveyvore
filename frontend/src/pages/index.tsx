@@ -6,9 +6,8 @@ import Link from "next/link";
 import useLoggedUser from "@/hooks/useLoggedUser";
 import Icon from "@/components/Icon/Icon";
 import { formatDate, removeAccents } from "@/tools/format.tools";
+import { SurveyState } from "@/types/surveyState.type";
 
-// get les états des formulaires pour les afficher dans les filtres
-// créer un composant  filters avec tableau en prop pour display les filtres
 // faire une requête dynamique en fonction du state qui est passé au clic sur un filtre pour filtrer les formulaires
 
 // trier en fonction des dates
@@ -45,30 +44,54 @@ const GET_SURVEY_BY_OWNER = gql`
   }
 `;
 
+const GET_SURVEY_STATES = gql`
+  query Query {
+    getSurveyStates {
+      color
+      id
+      state
+    }
+  }
+`;
+
 export default function Home() {
   const [surveys, setSurveys] = useState([]);
+  const [surveyStates, setSurveyStates] = useState([]);
+  const [selectedState, setSelectedState] = useState("");
   const [searchSurveysValue, setSearchSurveysValue] = useState("");
+  const [areFiltersOpen, setAreFiltersOpen] = useState(false);
   const user = useLoggedUser();
 
-  console.log(surveys);
+  const [getSurveys, { loading, error }] = useLazyQuery(GET_SURVEY_BY_OWNER);
+
+  const [getStates] = useLazyQuery(GET_SURVEY_STATES);
 
   const displayState = (state: string) => {
-    switch (state) {
+    switch (state.toLowerCase()) {
       case "draft":
         return "Brouillon";
       case "published":
         return "Publié";
       case "in-progress":
         return "En cours";
-      case "Closed":
+      case "closed":
         return "Clotûré";
       case "archived":
         return "Archivé";
     }
   };
 
-  const [getSurveys, { data, loading, error }] =
-    useLazyQuery(GET_SURVEY_BY_OWNER);
+  const displayNumberOfQuestions = (survey: Survey) => {
+    console.log(survey.question);
+
+    if (survey.question.length > 0) {
+      return `${survey.question.length} questions`;
+    } else {
+      return "0 questions";
+    }
+  };
+
+  console.log(surveys);
 
   useEffect(() => {
     if (user) {
@@ -77,26 +100,39 @@ export default function Home() {
         fetchPolicy: "network-only",
         onCompleted: (data) => setSurveys(data.getSurveysByOwner),
       });
+
+      getStates({
+        fetchPolicy: "network-only",
+        onCompleted: (data) => setSurveyStates(data.getSurveyStates),
+      });
     }
   }, [user]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
-  const filteredResults = surveys.filter(
-    (survey: Survey) =>
-      removeAccents(survey.title.toLowerCase()).includes(
-        searchSurveysValue.toLowerCase().trim()
-      ) ||
-      (survey.description &&
-        removeAccents(survey.description.toLowerCase()).includes(
-          searchSurveysValue.toLowerCase().trim()
-        ))
-  );
+  const filteredSurveys = surveys
+    .filter(
+      (survey: Survey) =>
+        removeAccents(survey.title.toLowerCase()).includes(
+          searchSurveysValue
+        ) ||
+        (survey.description &&
+          removeAccents(survey.description.toLowerCase()).includes(
+            searchSurveysValue
+          ))
+    )
+    .filter((survey: Survey) =>
+      selectedState ? survey.state.state === selectedState : true
+    );
 
   const searchSurveys = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchSurveysValue(removeAccents(e.target.value));
+    setSearchSurveysValue(
+      removeAccents(e.target.value).toLocaleLowerCase().trim()
+    );
   };
+
+  console.log(selectedState);
 
   return (
     <div className="home-page">
@@ -116,23 +152,56 @@ export default function Home() {
             />
           </div>
         </label>
-        <button className="button-md-white-outline">
+        <button
+          className="button-md-white-outline"
+          onClick={() => setAreFiltersOpen(!areFiltersOpen)}>
           <Icon name="filter" height="1rem" width="1rem" />
           Filtrer
         </button>
-        {/* <div className="filters-dropdown"></div> */}
+        {areFiltersOpen && (
+          <div className="dropdown-wrapper">
+            {surveyStates.map((state: SurveyState) => (
+              <button
+                onClick={() => {
+                  setSelectedState(
+                    state.state === selectedState ? "" : state.state
+                  );
+                  // setAreFiltersOpen(false);
+                }}
+                className="dropdown-item">
+                <div
+                  key={state.id}
+                  className={`badge-lg-pale-${state.color}-square`}>
+                  <span className="dot" /> <p>{displayState(state.state)}</p>
+                </div>
+                {selectedState === state.state && (
+                  <Icon
+                    name="check-circle"
+                    width="1rem"
+                    height="1rem"
+                    color="purple"
+                  />
+                )}
+              </button>
+            ))}
+          </div>
+        )}
+
         <button className="button-md-white-outline">
           <Icon name="sort-alt" height="1rem" width="1rem" />
           Trier
         </button>
       </section>
       <section className="my-surveys surveys">
-        {filteredResults.map((survey: Survey) => (
+        {filteredSurveys.map((survey: Survey) => (
           <Link
             className="survey-card"
             href={`/surveys/${survey.link}`}
             key={survey.id}>
-            <div className="card-header">
+            <div className={`card-header ${survey.private && "private"}`}>
+              {survey.private && (
+                <Icon name="lock" height="1rem" width="1rem" />
+              )}
               <div className={`badge-md-pale-${survey.state.color}-square`}>
                 <span className="dot" />
                 <p>{displayState(survey.state.state)}</p>
@@ -146,10 +215,7 @@ export default function Home() {
             <p className="description text-sm">{survey.description}</p>
 
             <div className="badge-sm-colored-primary-round">
-              <p>
-                {survey.question ? `${survey.question.length} ` : "0 "}
-                questions
-              </p>
+              <p>{displayNumberOfQuestions(survey)}</p>
             </div>
 
             <p className="creation-date text-sm">
