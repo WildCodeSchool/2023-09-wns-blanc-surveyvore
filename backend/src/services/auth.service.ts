@@ -56,12 +56,7 @@ export function signJwt(payload: any) {
   if (process.env.JWT_SECRET_KEY === undefined) {
     throw new Error();
   }
-  console.log(
-    "token    :",
-    jwt.sign(payload, process.env.JWT_SECRET_KEY, {
-      expiresIn: 60 * 60,
-    })
-  );
+
   return jwt.sign(payload, process.env.JWT_SECRET_KEY, {
     expiresIn: 60 * 60,
   });

@@ -25,30 +25,40 @@
     display: grid;
     grid-template: auto/1fr 1fr;
     gap: calc(var(--gap) * 0.25);
-    position: relative;
 
-    .dropdown-wrapper {
-      width: 200px;
-      flex-direction: column;
-      border-radius: 8px;
-      border: 1px solid var(--grey-200);
-      background-color: var(--white);
-      overflow: hidden;
-      position: absolute;
-      top: calc(100% + 4px);
-      @include shadow("md");
+    .filters-container {
+      position: relative;
+      .dropdown-wrapper {
+        width: max-content;
+        min-width: 200px;
+        flex-direction: column;
+        border-radius: 8px;
+        border: 1px solid var(--grey-200);
+        background-color: var(--white);
+        overflow: hidden;
+        position: absolute;
+        top: calc(100% + 4px);
+        right: 0;
+        @include shadow("md");
 
-      .dropdown-item {
-        justify-content: space-between;
-        align-items: center;
-        padding: 8px 12px;
-        &:not(:last-child) {
-          border-bottom: 1px solid var(--grey-200);
-        }
-        & > div {
-          border: none;
-          background: none;
+        .dropdown-item {
+          justify-content: space-between;
+          gap: 1rem;
+          align-items: center;
+          padding: 8px 12px;
           cursor: pointer;
+          &:not(:last-child) {
+            border-bottom: 1px solid var(--grey-200);
+          }
+          & > div {
+            border: none;
+            background: none;
+          }
+
+          .option {
+            display: flex;
+            gap: 8px;
+          }
         }
       }
     }

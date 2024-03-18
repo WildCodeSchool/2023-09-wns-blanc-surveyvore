@@ -12,15 +12,12 @@ export class SurveyResolver {
   ): Promise<Survey | null> {
     return SurveyService.findSurveyByLink(surveyLink);
   }
-  @Query(() => [Survey])
-  getSurveysByOwner(@Arg("userId") userId: string): Promise<Survey[] | null> {
-    return SurveyService.findSurveysByOwner(userId);
-  }
 
-  // @Query(() => [Survey])
-  // getSurveysByState(@Arg("state") state: string): Promise<Survey[] | null> {
-  //   return SurveyService.findSurveyByState(state);
-  // }
+  @Authorized()
+  @Query(() => [Survey])
+  getSurveysByOwner(@Ctx("user") user: User): Promise<Survey[] | null> {
+    return SurveyService.findSurveysByOwner(user);
+  }
 
   @Authorized()
   @Mutation(() => String)
@@ -28,6 +25,7 @@ export class SurveyResolver {
     @Arg("title") title: string,
     @Ctx("user") user: User
   ): Promise<string> {
+    console.log(user);
     return SurveyService.create({ title, user });
   }
 

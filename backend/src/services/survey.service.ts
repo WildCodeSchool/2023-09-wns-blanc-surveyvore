@@ -17,9 +17,11 @@ export function findSurveyByLink(link: string): Promise<Survey | null> {
   });
 }
 
-export function findSurveysByOwner(userId: string): Promise<Survey[] | null> {
+export function findSurveysByOwner(user: User): Promise<Survey[] | null> {
   return Survey.find({
-    where: { user: { id: userId } },
+    where: {
+      user: { id: user.id },
+    },
     relations: {
       state: true,
       question: true,
@@ -27,14 +29,23 @@ export function findSurveysByOwner(userId: string): Promise<Survey[] | null> {
   });
 }
 
-// export function findSurveyByState(state: string) {
-//   return Survey.find({
-//     where: { state: { state: state } },
-//     relations: {
-//       state: true,
-//     },
-//   });
-// }
+export function findSurveyByState(user: User, state: string) {
+  if (state) {
+    return Survey.find({
+      where: { user: { id: user.id }, state: { state: state } },
+      relations: {
+        state: true,
+      },
+    });
+  } else {
+    return Survey.find({
+      where: { user: { id: user.id } },
+      relations: {
+        state: true,
+      },
+    });
+  }
+}
 
 export async function create(datas: {
   title: string;

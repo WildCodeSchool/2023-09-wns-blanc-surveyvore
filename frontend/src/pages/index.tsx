@@ -1,22 +1,19 @@
 import NavLayout from "@/layouts/NavLayout";
 import { ReactElement, useEffect, useState } from "react";
 import { Survey } from "@/types/survey.type";
-import { gql, useLazyQuery } from "@apollo/client";
+import { gql, useLazyQuery, useQuery } from "@apollo/client";
 import Link from "next/link";
-import useLoggedUser from "@/hooks/useLoggedUser";
 import Icon from "@/components/Icon/Icon";
 import { formatDate, removeAccents } from "@/tools/format.tools";
 import { SurveyState } from "@/types/surveyState.type";
+import { IconName } from "@/types/iconName.type";
 
-// faire une requête dynamique en fonction du state qui est passé au clic sur un filtre pour filtrer les formulaires
-
-// trier en fonction des dates
-
-// créer un composant tag pour afficher le nombre de questions
+// Si on fait une requête dynamique ça recharge la page à chaque fois que l'on clique sur un filtre et c'est pas ouf --> filtres en front
+// j'ai utiliser le contexte du user plutot que de passer l'id en paramètre du getSurveysByOwner
 
 const GET_SURVEY_BY_OWNER = gql`
-  query GetSurveysByOwner($userId: String!) {
-    getSurveysByOwner(userId: $userId) {
+  query GetSurveysByOwner {
+    getSurveysByOwner {
       id
       title
       description
@@ -54,17 +51,25 @@ const GET_SURVEY_STATES = gql`
   }
 `;
 
+type SortOption = {
+  option: string;
+  icon: IconName;
+};
+
 export default function Home() {
-  const [surveys, setSurveys] = useState([]);
+  const [surveys, setSurveys] = useState<Survey[]>([]);
   const [surveyStates, setSurveyStates] = useState([]);
   const [selectedState, setSelectedState] = useState("");
+  const [selectedSortOption, setSelectedSortOption] = useState("");
   const [searchSurveysValue, setSearchSurveysValue] = useState("");
   const [areFiltersOpen, setAreFiltersOpen] = useState(false);
-  const user = useLoggedUser();
+  const [areSortedOptionsOpen, setAreSortedOptionsOpen] = useState(false);
 
   const [getSurveys, { loading, error }] = useLazyQuery(GET_SURVEY_BY_OWNER);
 
-  const [getStates] = useLazyQuery(GET_SURVEY_STATES);
+  const getStates = useQuery(GET_SURVEY_STATES, {
+    onCompleted: (data) => setSurveyStates(data.getSurveyStates),
+  });
 
   const displayState = (state: string) => {
     switch (state.toLowerCase()) {
@@ -81,9 +86,45 @@ export default function Home() {
     }
   };
 
-  const displayNumberOfQuestions = (survey: Survey) => {
-    console.log(survey.question);
+  const sortOptions: SortOption[] = [
+    {
+      option: "Ordre alphabétique",
+      icon: "sort-alpha-up",
+    },
+    {
+      option: "Ordre anti-alphabétique",
+      icon: "sort-alpha-down",
+    },
+    {
+      option: "number of questions",
+      icon: "list-check",
+    },
+  ];
 
+  const sortSurveys = (option: string, surveys: Survey[]) => {
+    switch (option) {
+      case "Ordre alphabétique":
+        return surveys.sort((a, b) =>
+          removeAccents(a.title.toLowerCase()) >
+          removeAccents(b.title.toLowerCase())
+            ? 1
+            : -1
+        );
+      case "Ordre anti-alphabétique":
+        return surveys.sort((a, b) =>
+          removeAccents(a.title.toLowerCase()) <
+          removeAccents(b.title.toLowerCase())
+            ? 1
+            : -1
+        );
+      case "number of questions":
+        return surveys.sort((a, b) => b.question.length - a.question.length);
+      default:
+        return surveys;
+    }
+  };
+
+  const displayNumberOfQuestions = (survey: Survey) => {
     if (survey.question.length > 0) {
       return `${survey.question.length} questions`;
     } else {
@@ -94,19 +135,11 @@ export default function Home() {
   console.log(surveys);
 
   useEffect(() => {
-    if (user) {
-      getSurveys({
-        variables: { userId: user?.id },
-        fetchPolicy: "network-only",
-        onCompleted: (data) => setSurveys(data.getSurveysByOwner),
-      });
-
-      getStates({
-        fetchPolicy: "network-only",
-        onCompleted: (data) => setSurveyStates(data.getSurveyStates),
-      });
-    }
-  }, [user]);
+    getSurveys({
+      fetchPolicy: "network-only",
+      onCompleted: (data) => setSurveys(data.getSurveysByOwner),
+    });
+  }, []);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -125,14 +158,15 @@ export default function Home() {
     .filter((survey: Survey) =>
       selectedState ? survey.state.state === selectedState : true
     );
-
   const searchSurveys = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchSurveysValue(
       removeAccents(e.target.value).toLocaleLowerCase().trim()
     );
   };
 
-  console.log(selectedState);
+  const SortedSurveys = sortSurveys(selectedSortOption, filteredSurveys);
+
+  console.log("filter", areFiltersOpen, "sort", areSortedOptionsOpen);
 
   return (
     <div className="home-page">
@@ -152,48 +186,82 @@ export default function Home() {
             />
           </div>
         </label>
-        <button
-          className="button-md-white-outline"
-          onClick={() => setAreFiltersOpen(!areFiltersOpen)}>
-          <Icon name="filter" height="1rem" width="1rem" />
-          Filtrer
-        </button>
-        {areFiltersOpen && (
-          <div className="dropdown-wrapper">
-            {surveyStates.map((state: SurveyState) => (
-              <button
-                onClick={() => {
-                  setSelectedState(
-                    state.state === selectedState ? "" : state.state
-                  );
-                  // setAreFiltersOpen(false);
-                }}
-                className="dropdown-item">
-                <div
+        <div className="filters-container">
+          <button
+            className="button-md-white-outline"
+            onClick={() => {
+              setAreFiltersOpen(!areFiltersOpen);
+              setAreSortedOptionsOpen(false);
+            }}>
+            <Icon name="filter" height="1rem" width="1rem" />
+            Filtrer
+          </button>
+          {areFiltersOpen && (
+            <div className="dropdown-wrapper">
+              {surveyStates.map((state: SurveyState) => (
+                <button
                   key={state.id}
-                  className={`badge-lg-pale-${state.color}-square`}>
-                  <span className="dot" /> <p>{displayState(state.state)}</p>
-                </div>
-                {selectedState === state.state && (
-                  <Icon
-                    name="check-circle"
-                    width="1rem"
-                    height="1rem"
-                    color="purple"
-                  />
-                )}
-              </button>
-            ))}
-          </div>
-        )}
-
-        <button className="button-md-white-outline">
-          <Icon name="sort-alt" height="1rem" width="1rem" />
-          Trier
-        </button>
+                  onClick={() => {
+                    setSelectedState(
+                      state.state === selectedState ? "" : state.state
+                    );
+                    setAreFiltersOpen(false);
+                  }}
+                  className="dropdown-item">
+                  <div className={`badge-lg-pale-${state.color}-square`}>
+                    <span className="dot" /> <p>{displayState(state.state)}</p>
+                  </div>
+                  {selectedState === state.state && (
+                    <Icon
+                      name="check-circle"
+                      width="1rem"
+                      height="1rem"
+                      color="purple"
+                    />
+                  )}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+        <div className="filters-container">
+          <button
+            className="button-md-white-outline"
+            onClick={() => {
+              setAreSortedOptionsOpen(!areSortedOptionsOpen);
+              setAreFiltersOpen(false);
+            }}>
+            <Icon name="sort-alt" height="1rem" width="1rem" />
+            Trier
+          </button>
+          {areSortedOptionsOpen && (
+            <div className="dropdown-wrapper">
+              {sortOptions.map((option) => (
+                <button
+                  onClick={() => {
+                    setSelectedSortOption(option.option);
+                  }}
+                  className="dropdown-item">
+                  <div className="option">
+                    <Icon name={option.icon} height="1rem" width="1rem" />
+                    <p>{option.option}</p>
+                  </div>
+                  {selectedSortOption === option.option && (
+                    <Icon
+                      name="check-circle"
+                      width="1rem"
+                      height="1rem"
+                      color="purple"
+                    />
+                  )}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </section>
       <section className="my-surveys surveys">
-        {filteredSurveys.map((survey: Survey) => (
+        {SortedSurveys.map((survey: Survey) => (
           <Link
             className="survey-card"
             href={`/surveys/${survey.link}`}

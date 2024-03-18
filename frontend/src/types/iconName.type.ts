@@ -13,5 +13,7 @@ export type IconName =
   | "sort-alt"
   | "filter"
   | "search"
-  | "dots";
+  | "dots"
+  | "sort-alpha-up"
+  | "sort-alpha-down";
 
