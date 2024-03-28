@@ -4,11 +4,8 @@ export class UpdateQuestionTypeAndUser1710325754170
   implements MigrationInterface
 {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
+        await queryRunner.query(
       `ALTER TABLE "question_type" ADD "icon" character varying`
-    );
-    await queryRunner.query(
-      `ALTER TABLE "question_type" ADD "slug" character varying`
     );
 
     await queryRunner.query(
@@ -20,40 +17,23 @@ export class UpdateQuestionTypeAndUser1710325754170
     );
 
     await queryRunner.query(
-      `INSERT INTO "user" (firstname, lastname, password, email) VALUES ('Charlie', 'FEIX', '$argon2id$v=19$m=65536,t=3,p=4$J7CBDt5/YzDRf+OU3hhD3g$R0cYf+s2mbWGLjR0qL0FavSZNhAZy/xbqh2IAHvVErE', 'charlie.feix@gmail.com')`
-    );
-    await queryRunner.query(`INSERT INTO "user" (firstname, lastname, password, email) VALUES ('Cyrille', 'AQUILINA', '$argon2id$v=19$m=65536,t=3,p=4$J7CBDt5/YzDRf+OU3hhD3g$R0cYf+s2mbWGLjR0qL0FavSZNhAZy/xbqh2IAHvVErE
-        ', 'cyrille.aquilina@gmail.com')`);
-    await queryRunner.query(`INSERT INTO "user" (firstname, lastname, password, email) VALUES ('Matthieu', 'GUINET', '$argon2id$v=19$m=65536,t=3,p=4$J7CBDt5/YzDRf+OU3hhD3g$R0cYf+s2mbWGLjR0qL0FavSZNhAZy/xbqh2IAHvVErE
-        ', 'matthieuguinet@gmail.com')`);
-    await queryRunner.query(
-      `UPDATE "user" SET "roleId" = (SELECT id FROM role WHERE name = 'ADMIN') WHERE email = 'charlie.feix@gmail.com'`
-    );
-    await queryRunner.query(
-      `UPDATE "user" SET "roleId" = (SELECT id FROM role WHERE name = 'ADMIN') WHERE email = 'cyrille.aquilina@gmail.com'`
-    );
-    await queryRunner.query(
-      `UPDATE "user" SET "roleId" = (SELECT id FROM role WHERE name = 'ADMIN') WHERE email = 'matthieuguinet@gmail.com'`
+      `UPDATE "question_type" SET icon = 'text-box-edit' WHERE type = 'text'`
     );
 
     await queryRunner.query(
-      `UPDATE "question_type" SET ("icon", "slug") = ('text-box-edit', 'texte-libre') WHERE type = 'Texte libre'`
+      `UPDATE "question_type" SET icon = 'list-check' WHERE type = 'checkboxes'`
     );
 
     await queryRunner.query(
-      `UPDATE "question_type" SET ("icon", "slug") = ('list-check', 'choix-multiple') WHERE type = 'Choix multiple'`
+      `UPDATE "question_type" SET icon = 'check-circle' WHERE type = 'radio'`
     );
 
     await queryRunner.query(
-      `UPDATE "question_type" SET ("icon", "slug") = ('check-circle', 'choix-unique') WHERE type = 'Choix unique'`
+      `UPDATE "question_type" SET icon = 'checkbox' WHERE type = 'checkbox'`
     );
 
     await queryRunner.query(
-      `UPDATE "question_type" SET ("icon", "slug") = ('checkbox', 'case-a-cocher') WHERE type = 'Case à cocher'`
-    );
-
-    await queryRunner.query(
-      `UPDATE "question_type" SET ("icon", "slug") = ('calendar-day', 'date-periode') WHERE type = 'Date / période'`
+      `UPDATE "question_type" SET icon = 'calendar-day' WHERE type = 'date'`
     );
   }
 
