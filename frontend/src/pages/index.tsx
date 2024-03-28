@@ -57,6 +57,8 @@ type SortOption = {
 };
 
 export default function Home() {
+  // ----------------------------------States----------------------------------
+
   const [surveys, setSurveys] = useState<Survey[]>([]);
   const [surveyStates, setSurveyStates] = useState([]);
   const [selectedState, setSelectedState] = useState("");
@@ -65,12 +67,27 @@ export default function Home() {
   const [areFiltersOpen, setAreFiltersOpen] = useState(false);
   const [areSortedOptionsOpen, setAreSortedOptionsOpen] = useState(false);
 
-  const [getSurveys, { loading, error }] = useLazyQuery(GET_SURVEY_BY_OWNER);
+  // ----------------------------------Queries----------------------------------
 
   const getStates = useQuery(GET_SURVEY_STATES, {
     onCompleted: (data) => setSurveyStates(data.getSurveyStates),
   });
 
+  const [getSurveys, { loading, error }] = useLazyQuery(GET_SURVEY_BY_OWNER);
+
+  useEffect(() => {
+    getSurveys({
+      fetchPolicy: "network-only",
+      onCompleted: (data) => setSurveys(data.getSurveysByOwner),
+    });
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
+  // ----------------------------------Functions----------------------------------
+
+  // function to display survey states
   const displayState = (state: string) => {
     switch (state.toLowerCase()) {
       case "draft":
@@ -86,6 +103,7 @@ export default function Home() {
     }
   };
 
+  // Array of sort options for surveys. We can add as many as we want.
   const sortOptions: SortOption[] = [
     {
       option: "Ordre alphabétique",
@@ -96,11 +114,12 @@ export default function Home() {
       icon: "sort-alpha-down",
     },
     {
-      option: "number of questions",
+      option: "Nombre de questions",
       icon: "list-check",
     },
   ];
 
+  // function to sort surveys by selected option
   const sortSurveys = (option: string, surveys: Survey[]) => {
     switch (option) {
       case "Ordre alphabétique":
@@ -125,24 +144,14 @@ export default function Home() {
   };
 
   const displayNumberOfQuestions = (survey: Survey) => {
-    if (survey.question.length > 0) {
+    if (survey.question.length > 1) {
       return `${survey.question.length} questions`;
+    } else if (survey.question.length === 1) {
+      return "1 question";
     } else {
-      return "0 questions";
+      return "Aucune question";
     }
   };
-
-  console.log(surveys);
-
-  useEffect(() => {
-    getSurveys({
-      fetchPolicy: "network-only",
-      onCompleted: (data) => setSurveys(data.getSurveysByOwner),
-    });
-  }, []);
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
 
   const filteredSurveys = surveys
     .filter(
@@ -166,7 +175,11 @@ export default function Home() {
 
   const SortedSurveys = sortSurveys(selectedSortOption, filteredSurveys);
 
-  console.log("filter", areFiltersOpen, "sort", areSortedOptionsOpen);
+  /**
+  |--------------------------------------------------
+  |                     Return
+  |--------------------------------------------------
+  */
 
   return (
     <div className="home-page">
@@ -239,7 +252,9 @@ export default function Home() {
               {sortOptions.map((option) => (
                 <button
                   onClick={() => {
-                    setSelectedSortOption(option.option);
+                    setSelectedSortOption(
+                      option.option === selectedSortOption ? "" : option.option
+                    );
                   }}
                   className="dropdown-item">
                   <div className="option">

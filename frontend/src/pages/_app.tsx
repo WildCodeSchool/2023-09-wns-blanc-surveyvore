@@ -16,12 +16,12 @@ import { ReactElement, ReactNode } from "react";
 import { NextPage } from "next";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
-  getLayout?: (page: ReactElement) => ReactNode
-}
+  getLayout?: (page: ReactElement) => ReactNode;
+};
 
 type AppPropsWithLayout = AppProps & {
-  Component: NextPageWithLayout
-}
+  Component: NextPageWithLayout;
+};
 
 const httpLink = createHttpLink({
   // TODO: create dotenv for the backend url --> résoudre le bug du .env et .gitignore
@@ -41,6 +41,7 @@ const errorLink = onError(({ graphQLErrors }) => {
 
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem("token");
+
   return {
     headers: {
       ...headers,
@@ -55,12 +56,10 @@ const client = new ApolloClient({
 });
 
 function App({ Component, pageProps }: AppPropsWithLayout) {
-  const getLayout = Component.getLayout ?? ((page) => page)
+  const getLayout = Component.getLayout ?? ((page) => page);
   return (
     <ApolloProvider client={client}>
-      <RootLayout>
-        {getLayout(<Component {...pageProps} />)}
-      </RootLayout>
+      <RootLayout>{getLayout(<Component {...pageProps} />)}</RootLayout>
     </ApolloProvider>
   );
 }

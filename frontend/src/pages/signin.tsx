@@ -36,7 +36,12 @@ function SignIn() {
         className="logo"
       />
 
-      <section className="sign-in-form">
+      <form
+        className="sign-in-form"
+        onSubmit={(e) => {
+          e.preventDefault();
+          signIn();
+        }}>
         <Input
           type="email"
           inputName="email"
@@ -57,13 +62,10 @@ function SignIn() {
           value={password}
           setValue={setPassword}
         />
-        <button
-          className="button-md-primary-solid"
-          type="button"
-          onClick={() => signIn()}>
+        <button className="button-md-primary-solid" type="submit">
           Se connecter
         </button>
-      </section>
+      </form>
 
       <p className="no-account">
         Pas encore inscrit·e ? <Link href="/signup">S’inscrire</Link>
@@ -73,10 +75,8 @@ function SignIn() {
 }
 
 SignIn.getLayout = function getLayout(page: ReactElement) {
-  return (
-    <LogLayout>{page}</LogLayout>
-  )
-}
+  return <LogLayout>{page}</LogLayout>;
+};
 
 export default SignIn;
 
