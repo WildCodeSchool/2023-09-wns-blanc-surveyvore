@@ -63,6 +63,7 @@ function Input({
           name={inputName}
           id={inputName}
           placeholder={placeholder}
+          autoComplete={type === "password" ? "current-password" : ""}
           value={value}
           data-test-id={inputName}
           onChange={handleChange}

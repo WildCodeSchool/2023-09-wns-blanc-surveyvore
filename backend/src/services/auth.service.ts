@@ -20,10 +20,7 @@ export async function signIn(email: string, password: string): Promise<string> {
     // Récupérer l'utilisateur dans la bdd suivant l'email
     const userFromDB = await UserService.getByEmail(email);
     // Vérifier que ce sont les même mots de passe
-    if (
-      userFromDB &&
-      (await verifyPassword(password, userFromDB.password))
-    ) {
+    if (userFromDB && (await verifyPassword(password, userFromDB.password))) {
       // Créer un nouveau token => signer un token
       const token = signJwt({
         email: userFromDB.email,
@@ -59,13 +56,16 @@ export function signJwt(payload: any) {
   if (process.env.JWT_SECRET_KEY === undefined) {
     throw new Error();
   }
-  console.log(
-    "token    :",
-    jwt.sign(payload, process.env.JWT_SECRET_KEY, {
-      expiresIn: 60 * 60,
-    })
-  );
+
   return jwt.sign(payload, process.env.JWT_SECRET_KEY, {
     expiresIn: 60 * 60,
   });
 }
+
+export function getMe(token: string) {
+  const payload: any = verifyToken(token);
+
+  const user = UserService.getByEmail(payload.email);
+  return user;
+}
+

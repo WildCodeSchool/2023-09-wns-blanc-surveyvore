@@ -10,13 +10,41 @@ export function findSurveyByLink(link: string): Promise<Survey | null> {
     where: {
       link: link,
     },
+    relations: {
+      state: true,
+      question: true,
+    },
   });
 }
 
-export function findSurveysByOwner(userId: string): Promise<Survey[] | null> {
+export function findSurveysByOwner(user: User): Promise<Survey[] | null> {
   return Survey.find({
-    where: { user: { id: userId } },
+    where: {
+      user: { id: user.id },
+    },
+    relations: {
+      state: true,
+      question: true,
+    },
   });
+}
+
+export function findSurveyByState(user: User, state: string) {
+  if (state) {
+    return Survey.find({
+      where: { user: { id: user.id }, state: { state: state } },
+      relations: {
+        state: true,
+      },
+    });
+  } else {
+    return Survey.find({
+      where: { user: { id: user.id } },
+      relations: {
+        state: true,
+      },
+    });
+  }
 }
 
 export async function create(datas: {
@@ -50,9 +78,12 @@ export async function archive(
   link: string,
   archive: boolean
 ): Promise<Survey | undefined> {
-  const surveyToArchive = await Survey.findOne({ where: { link: link } });
+  const surveyToArchive = await Survey.findOne({
+    where: { link: link },
+  });
   if (surveyToArchive) {
     surveyToArchive.archived = archive;
     return await surveyToArchive.save();
   }
 }
+

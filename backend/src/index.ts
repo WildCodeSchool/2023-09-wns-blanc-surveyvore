@@ -41,6 +41,7 @@ const start = async () => {
             throw new Error();
           }
         }
+
         return true;
       } catch (e) {
         throw new GraphQLError(
@@ -85,3 +86,4 @@ const start = async () => {
 };
 
 void start();
+

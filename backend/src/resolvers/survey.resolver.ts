@@ -12,9 +12,11 @@ export class SurveyResolver {
   ): Promise<Survey | null> {
     return SurveyService.findSurveyByLink(surveyLink);
   }
+
+  @Authorized()
   @Query(() => [Survey])
-  getSurveysByOwner(@Arg("userId") userId: string): Promise<Survey[] | null> {
-    return SurveyService.findSurveysByOwner(userId);
+  getSurveysByOwner(@Ctx("user") user: User): Promise<Survey[] | null> {
+    return SurveyService.findSurveysByOwner(user);
   }
 
   @Authorized()
@@ -42,3 +44,4 @@ export class SurveyResolver {
     return SurveyService.archive(link, archive);
   }
 }
+
