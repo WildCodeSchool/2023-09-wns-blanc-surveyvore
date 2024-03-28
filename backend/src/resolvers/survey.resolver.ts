@@ -25,7 +25,6 @@ export class SurveyResolver {
     @Arg("title") title: string,
     @Ctx("user") user: User
   ): Promise<string> {
-    console.log(user);
     return SurveyService.create({ title, user });
   }
 
