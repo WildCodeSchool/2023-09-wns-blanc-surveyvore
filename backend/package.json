@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "dev": "ts-node-dev ./src/index.ts",
+    "build": "tsc",
+    "start": "node build/src/index.js",
     "test": "jest",
-    "start": "ts-node-dev ./src/index.ts",
     "migration:create": "typeorm-ts-node-commonjs migration:create",
     "migration:generate": "typeorm-ts-node-commonjs migration:generate -d src/config/db.ts",
     "migration:up": "typeorm-ts-node-commonjs migration:run -d src/config/db.ts",

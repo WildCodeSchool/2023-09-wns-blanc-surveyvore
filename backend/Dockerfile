@@ -8,4 +8,4 @@ COPY .env .env
 RUN npm i
 COPY src src
 
-CMD npm start
+CMD npm run dev
