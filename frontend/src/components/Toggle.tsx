@@ -20,7 +20,7 @@ function Toggle({
         type="checkbox"
         name={inputName}
         id={inputName}
-        data-test-id={inputName}
+        data-testid={inputName}
         onChange={onChange}
         checked={checked}
       />

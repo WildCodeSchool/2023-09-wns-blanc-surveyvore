@@ -165,7 +165,7 @@ function NewQuestion({
       <form ref={formRef} className="survey-section" onSubmit={handleSubmit}>
         <Input
           type="text"
-          inputName="survey-title"
+          inputName="question-title"
           placeholder={question.title}
           labelClassName="input-field"
           inputClassName="input"
@@ -174,9 +174,9 @@ function NewQuestion({
         />
         <Input
           textarea
-          inputName="survey-description"
+          inputName="question-description"
           labelClassName="input-field"
-          labelName="Description (facultatif)"
+          labelName="Description (facultative)"
           placeholder={question.description}
           inputClassName="textarea"
           value={description}
