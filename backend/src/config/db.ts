@@ -10,11 +10,11 @@ import { SurveyState } from "../entities/surveyState";
 
 export const dataSource = new DataSource({
   type: "postgres",
-  host: "db",
-  port: 5432,
-  username: "surveyvore",
-  password: "password",
-  database: "surveyvore",
+  host: process.env.POSTGRES_HOST,
+  port: parseInt(process.env.POSTGRES_DB as string),
+  username: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD,
+  database: process.env.POSTGRES_DB,
   entities: [
     Question,
     QuestionAnswer,
