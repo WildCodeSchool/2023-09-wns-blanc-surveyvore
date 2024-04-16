@@ -19,6 +19,7 @@ const start = async () => {
 
   await dataSource.initialize();
 
+
   const schema = await buildSchema({
     resolvers: [
       UserResolver,
