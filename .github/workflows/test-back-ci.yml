@@ -42,7 +42,7 @@ jobs:
 
   docker:
     needs: test-backend
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: Set up QEMU
