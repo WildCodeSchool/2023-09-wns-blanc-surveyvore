@@ -1,6 +1,6 @@
 import { IconName } from "@/types/iconName.type";
 
-type ColorType =
+export type ColorType =
   | "current"
   | "primary"
   | "grey"
