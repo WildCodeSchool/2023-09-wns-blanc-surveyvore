@@ -4,10 +4,12 @@ import {
   Column,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Survey } from "./survey";
 import { QuestionType } from "./questionType";
+import { QuestionAnswer } from "./questionAnswer";
 
 @Entity()
 @ObjectType()
@@ -16,7 +18,6 @@ export class Question extends BaseEntity {
     datas: {
       title: string;
       description: string;
-      typeId: string;
       defaultQuestion: boolean;
     } | null = null
   ) {
@@ -24,7 +25,6 @@ export class Question extends BaseEntity {
     if (datas) {
       this.title = datas.title;
       this.description = datas.description;
-      this.typeId = datas.typeId;
       this.defaultQuestion = datas.defaultQuestion;
     }
   }
@@ -37,9 +37,9 @@ export class Question extends BaseEntity {
   @Field()
   title: string;
 
-  @Column()
-  @Field()
-  description: string;
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  description?: string;
 
   @Column()
   @Field()
@@ -47,10 +47,14 @@ export class Question extends BaseEntity {
 
   @Field()
   @ManyToOne(() => QuestionType, (questionType) => questionType.type)
-  typeId: string;
+  type: QuestionType;
 
   @Field()
-  @ManyToOne(() => Survey, (survey) => survey.id)
-  surveyId: string;
+  @ManyToOne(() => Survey, (survey) => survey.link)
+  survey: Survey;
+
+  @Field(() => [QuestionAnswer], { nullable: true })
+  @OneToMany(() => QuestionAnswer, (questionAnswer) => questionAnswer.question)
+  answer: QuestionAnswer[];
 }
 

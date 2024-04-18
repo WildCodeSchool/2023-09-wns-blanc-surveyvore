@@ -4,10 +4,11 @@ import {
   Column,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Survey } from "./survey";
 import { Role } from "./role";
+import { Survey } from "./survey";
 
 @Entity()
 @ObjectType()
@@ -16,12 +17,12 @@ export class User extends BaseEntity {
   @Field()
   id: string;
 
-  @Column()
-  @Field()
+  @Column({ nullable: true })
+  @Field({ nullable: true })
   firstname?: string;
 
-  @Column()
-  @Field()
+  @Column({ nullable: true })
+  @Field({ nullable: true })
   lastname?: string;
 
   @Column()
@@ -30,9 +31,13 @@ export class User extends BaseEntity {
 
   @Column()
   @Field()
-  hashedPassword: string;
+  password: string;
 
   @Field()
   @ManyToOne(() => Role, (role) => role.name)
-  roleId: string;
+  role: Role;
+
+  @Field(() => [Survey])
+  @OneToMany(() => Survey, (survey) => survey.user)
+  surveys: Survey[];
 }

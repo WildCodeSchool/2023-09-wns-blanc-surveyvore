@@ -6,8 +6,13 @@ import * as UserService from "../services/user.service";
 @Resolver(User)
 export class UserResolver {
   @Query(() => String)
-  helloWorld() {
-    return "Hello World!";
+  getUserByEmail(@Arg("email") email: string): Promise<User | null> {
+    return UserService.getByEmail(email);
+  }
+
+  @Query(() => User)
+  getMe(@Arg("token") token: string): Promise<User | null> {
+    return AuthService.getMe(token);
   }
 
   @Mutation(() => User)
@@ -17,6 +22,12 @@ export class UserResolver {
     @Arg("firstname") firstname?: string,
     @Arg("lastname") lastname?: string
   ): Promise<User> {
-    return UserService.create(email, password, firstname, lastname);
+    return UserService.createUser(email, password, firstname, lastname);
+  }
+
+  @Mutation(() => String)
+  signIn(@Arg("email") email: string, @Arg("password") password: string) {
+    return AuthService.signIn(email, password);
   }
 }
+

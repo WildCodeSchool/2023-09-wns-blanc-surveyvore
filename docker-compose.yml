@@ -5,17 +5,33 @@ services:
     build: ./backend
     ports:
       - 3001:3001
-    command: sh -c "npm install && npm start"
     volumes:
       - ./backend/.env:/surveyvore/.env:rw
       - ./backend/src:/surveyvore/src:rw
       - ./backend/node_modules:/surveyvore/node_modules
       - ./backend/package.json:/surveyvore/package.json:rw
       - ./backend/migrations:/surveyvore/migrations:rw
+      - ./backend/jest.config.js:/surveyvore/jest.config.js:rw
+      - ./backend/tsconfig.json:/surveyvore/tsconfig.json
     environment:
       - CHOKIDAR_USEPOLLING=true
     depends_on:
       - db
+
+  frontend:
+    build: ./frontend
+    command: npm run dev
+    ports:
+      - 3000:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+      - WDS_SOCKET_HOST=127.0.0.1
+    volumes:
+      - ./frontend/public:/surveyvoreApp/public:rw
+      - ./frontend/src:/surveyvoreApp/src:rw
+      - ./frontend/package.json:/surveyvoreApp/package.json:rw
+      - ./frontend/node_modules:/surveyvoreApp/node_modules
 
   db:
     image: postgres
@@ -30,7 +46,7 @@ services:
     volumes:
       - ./dbData:/var/lib/postgresql/data/customDataFolder
     healthcheck:
-      test: ["CMD", "pg_isready -U surveyvore -d surveyvore"]
+      test: [ "CMD", "pg_isready -U surveyvore -d surveyvore" ]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -40,4 +56,3 @@ services:
     restart: always
     ports:
       - 8080:8080
-
