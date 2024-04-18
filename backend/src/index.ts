@@ -11,6 +11,7 @@ import { GraphQLError } from "graphql";
 import { getByEmail } from "./services/user.service";
 import { verifyToken } from "./services/auth.service";
 import { SurveyStateResolver } from "./resolvers/surveyState.resolver";
+import { ApolloServerPluginLandingPageDisabled } from "apollo-server-core";
 
 const start = async () => {
   dotenv.config();
@@ -59,6 +60,11 @@ const start = async () => {
     },
   });
 
+  const plugins = [];
+  if (process.env.NODE_ENV === "production") {
+    plugins.push(ApolloServerPluginLandingPageDisabled());
+  }
+
   const server = new ApolloServer({
     schema,
     context: ({ req }) => {
@@ -75,6 +81,7 @@ const start = async () => {
         return {};
       }
     },
+    plugins: [...plugins],
   });
 
   try {

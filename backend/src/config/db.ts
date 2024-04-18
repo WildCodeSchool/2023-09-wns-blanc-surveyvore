@@ -27,5 +27,6 @@ export const dataSource = new DataSource({
   ],
   logging: true,
   synchronize: false,
-  migrations: ["migrations/*.ts"],
+  migrations: ["migrations/*.{ts,js}"],
 });
+
