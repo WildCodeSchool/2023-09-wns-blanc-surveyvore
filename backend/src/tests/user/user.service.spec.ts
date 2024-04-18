@@ -1,5 +1,5 @@
-import * as userService from "../services/user.service";
-import { User } from "../entities/user";
+import * as userService from "../../services/user.service";
+import { User } from "../../entities/user";
 
 const userMock = jest
   .spyOn(User.prototype, "save")

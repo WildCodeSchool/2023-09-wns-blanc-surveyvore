@@ -8,6 +8,10 @@ import { User } from "../entities/user";
 import { UserAnswer } from "../entities/userAnswer";
 import { SurveyState } from "../entities/surveyState";
 
+import * as dotenv from "dotenv";
+
+dotenv.config();
+
 export const dataSource = new DataSource({
   type: "postgres",
   host: process.env.POSTGRES_HOST,

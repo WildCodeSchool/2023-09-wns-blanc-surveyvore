@@ -1,5 +1,5 @@
 import { ApolloServer, gql } from "apollo-server";
-import createServer from "../config/server";
+import createServer from "../../config/server";
 
 const tokenContext: { token?: string } = {};
 
