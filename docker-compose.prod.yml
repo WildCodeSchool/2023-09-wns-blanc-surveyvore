@@ -17,7 +17,7 @@ services:
     volumes:
       - ./dbData:/var/lib/postgresql/data/customDataFolder
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -d goodcornerdb -U goodcorner"]
+      test: ["CMD-SHELL", "pg_isready -d surveyvore -U surveyvore"]
       interval: 5s
       timeout: 5s
       retries: 10
