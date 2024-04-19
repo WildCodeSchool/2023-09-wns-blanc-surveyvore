@@ -2,7 +2,8 @@ name: frontend-actions
 
 on:
   push:
-    paths: "frontend/**"
+    paths:
+      - "frontend/**"
 
 jobs:
   test-front:
