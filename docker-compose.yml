@@ -2,11 +2,16 @@ version: "3"
 
 services:
   backend:
+    # image: backend
     build: ./backend
+    command:
+      npm run dev
+      # context: ./backend
+      # dockerfile: Dockerfile
     ports:
       - 3001:3001
     volumes:
-      - ./backend/.env:/surveyvore/.env:rw
+      - ./backend/.env.backend:/surveyvore/.env:rw
       - ./backend/src:/surveyvore/src:rw
       - ./backend/node_modules:/surveyvore/node_modules
       - ./backend/package.json:/surveyvore/package.json:rw
@@ -46,7 +51,7 @@ services:
     volumes:
       - ./dbData:/var/lib/postgresql/data/customDataFolder
     healthcheck:
-      test: [ "CMD", "pg_isready -U surveyvore -d surveyvore" ]
+      test: ["CMD", "pg_isready -U surveyvore -d surveyvore"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -56,3 +61,4 @@ services:
     restart: always
     ports:
       - 8080:8080
+
