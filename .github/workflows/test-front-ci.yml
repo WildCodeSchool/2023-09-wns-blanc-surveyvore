@@ -32,5 +32,6 @@ jobs:
         with:
           push: true
           context: "{{defaultContext}}:frontend"
+          file: build.Dockerfile
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/surveyvore-frontend:latest
 
