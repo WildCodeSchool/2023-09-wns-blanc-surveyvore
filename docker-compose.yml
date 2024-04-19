@@ -33,10 +33,10 @@ services:
       - WATCHPACK_POLLING=true
       - WDS_SOCKET_HOST=127.0.0.1
     volumes:
-      - ./frontend/public:/surveyvoreApp/public:rw
-      - ./frontend/src:/surveyvoreApp/src:rw
-      - ./frontend/package.json:/surveyvoreApp/package.json:rw
-      - ./frontend/node_modules:/surveyvoreApp/node_modules
+      - ./frontend/public:/surveyvore/public:rw
+      - ./frontend/src:/surveyvore/src:rw
+      - ./frontend/package.json:/surveyvore/package.json:rw
+      - ./frontend/node_modules:/surveyvore/node_modules
 
   db:
     image: postgres
@@ -49,7 +49,7 @@ services:
       - POSTGRES_PASSWORD=password
       - PGDATA=/var/lib/postgresql/data/customDataFolder
     volumes:
-      - ./dbData:/var/lib/postgresql/data/customDataFolder
+      - ./dbData:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD", "pg_isready -U surveyvore -d surveyvore"]
       interval: 5s
