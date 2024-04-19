@@ -6,8 +6,18 @@ import { useRouter } from "next/router";
 import React, { ReactElement, useState } from "react";
 
 const SIGN_UP = gql`
-  mutation CreateUser($lastname: String!, $firstname: String!, $password: String!, $email: String!) {
-    createUser(lastname: $lastname, firstname: $firstname, password: $password, email: $email) {
+  mutation CreateUser(
+    $lastname: String!
+    $firstname: String!
+    $password: String!
+    $email: String!
+  ) {
+    createUser(
+      lastname: $lastname
+      firstname: $firstname
+      password: $password
+      email: $email
+    ) {
       email
     }
   }
@@ -26,7 +36,7 @@ function SignUp() {
       email,
       password,
       lastname,
-      firstname
+      firstname,
     },
     onCompleted: () => {
       router.push("/signin");
@@ -91,17 +101,15 @@ function SignUp() {
       </section>
 
       <p className="existing-account">
-        Déjà un compte ? <Link href="/signin">Se connecter</Link>
+        Vous possédez déjà un compte ? <Link href="/signin">Se connecter</Link>
       </p>
     </div>
   );
 }
 
 SignUp.getLayout = function getLayout(page: ReactElement) {
-  return (
-    <LogLayout>{page}</LogLayout>
-  )
-}
+  return <LogLayout>{page}</LogLayout>;
+};
 
 export default SignUp;
 
