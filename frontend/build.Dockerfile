@@ -28,7 +28,7 @@ WORKDIR /surveyvore
 # Copier les dossiers à partir de l'image précédente
 COPY --from=builder /surveyvore/package.json /surveyvore/package.json
 COPY --from=builder /surveyvore/public /surveyvore/public
-COPY --from=builder /surveyvore/.next /surveyvore
+COPY --from=builder /surveyvore/.next /surveyvore/.next
 
 RUN npm i --production
 
