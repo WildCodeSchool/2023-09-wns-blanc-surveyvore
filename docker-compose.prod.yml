@@ -15,7 +15,7 @@ services:
     image: postgres
     restart: always
     volumes:
-      - ./dbData:/var/lib/postgresql/data/customDataFolder
+      - ./dbData:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d goodcornerdb -U goodcorner"]
       interval: 5s

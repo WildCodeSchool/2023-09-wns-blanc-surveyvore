@@ -49,7 +49,7 @@ services:
       - POSTGRES_PASSWORD=password
       - PGDATA=/var/lib/postgresql/data/customDataFolder
     volumes:
-      - ./dbData:/var/lib/postgresql/data/customDataFolder
+      - ./dbData:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD", "pg_isready -U surveyvore -d surveyvore"]
       interval: 5s
