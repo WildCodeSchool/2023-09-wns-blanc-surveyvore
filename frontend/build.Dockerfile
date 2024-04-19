@@ -9,7 +9,7 @@ COPY package-lock.json package-lock.json
 COPY tsconfig.json tsconfig.json
 COPY public public
 COPY next-env.d.ts next-env.d.ts
-COPY next.config.js next.config.js
+COPY next.config.mjs next.config.mjs
 COPY src src
 
 # Génère le dossier node_modules
