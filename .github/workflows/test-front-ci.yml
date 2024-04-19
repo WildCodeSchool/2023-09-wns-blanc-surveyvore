@@ -35,4 +35,5 @@ jobs:
           context: "{{defaultContext}}:frontend"
           file: build.Dockerfile
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/surveyvore-frontend:latest
+          build-args: NEXT_PUBLIC_BACKEND_URL=${{ secrets.BACKEND_URL }}
 
