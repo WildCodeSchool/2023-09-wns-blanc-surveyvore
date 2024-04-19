@@ -2,7 +2,7 @@ name: backend-actions
 
 on:
   push:
-    paths: -"backend/**"
+    paths: "backend/**"
 
 env:
   JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
