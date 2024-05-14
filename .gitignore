@@ -2,3 +2,4 @@
 /dbData
 */build
 */.env
+*.log

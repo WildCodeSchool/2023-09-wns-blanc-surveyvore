@@ -4,7 +4,7 @@ RUN mkdir /surveyvore
 WORKDIR /surveyvore
 COPY package*.json ./
 COPY tsconfig.json tsconfig.json
-COPY .env .env
+COPY .env.backend .env.backend
 RUN npm i
 COPY src src
 

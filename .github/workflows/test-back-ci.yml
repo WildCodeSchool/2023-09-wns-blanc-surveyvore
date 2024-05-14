@@ -1,6 +1,9 @@
-name: jest-and-docker-ci
+name: backend-actions
 
-on: push
+on:
+  push:
+    paths:
+      - "backend/**"
 
 env:
   JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
@@ -9,6 +12,7 @@ env:
   POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
   POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
   POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
+
 
 jobs:
   test-backend:
@@ -42,7 +46,7 @@ jobs:
 
   docker:
     needs: test-backend
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: Set up QEMU
@@ -61,3 +65,4 @@ jobs:
           context: "{{defaultContext}}:backend"
           file: build.Dockerfile
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/surveyvore-backend:latest
+
