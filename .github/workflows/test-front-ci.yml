@@ -1,6 +1,9 @@
-name: jest-ci
+name: frontend-actions
 
-on: push
+on:
+  push:
+    paths:
+      - "frontend/**"
 
 jobs:
   test-front:
@@ -8,7 +11,7 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
-      - name: Goto client and run tests
+      - name: Goto frontend and run tests
         run: cd frontend && npm i && npm test
 
   docker:
@@ -30,5 +33,7 @@ jobs:
         with:
           push: true
           context: "{{defaultContext}}:frontend"
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/surveyvore-front:latest
+          file: build.Dockerfile
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/surveyvore-frontend:latest
+          build-args: NEXT_PUBLIC_BACKEND_URL=${{ secrets.BACKEND_URL }}
 

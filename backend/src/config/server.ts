@@ -10,6 +10,7 @@ import { QuestionResolver } from "../resolvers/question.resolver";
 import { QuestionTypeResolver } from "../resolvers/questionType.resolver";
 import { SurveyResolver } from "../resolvers/survey.resolver";
 import { SurveyStateResolver } from "../resolvers/surveyState.resolver";
+import { ApolloServerPluginLandingPageDisabled } from "apollo-server-core";
 
 async function createServer(
   customContext: any = undefined
@@ -57,6 +58,11 @@ async function createServer(
     },
   });
 
+  const plugins = [];
+  if (process.env.NODE_ENV === "production") {
+    plugins.push(ApolloServerPluginLandingPageDisabled());
+  }
+
   return new ApolloServer({
     schema,
     context: customContext
@@ -78,6 +84,7 @@ async function createServer(
             }
           }
         },
+    plugins: [...plugins],
   });
 }
 
