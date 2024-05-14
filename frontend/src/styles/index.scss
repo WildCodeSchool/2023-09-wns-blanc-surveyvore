@@ -1,10 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@400;500;600;700&display=swap");
-@import url("https://use.typekit.net/ubj2mdm.css");
-
-@import "reset.css";
-
-@use "elements/typography";
 @use "base";
+@use "elements/typography";
 @use "elements/colors";
 @use "elements/shadows";
 @use "elements/checkbox";
@@ -24,4 +19,3 @@
 @use "pages/NewSurvey.scss";
 @use "pages/Access.scss";
 @use "pages/Home.scss";
-
