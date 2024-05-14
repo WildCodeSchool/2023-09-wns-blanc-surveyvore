@@ -15,7 +15,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
                 <link
                     rel="preconnect"
                     href="https://fonts.gstatic.com"
-                    crossorigin
+                    crossOrigin="anonymous"
                 />
                 <link
                     href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap"

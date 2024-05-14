@@ -102,10 +102,11 @@ function NewQuestion({
     const formData = new FormData(formRef.current);
 
     const form = {
-      title: formData.get("survey-title"),
-      description: formData.get("survey-description"),
+      title: formData.get("question-title"),
+      description: formData.get("question-description"),
       type: selectedType,
     };
+
 
     createQuestion({
       variables: {
