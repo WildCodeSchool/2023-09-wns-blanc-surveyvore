@@ -1,55 +1,16 @@
 import NavLayout from "@/layouts/NavLayout";
 import { ReactElement, useEffect, useState } from "react";
 import { Survey } from "@/types/survey.type";
-import { gql, useLazyQuery, useQuery } from "@apollo/client";
+import { useLazyQuery, useQuery } from "@apollo/client";
 import Link from "next/link";
 import Icon from "@/components/Icon/Icon";
-import { formatDate, removeAccents } from "@/tools/format.tools";
+import { formatDate, removeAccents } from "@/lib/tools/format.tools";
 import { SurveyState } from "@/types/surveyState.type";
 import { IconName } from "@/types/iconName.type";
-
-// Si on fait une requête dynamique ça recharge la page à chaque fois que l'on clique sur un filtre et c'est pas ouf --> filtres en front
-// j'ai utiliser le contexte du user plutot que de passer l'id en paramètre du getSurveysByOwner
-
-const GET_SURVEY_BY_OWNER = gql`
-  query GetSurveysByOwner {
-    getSurveysByOwner {
-      id
-      title
-      description
-      link
-      archived
-      private
-      collectingUserData
-      startDate
-      endDate
-      deleteDate
-      creationDate
-      publicationDate
-      archiveDate
-      state {
-        color
-        state
-      }
-      question {
-        title
-        answer {
-          content
-        }
-      }
-    }
-  }
-`;
-
-const GET_SURVEY_STATES = gql`
-  query Query {
-    getSurveyStates {
-      color
-      id
-      state
-    }
-  }
-`;
+import {
+  GET_SURVEY_BY_OWNER,
+  GET_SURVEY_STATES,
+} from "@/lib/queries/survey.queries";
 
 type SortOption = {
   option: string;
@@ -251,6 +212,7 @@ export default function Home() {
             <div className="dropdown-wrapper">
               {sortOptions.map((option) => (
                 <button
+                  key={option.option}
                   onClick={() => {
                     setSelectedSortOption(
                       option.option === selectedSortOption ? "" : option.option

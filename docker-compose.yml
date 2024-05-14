@@ -38,6 +38,7 @@ services:
       - ./frontend/src:/surveyvore/src:rw
       - ./frontend/package.json:/surveyvore/package.json:rw
       - ./frontend/node_modules:/surveyvore/node_modules
+      - ./frontend/.env.frontend:/surveyvore/.env:rw
 
   db:
     image: postgres
