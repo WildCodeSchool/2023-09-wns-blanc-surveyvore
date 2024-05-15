@@ -1,5 +1,6 @@
 FROM node:lts-alpine
 
+RUN apk --no-cache add curl
 WORKDIR /surveyvore
 
 COPY package.json package.json

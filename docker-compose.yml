@@ -2,12 +2,9 @@ version: "3"
 
 services:
   backend:
-    # image: backend
     build: ./backend
     command:
       npm run dev
-      # context: ./backend
-      # dockerfile: Dockerfile
     ports:
       - 3001:3001
     volumes:

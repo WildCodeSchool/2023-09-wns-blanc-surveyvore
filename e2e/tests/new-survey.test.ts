@@ -16,7 +16,7 @@ test.afterAll(async () => {
 
 test.describe("Add a new survey", () => {
     test("01. Go to login page", async () => {
-        await page.goto("http://localhost:3000/signin");
+        await page.goto("http://frontend:3000/signin");
     });
 
     test("02. Login with valid credentials", async () => {
@@ -31,13 +31,13 @@ test.describe("Add a new survey", () => {
         await page.getByRole("button", { name: "Se connecter" }).click();
 
         await page.waitForLoadState("networkidle");
-        await expect(page.url()).toEqual("http://localhost:3000/");
+        await expect(page.url()).toEqual("http://frontend:3000/");
     });
 
     test("03. Go to the new survey page", async () => {
         await page.getByRole("button", { name: "Nouveau formulaire" }).click();
         await expect(page).toHaveURL(
-            new RegExp("^http://localhost:3000/surveys/")
+            new RegExp("^http://frontend:3000/surveys/")
         );
     });
 
