@@ -6,16 +6,16 @@ import Link from "next/link";
 import Icon from "@/components/Icon/Icon";
 import { formatDate, removeAccents } from "@/lib/tools/format.tools";
 import { SurveyState } from "@/types/surveyState.type";
-import { IconName } from "@/types/iconName.type";
 import {
   GET_SURVEY_BY_OWNER,
   GET_SURVEY_STATES,
 } from "@/lib/queries/survey.queries";
-
-type SortOption = {
-  option: string;
-  icon: IconName;
-};
+import {
+  displayNumberOfQuestions,
+  displayState,
+  sortSurveys,
+} from "@/lib/tools/survey.tools";
+import { sortOptions } from "@/lib/fixtures/data";
 
 export default function Home() {
   // ----------------------------------States----------------------------------
@@ -47,72 +47,6 @@ export default function Home() {
   if (error) return <p>Error: {error.message}</p>;
 
   // ----------------------------------Functions----------------------------------
-
-  // function to display survey states
-  const displayState = (state: string) => {
-    switch (state.toLowerCase()) {
-      case "draft":
-        return "Brouillon";
-      case "published":
-        return "Publié";
-      case "in-progress":
-        return "En cours";
-      case "closed":
-        return "Clotûré";
-      case "archived":
-        return "Archivé";
-    }
-  };
-
-  // Array of sort options for surveys. We can add as many as we want.
-  const sortOptions: SortOption[] = [
-    {
-      option: "Ordre alphabétique",
-      icon: "sort-alpha-up",
-    },
-    {
-      option: "Ordre anti-alphabétique",
-      icon: "sort-alpha-down",
-    },
-    {
-      option: "Nombre de questions",
-      icon: "list-check",
-    },
-  ];
-
-  // function to sort surveys by selected option
-  const sortSurveys = (option: string, surveys: Survey[]) => {
-    switch (option) {
-      case "Ordre alphabétique":
-        return surveys.sort((a, b) =>
-          removeAccents(a.title.toLowerCase()) >
-          removeAccents(b.title.toLowerCase())
-            ? 1
-            : -1
-        );
-      case "Ordre anti-alphabétique":
-        return surveys.sort((a, b) =>
-          removeAccents(a.title.toLowerCase()) <
-          removeAccents(b.title.toLowerCase())
-            ? 1
-            : -1
-        );
-      case "number of questions":
-        return surveys.sort((a, b) => b.question.length - a.question.length);
-      default:
-        return surveys;
-    }
-  };
-
-  const displayNumberOfQuestions = (survey: Survey) => {
-    if (survey.question.length > 1) {
-      return `${survey.question.length} questions`;
-    } else if (survey.question.length === 1) {
-      return "1 question";
-    } else {
-      return "Aucune question";
-    }
-  };
 
   const filteredSurveys = surveys
     .filter(
