@@ -2,8 +2,10 @@ import NavLayout from "@/layouts/NavLayout";
 import { ReactElement, useEffect, useState } from "react";
 import { Survey } from "@/types/survey.type";
 import { useLazyQuery, useQuery } from "@apollo/client";
+import { useLazyQuery, useQuery } from "@apollo/client";
 import Link from "next/link";
 import Icon from "@/components/Icon/Icon";
+import { formatDate, removeAccents } from "@/lib/tools/format.tools";
 import { formatDate, removeAccents } from "@/lib/tools/format.tools";
 import { SurveyState } from "@/types/surveyState.type";
 import {
