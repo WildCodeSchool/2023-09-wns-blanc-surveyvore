@@ -5,14 +5,15 @@ function QuestionType({
     types,
     selectedType,
     setSelectedType,
+    questionId,
 }: {
     types: QuestionType[];
     selectedType: RadioElement | undefined | QuestionType;
     setSelectedType: React.Dispatch<
         React.SetStateAction<RadioElement | undefined | QuestionType>
     >;
+    questionId: string;
 }) {
-
     const getTypeName = (type: QuestionType) => {
         switch (type.type) {
             case "text":
@@ -37,10 +38,13 @@ function QuestionType({
         onClick: () => setSelectedType(type),
         isChecked: selectedType?.id === type.id,
     }));
-    
+
     return (
         <>
-            <RadioGroup elements={elements} name="question-type" />
+            <RadioGroup
+                elements={elements}
+                name={`question-type-${questionId}`}
+            />
         </>
     );
 }
