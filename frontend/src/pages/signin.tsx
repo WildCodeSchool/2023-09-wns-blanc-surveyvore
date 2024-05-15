@@ -55,7 +55,7 @@ function SignIn() {
         <Input
           type="password"
           inputName="password"
-          placeholder="********"
+          placeholder="••••••••"
           labelName="Mot de passe"
           labelClassName="input-field"
           inputClassName="input"

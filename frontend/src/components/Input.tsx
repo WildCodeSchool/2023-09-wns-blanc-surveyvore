@@ -49,7 +49,7 @@ function Input({
           ref={ref as React.RefObject<HTMLTextAreaElement>}
           name={inputName}
           value={value ? value : ""}
-          data-test-id={inputName}
+          data-testid={inputName}
           onChange={handleChange}
           placeholder={placeholder}
           className={inputClassName}
@@ -65,7 +65,7 @@ function Input({
           placeholder={placeholder}
           autoComplete={type === "password" ? "current-password" : ""}
           value={value}
-          data-test-id={inputName}
+          data-testid={inputName}
           onChange={handleChange}
           onBlur={onBlur}
         />
