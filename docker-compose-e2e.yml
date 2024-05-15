@@ -6,8 +6,10 @@ services:
     command: npm run dev
     ports:
       - 3001:3001
+
+    env_file:
+      - ./backend/.env.test.backend
     volumes:
-      - ./backend/.env.test.backend:/surveyvore/.env:rw
       - ./backend/src:/surveyvore/src:rw
       - ./backend/node_modules:/surveyvore/node_modules
       - ./backend/package.json:/surveyvore/package.json:rw
@@ -30,8 +32,9 @@ services:
     command: npm run dev
     ports:
       - 3000:3000
+    env_file:
+      - ./frontend/.env.test.frontend
     volumes:
-      - ./frontend/.env.test.frontend:/surveyvore/.env:rw
       - ./frontend/public:/surveyvore/public:rw
       - ./frontend/src:/surveyvore/src:rw
       - ./frontend/package.json:/surveyvore/package.json:rw
@@ -71,7 +74,7 @@ services:
     depends_on:
       frontend:
         condition: service_healthy
-        
+
   adminer:
     image: adminer
     restart: always
