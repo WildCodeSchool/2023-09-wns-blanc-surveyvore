@@ -1,6 +1,7 @@
 import Head from "next/head";
 
 function RootLayout({ children }: { children: React.ReactNode }) {
+
     return (
         <>
             <Head>
@@ -18,3 +19,4 @@ function RootLayout({ children }: { children: React.ReactNode }) {
 }
 
 export default RootLayout;
+
