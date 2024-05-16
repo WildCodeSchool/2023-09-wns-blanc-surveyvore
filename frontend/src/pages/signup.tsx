@@ -85,7 +85,7 @@ function SignUp() {
                 <Input
                     type="password"
                     inputName="password"
-                    placeholder="********"
+                    placeholder="••••••••"
                     labelName="Mot de passe"
                     value={password}
                     setValue={setPassword}
