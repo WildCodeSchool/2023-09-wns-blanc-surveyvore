@@ -18,6 +18,8 @@ async function createServerTest(
   dotenv.config();
   await dataSourceTest.initialize();
 
+  console.log("Starting datasource test ...");
+
   const schema = await buildSchema({
     resolvers: [
       QuestionResolver,
