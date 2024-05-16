@@ -7,7 +7,7 @@ on:
 
 env:
   JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-  POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+  POSTGRES_DB_TEST: ${{ secrets.POSTGRES_DB }}
   POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
   POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
   POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
@@ -22,7 +22,7 @@ jobs:
       db:
         image: postgres
         env:
-          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          POSTGRES_DB_TEST: ${{ secrets.POSTGRES_DB }}
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         options: >-
