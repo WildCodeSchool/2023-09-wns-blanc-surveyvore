@@ -10,7 +10,7 @@ import { QuestionTypeResolver } from "../resolvers/questionType.resolver";
 import { SurveyResolver } from "../resolvers/survey.resolver";
 import { SurveyStateResolver } from "../resolvers/surveyState.resolver";
 import { ApolloServerPluginLandingPageDisabled } from "apollo-server-core";
-import { dataSourceTest } from "./test_dbase";
+import { dataSourceTest } from "./test_database";
 
 async function createServerTest(
   customContext: any = undefined
