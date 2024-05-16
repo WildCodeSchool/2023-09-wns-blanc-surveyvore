@@ -1,0 +1,13 @@
+.answer-text-question-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  .answer-text-question-title {
+    font-weight: 500;
+  }
+  .answer-text-question-description {
+    font-style: italic;
+    font-size: 0.75rem;
+  }
+}

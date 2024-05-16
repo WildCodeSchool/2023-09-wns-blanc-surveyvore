@@ -24,7 +24,6 @@ type AppPropsWithLayout = AppProps & {
 };
 
 const httpLink = createHttpLink({
-  // TODO: create dotenv for the backend url --> résoudre le bug du .env et .gitignore
   uri: `${process.env.NEXT_PUBLIC_BACKEND_URL}/graphql`,
 });
 

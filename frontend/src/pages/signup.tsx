@@ -96,7 +96,7 @@ function SignUp() {
             </form>
 
             <p className="existing-account">
-                Vous possédez déjà un compte ?{" "}
+                Vous possédez déjà un compte ?
                 <Link href="/signin">Se connecter</Link>
             </p>
         </div>

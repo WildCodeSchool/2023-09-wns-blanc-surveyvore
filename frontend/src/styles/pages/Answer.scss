@@ -1,0 +1,37 @@
+.answer-survey-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  .answer-survey-data-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    .answer-survey-title-container {
+      display: flex;
+      gap: 1rem;
+      font-size: 1.5rem;
+      .answer-survey-title {
+        font-weight: 900;
+      }
+    }
+
+    .answer-survey-description {
+      font-style: italic;
+      font-size: 1rem;
+    }
+  }
+
+  .answer-survey-default-questions-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .answer-survey-questions-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
