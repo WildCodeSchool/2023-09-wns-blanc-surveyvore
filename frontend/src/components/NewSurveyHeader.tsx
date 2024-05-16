@@ -64,7 +64,7 @@ function NewSurveyHeader({
         variables: {
             editSurveyLink: link,
             survey: {
-                title: title,
+                title: title ? title : "Formulaire sans titre",
                 description: description ? description : "",
                 collectingUserData: collectingData,
                 private: isPrivate,
@@ -92,7 +92,7 @@ function NewSurveyHeader({
             variables: {
                 editSurveyLink: link,
                 survey: {
-                    title,
+                    title: title ? title : "Formulaire sans titre",
                     description: description ? description : "",
                     collectingUserData: collectingData,
                     private: isPrivate,
@@ -107,11 +107,10 @@ function NewSurveyHeader({
                 focus
                 type="text"
                 inputName="survey-title"
-                placeholder="Formulaire sans titre"
-                labelClassName="input-field"
-                inputClassName="input"
+                placeholder="Titre du formulaire"
                 value={title}
                 setValue={setTitle}
+                inputClassName="survey-input-title"
                 onBlur={() => editSurvey()}
             />
             <div className="private-public-buttons">
@@ -121,10 +120,8 @@ function NewSurveyHeader({
             <Input
                 textarea
                 inputName="survey-description"
-                labelClassName="input-field"
                 labelName="Description (facultatif)"
                 placeholder="Description de mon formulaire"
-                inputClassName="textarea"
                 value={description}
                 setValue={setDescription}
                 onBlur={() => editSurvey()}

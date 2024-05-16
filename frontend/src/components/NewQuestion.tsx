@@ -6,6 +6,7 @@ import { RadioElement } from "./RadioGroup/RadioGroup";
 import { IconName } from "@/types/iconName.type";
 import Icon from "./Icon/Icon";
 import { Question } from "@/types/question.type";
+import CheckboxesQuestionType from "./QuestionTypes/CheckboxesQuestionType";
 
 /**
  * conservation des données quand on édite une question alors qu'une autre est en cours d'édition mais non validée
@@ -219,18 +220,14 @@ function NewQuestion({
                     type="text"
                     inputName="question-title"
                     placeholder="Titre de la question"
-                    labelClassName="input-field"
-                    inputClassName="input"
                     value={title}
                     setValue={setTitle}
                 />
                 <Input
                     textarea
                     inputName="question-description"
-                    labelClassName="input-field"
                     labelName="Description (facultative)"
                     placeholder="Description de la question"
-                    inputClassName="textarea"
                     value={description}
                     setValue={setDescription}
                 />
@@ -240,7 +237,13 @@ function NewQuestion({
                     setSelectedType={setSelectedType}
                     questionId={question.id || "empty"}
                 />
-
+                {selectedType && selectedType.type === "checkboxes" && (
+                    <CheckboxesQuestionType
+                        questions={questions}
+                        setQuestions={setQuestions}
+                        questionId={question.id || "empty"}
+                    />
+                )}
                 <div className="actions">
                     <button
                         className="button-md-grey-outline"

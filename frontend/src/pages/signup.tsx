@@ -63,8 +63,6 @@ function SignUp() {
                     inputName="firstname"
                     placeholder="Paul"
                     labelName="Prénom"
-                    labelClassName="input-field"
-                    inputClassName="input"
                     value={firstname}
                     setValue={setFirstname}
                 />
@@ -73,8 +71,6 @@ function SignUp() {
                     inputName="lastname"
                     placeholder="Ochon"
                     labelName="Nom"
-                    labelClassName="input-field"
-                    inputClassName="input"
                     value={lastname}
                     setValue={setLastname}
                 />
@@ -83,8 +79,6 @@ function SignUp() {
                     inputName="email"
                     placeholder="example@gmail.com"
                     labelName="Email"
-                    labelClassName="input-field"
-                    inputClassName="input"
                     value={email}
                     setValue={setEmail}
                 />
@@ -93,8 +87,6 @@ function SignUp() {
                     inputName="password"
                     placeholder="********"
                     labelName="Mot de passe"
-                    labelClassName="input-field"
-                    inputClassName="input"
                     value={password}
                     setValue={setPassword}
                 />

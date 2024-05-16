@@ -40,12 +40,12 @@ function QuestionType({
     }));
 
     return (
-        <>
+        <div className="">
             <RadioGroup
                 elements={elements}
                 name={`question-type-${questionId}`}
             />
-        </>
+        </div>
     );
 }
 

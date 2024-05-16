@@ -1,54 +1,69 @@
 @use "../elements/colors" as *;
 @use "../elements/shadows" as *;
+@use "../elements/typography" as *;
 
 .new-survey-content {
     display: flex;
     flex-direction: column;
     gap: 1rem;
 
-  }
-  
-  .survey-section {
-    @include shadow("xs");
-    background-color: var(--white);
-    padding: 2rem;
-    border-radius: 12px;
-    border: 1px solid var(--grey-200);
-    width: 100%;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    
-    .actions {
-      display: flex;
-      gap: 8px;
-      justify-content: flex-end;
-    }
-  }
-  
-  .survey-section-closed {
-  @include shadow("xs");
-    padding: 1rem;
-    display: flex;
-    justify-content: space-between;
-    background-color: var(--white);
-    border-radius: 12px;
-    border: 1px solid var(--grey-200);
-    .header {
+    .survey-section {
+        @include shadow("xs");
+        background-color: var(--white);
+        padding: 2rem;
+        border-radius: 12px;
+        border: 1px solid var(--grey-200);
+        width: 100%;
+        margin: 0 auto;
         display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        p {
-            font-weight: 500;
-            color: var(--grey-800);
+        flex-direction: column;
+        gap: 24px;
+
+        &.new-survey-header-section {
+            .survey-input-title {
+                input {
+                    @include title(
+                        "sm",
+                        $font: $font-family-accent,
+                        $weight: 500
+                    );
+                }
+                height: 3rem;
+            }
         }
-        i {
-            color: var(--grey-500) !important;
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+        .options {
         }
     }
-    .actions {
+
+    .survey-section-closed {
+        @include shadow("xs");
+        padding: 1rem;
         display: flex;
-        gap: 0.5rem;
+        justify-content: space-between;
+        background-color: var(--white);
+        border-radius: 12px;
+        border: 1px solid var(--grey-200);
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            p {
+                font-weight: 500;
+                color: var(--grey-800);
+            }
+            i {
+                color: var(--grey-500) !important;
+            }
+        }
+        .actions {
+            display: flex;
+            gap: 0.5rem;
+        }
     }
 }

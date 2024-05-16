@@ -47,8 +47,6 @@ function SignIn() {
           inputName="email"
           placeholder="example@gmail.com"
           labelName="Email"
-          labelClassName="input-field"
-          inputClassName="input"
           value={email}
           setValue={setEmail}
         />
@@ -57,8 +55,6 @@ function SignIn() {
           inputName="password"
           placeholder="••••••••"
           labelName="Mot de passe"
-          labelClassName="input-field"
-          inputClassName="input"
           value={password}
           setValue={setPassword}
         />
