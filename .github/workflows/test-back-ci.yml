@@ -19,7 +19,7 @@ jobs:
     container: node:lts-alpine
 
     services:
-      db:
+      db_test:
         image: postgres
         env:
           POSTGRES_DB_TEST: ${{ secrets.POSTGRES_DB }}
