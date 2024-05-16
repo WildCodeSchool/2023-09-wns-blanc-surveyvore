@@ -10,7 +10,9 @@
     "migration:create": "typeorm-ts-node-commonjs migration:create",
     "migration:generate": "typeorm-ts-node-commonjs migration:generate -d src/config/db.ts",
     "migration:up": "typeorm-ts-node-commonjs migration:run -d src/config/db.ts",
-    "migration:down": "typeorm-ts-node-commonjs migration:revert -d src/config/db.ts"
+    "migration_test:up": "typeorm-ts-node-commonjs migration:run -d src/config/db_test.ts",
+    "migration:down": "typeorm-ts-node-commonjs migration:revert -d src/config/db.ts",
+    "migration_test:down": "typeorm-ts-node-commonjs migration:revert -d src/config/db_test.ts"
   },
   "keywords": [],
   "author": "",

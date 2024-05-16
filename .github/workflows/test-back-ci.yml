@@ -39,7 +39,7 @@ jobs:
       - name: Install dependancies
         run: cd backend && npm i
       - name: Execute migrations
-        run: cd backend && npm run migration:up
+        run: cd backend && npm run migration_test:up
       - name: Go to backend and run tests
         run: cd backend && npm test
 
@@ -64,4 +64,3 @@ jobs:
           context: "{{defaultContext}}:backend"
           file: build.Dockerfile
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/surveyvore-backend:latest
-

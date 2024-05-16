@@ -49,7 +49,7 @@ export class Question extends BaseEntity {
   @ManyToOne(() => QuestionType, (questionType) => questionType.type)
   type: QuestionType;
 
-  @Field()
+  @Field(() => Survey)
   @ManyToOne(() => Survey, (survey) => survey.link)
   survey: Survey;
 
@@ -57,4 +57,3 @@ export class Question extends BaseEntity {
   @OneToMany(() => QuestionAnswer, (questionAnswer) => questionAnswer.question)
   answer: QuestionAnswer[];
 }
-

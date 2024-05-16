@@ -6,12 +6,14 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  Unique,
 } from "typeorm";
 import { Role } from "./role";
 import { Survey } from "./survey";
 
 @Entity()
 @ObjectType()
+@Unique(["email"])
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   @Field()
