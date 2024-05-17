@@ -1,7 +1,7 @@
 import * as userService from "../../services/user.service";
 import { User } from "../../entities/user";
 import * as dotenv from "dotenv";
-import { dataSourceTest } from "../../config/db_test";
+import { dataSourceTest } from "../../config/dbTest";
 
 beforeAll(async () => {
   dotenv.config();
