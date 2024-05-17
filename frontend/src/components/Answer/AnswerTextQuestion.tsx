@@ -10,7 +10,6 @@ function AnswerTextQuestion({ question }: { question: Question }) {
         <p className="answer-text-question-title">{question.title}</p>
         {question.description && <p className="answer-text-question-description">{question.description}</p>}
         <Input
-          textarea
           inputName={question.id ? question.id : "id" + Math.random().toString(16).slice(2)} // to delete when id is changed in db
           placeholder="Réponse à la question"
           value={answer}

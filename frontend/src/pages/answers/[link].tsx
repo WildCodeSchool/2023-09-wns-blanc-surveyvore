@@ -107,7 +107,7 @@ function AnswerSurvey() {
         <div className="answer-survey-data-container">
           <div className="answer-survey-title-container">
             <h1 className="answer-survey-title">{title}</h1>
-            {isPrivate && <Icon name="lock" height="1rem" width="1rem" />}
+            {isPrivate && <Icon name="lock" height="1.5rem" width="1.5rem" />}
           </div>
           <p className="answer-survey-description">{description}</p>
         </div>
