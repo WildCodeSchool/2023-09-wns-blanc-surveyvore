@@ -26,43 +26,6 @@
     grid-template: auto/1fr 1fr;
     gap: calc(var(--gap) * 0.25);
 
-    .filters-container {
-      position: relative;
-      .dropdown-wrapper {
-        width: max-content;
-        min-width: 200px;
-        flex-direction: column;
-        border-radius: 8px;
-        border: 1px solid var(--grey-200);
-        background-color: var(--white);
-        overflow: hidden;
-        position: absolute;
-        top: calc(100% + 4px);
-        right: 0;
-        @include shadow("md");
-
-        .dropdown-item {
-          justify-content: space-between;
-          gap: 1rem;
-          align-items: center;
-          padding: 8px 12px;
-          cursor: pointer;
-          &:not(:last-child) {
-            border-bottom: 1px solid var(--grey-200);
-          }
-          & > div {
-            border: none;
-            background: none;
-          }
-
-          .option {
-            display: flex;
-            gap: 8px;
-          }
-        }
-      }
-    }
-
     & > h2,
     .search-surveys-label {
       grid-column: span 2;
@@ -71,6 +34,49 @@
     & > h2 {
       font-size: clamp(20px, calc(3vw + 0.5rem), 30px);
       margin-bottom: 1rem;
+    }
+  }
+
+  .filters-container {
+    position: relative;
+
+    .filter {
+      width: 100%;
+    }
+    .dropdown-wrapper {
+      width: max-content;
+      min-width: 100%;
+      flex-direction: column;
+      border-radius: 8px;
+      border: 1px solid var(--grey-200);
+      background-color: var(--white);
+      overflow: hidden;
+      position: absolute;
+      top: calc(100% + 4px);
+      right: 0;
+      @include shadow("md");
+
+      .dropdown-item {
+        gap: 1rem;
+        align-items: center;
+        padding: 8px 12px;
+        cursor: pointer;
+        &:not(:last-child) {
+          border-bottom: 1px solid var(--grey-200);
+        }
+        & > div {
+          border: none;
+          background: none;
+        }
+
+        .option {
+          display: flex;
+          gap: 8px;
+        }
+        &:hover {
+          background-color: var(--grey-100);
+        }
+      }
     }
   }
 
@@ -99,7 +105,12 @@
         }
 
         .settings {
-          background: none;
+          width: 2rem;
+          aspect-ratio: 1;
+          border-radius: 8px;
+          &:hover {
+            background-color: var(--grey-100);
+          }
         }
       }
 

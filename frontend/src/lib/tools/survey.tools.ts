@@ -32,13 +32,16 @@ export const displayState = (state: string): string | undefined => {
  */
 
 export const displayNumberOfQuestions = (survey: Survey): string => {
-  if (survey.question.length > 1) {
-    return `${survey.question.length} questions`;
-  } else if (survey.question.length === 1) {
-    return "1 question";
-  } else {
-    return "Aucune question";
+  if (survey.question !== null) {
+    if (survey.question.length > 1) {
+      return `${survey.question.length} questions`;
+    } else if (survey.question.length === 1) {
+      return "1 question";
+    } else {
+      return "Aucune question";
+    }
   }
+  return "Aucune question";
 };
 
 // function to sort surveys by selected option

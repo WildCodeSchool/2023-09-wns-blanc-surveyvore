@@ -80,10 +80,32 @@ export async function archive(
 ): Promise<Survey | undefined> {
   const surveyToArchive = await Survey.findOne({
     where: { link: link },
+    relations: {
+      state: true,
+    },
   });
+
+  console.log(surveyToArchive);
+
   if (surveyToArchive) {
     surveyToArchive.archived = archive;
+    surveyToArchive.archiveDate = new Date().getTime().toString();
+    surveyToArchive.state = (await getSurveyStateByName(
+      "archived"
+    )) as SurveyState;
+
     return await surveyToArchive.save();
+  }
+}
+
+export async function softDelete(link: string): Promise<Survey | undefined> {
+  const surveyToSoftDelete = await Survey.findOne({
+    where: { link: link },
+  });
+
+  if (surveyToSoftDelete) {
+    surveyToSoftDelete.deleteDate = new Date().getTime().toString();
+    return await surveyToSoftDelete.save();
   }
 }
 

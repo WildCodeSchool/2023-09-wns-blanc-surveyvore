@@ -40,3 +40,42 @@ export const GET_SURVEY_STATES = gql`
   }
 `;
 
+export const ARCHIVE_SURVEY = gql`
+  mutation Mutation($archive: Boolean!, $link: String!) {
+    archiveSurvey(archive: $archive, link: $link) {
+      id
+      title
+      description
+      link
+      archived
+      private
+      collectingUserData
+      startDate
+      endDate
+      deleteDate
+      creationDate
+      publicationDate
+      archiveDate
+      state {
+        color
+        state
+      }
+      question {
+        title
+        answer {
+          content
+        }
+      }
+    }
+  }
+`;
+
+export const DELETE_SURVEY = gql`
+  mutation Mutation($link: String!) {
+    softDeleteSurvey(link: $link) {
+      id
+      deleteDate
+    }
+  }
+`;
+

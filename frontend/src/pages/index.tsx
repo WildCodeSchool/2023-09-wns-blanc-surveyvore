@@ -16,6 +16,7 @@ import {
   sortSurveys,
 } from "@/lib/tools/survey.tools";
 import { sortOptions } from "@/lib/fixtures/data";
+import CardMenu from "@/components/CardMenu/CardMenu";
 
 export default function Home() {
   // ----------------------------------States----------------------------------
@@ -29,7 +30,6 @@ export default function Home() {
   const [areSortedOptionsOpen, setAreSortedOptionsOpen] = useState(false);
 
   // ----------------------------------Queries----------------------------------
-
   const getStates = useQuery(GET_SURVEY_STATES, {
     onCompleted: (data) => setSurveyStates(data.getSurveyStates),
   });
@@ -96,7 +96,7 @@ export default function Home() {
         </label>
         <div className="filters-container">
           <button
-            className="button-md-white-outline"
+            className="button-md-white-outline filter"
             onClick={() => {
               setAreFiltersOpen(!areFiltersOpen);
               setAreSortedOptionsOpen(false);
@@ -134,7 +134,7 @@ export default function Home() {
         </div>
         <div className="filters-container">
           <button
-            className="button-md-white-outline"
+            className="button-md-white-outline filter"
             onClick={() => {
               setAreSortedOptionsOpen(!areSortedOptionsOpen);
               setAreFiltersOpen(false);
@@ -146,7 +146,7 @@ export default function Home() {
             <div className="dropdown-wrapper">
               {sortOptions.map((option) => (
                 <button
-                  key={option.option}
+                  key={option.id}
                   onClick={() => {
                     setSelectedSortOption(
                       option.option === selectedSortOption ? "" : option.option
@@ -172,36 +172,42 @@ export default function Home() {
         </div>
       </section>
       <section className="my-surveys surveys">
-        {SortedSurveys.map((survey: Survey) => (
-          <Link
-            className="survey-card"
-            href={`/surveys/${survey.link}`}
-            key={survey.id}>
-            <div className={`card-header ${survey.private && "private"}`}>
-              {survey.private && (
-                <Icon name="lock" height="1rem" width="1rem" />
-              )}
-              <div className={`badge-md-pale-${survey.state.color}-square`}>
-                <span className="dot" />
-                <p>{displayState(survey.state.state)}</p>
-              </div>
-              <button className="settings " type="button">
-                <Icon name="dots" height="1rem" width="1rem"></Icon>
-              </button>
-            </div>
+        {SortedSurveys.map(
+          (survey: Survey) =>
+            !survey.deleteDate && (
+              <Link
+                className="survey-card"
+                href={`/surveys/${survey.link}`}
+                key={survey.id}>
+                <div className={`card-header ${survey.private && "private"}`}>
+                  {survey.private && (
+                    <Icon name="lock" height="1rem" width="1rem" />
+                  )}
+                  <div className={`badge-md-pale-${survey.state.color}-square`}>
+                    <span className="dot" />
+                    <p>{displayState(survey.state.state)}</p>
+                  </div>
 
-            <h3 className="title text-lg text--medium">{survey.title}</h3>
-            <p className="description text-sm">{survey.description}</p>
+                  <CardMenu
+                    survey={survey}
+                    surveys={surveys}
+                    setSurveys={setSurveys}
+                  />
+                </div>
 
-            <div className="badge-sm-colored-primary-round">
-              <p>{displayNumberOfQuestions(survey)}</p>
-            </div>
+                <h3 className="title text-lg text--medium">{survey.title}</h3>
+                <p className="description text-sm">{survey.description}</p>
 
-            <p className="creation-date text-sm">
-              {formatDate(survey.creationDate)}
-            </p>
-          </Link>
-        ))}
+                <div className="badge-sm-colored-primary-round">
+                  <p>{displayNumberOfQuestions(survey)}</p>
+                </div>
+
+                <p className="creation-date text-sm">
+                  {formatDate(Number(survey.creationDate))}
+                </p>
+              </Link>
+            )
+        )}
       </section>
     </div>
   );

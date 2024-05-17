@@ -43,5 +43,11 @@ export class SurveyResolver {
   ): Promise<Survey | undefined> {
     return SurveyService.archive(link, archive);
   }
+
+  @Authorized()
+  @Mutation(() => Survey)
+  softDeleteSurvey(@Arg("link") link: string): Promise<Survey | undefined> {
+    return SurveyService.softDelete(link);
+  }
 }
 
