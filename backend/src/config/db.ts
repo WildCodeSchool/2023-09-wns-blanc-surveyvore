@@ -1,4 +1,5 @@
 import { DataSource } from "typeorm";
+import * as dotenv from "dotenv";
 import { Question } from "../entities/question";
 import { QuestionAnswer } from "../entities/questionAnswer";
 import { QuestionType } from "../entities/questionType";
@@ -7,8 +8,6 @@ import { Survey } from "../entities/survey";
 import { User } from "../entities/user";
 import { UserAnswer } from "../entities/userAnswer";
 import { SurveyState } from "../entities/surveyState";
-
-import * as dotenv from "dotenv";
 
 dotenv.config();
 

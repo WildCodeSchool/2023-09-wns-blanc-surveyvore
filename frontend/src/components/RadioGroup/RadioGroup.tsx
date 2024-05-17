@@ -14,16 +14,16 @@ export default function RadioGroup({ elements, name }: { elements: RadioElement[
     return (
         <div className="radio-group">
             {elements.map((element) => (
-                <div className="radio-element" key={element.id}>
+                <div className="radio-element" key={name+ "-" +element.id}>
                     <input
                         type="radio"
                         name={name}
-                        id={element.id}
+                        id={name+ "-" +element.id}
                         value={element.title}
                         onChange={element.onClick}
                         checked={element.isChecked}
                     />
-                    <label htmlFor={element.id}>
+                    <label htmlFor={name+ "-" +element.id}>
                         <div className="header">
                             <Icon
                                 name={element.icon}
