@@ -1,5 +1,5 @@
 import { cardMenuOptions } from "@/lib/fixtures/data";
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import Icon from "../Icon/Icon";
 import { Survey } from "@/types/survey.type";
 import { NextRouter, useRouter } from "next/router";
@@ -16,7 +16,9 @@ function CardMenu({
   setSurveys: React.Dispatch<React.SetStateAction<Survey[]>>;
 }) {
   const [isCardMenuOpen, setIsCardMenuOpen] = useState(false);
+
   const router: NextRouter = useRouter();
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const [archiveSurvey] = useMutation(ARCHIVE_SURVEY);
   const [deleteSurvey] = useMutation(DELETE_SURVEY);
@@ -65,6 +67,28 @@ function CardMenu({
     }
   }
 
+  const handleClickOutside = useCallback((event: MouseEvent) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
+      setIsCardMenuOpen(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isCardMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    // Nettoyage de l'écouteur d'événements lors du démontage du composant
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isCardMenuOpen, handleClickOutside]);
+
   return (
     <div className="filters-container">
       <button
@@ -78,7 +102,10 @@ function CardMenu({
         <Icon name="dots" height="1rem" width="1rem"></Icon>
       </button>
       {isCardMenuOpen && (
-        <div className="dropdown-wrapper">
+        <div
+          ref={dropdownRef}
+          className="dropdown-wrapper"
+          onBlur={() => setIsCardMenuOpen(false)}>
           {cardMenuOptions.map((option) => (
             <button
               key={option.id}
