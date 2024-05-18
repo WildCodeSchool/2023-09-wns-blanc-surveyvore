@@ -52,6 +52,7 @@
       background-color: var(--white);
       overflow: hidden;
       position: absolute;
+      z-index: 2;
       top: calc(100% + 4px);
       right: 0;
       @include shadow("md");

@@ -83,7 +83,6 @@ function CardMenu({
       document.removeEventListener("mousedown", handleClickOutside);
     }
 
-    // Nettoyage de l'écouteur d'événements lors du démontage du composant
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };

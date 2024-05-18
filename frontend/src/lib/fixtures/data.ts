@@ -1,11 +1,7 @@
-import { Options } from "@/types/options.type";
-import { Survey } from "@/types/survey.type";
-import { MutationFunction, useMutation } from "@apollo/client";
-import { NextRouter } from "next/router";
-import { ARCHIVE_SURVEY } from "../queries/survey.queries";
+import { Option } from "@/types/options.type";
 
 // Array of sort options for surveys. We can add as many as we want.
-export const sortOptions: Options[] = [
+export const sortOptions: Option[] = [
   {
     id: 1,
     option: "Ordre alphabétique",
@@ -25,7 +21,7 @@ export const sortOptions: Options[] = [
 
 // Array of card menu options to modify, archive or delete a survey
 
-export const cardMenuOptions: Options[] = [
+export const cardMenuOptions: Option[] = [
   {
     id: 1,
     option: "Modifier",

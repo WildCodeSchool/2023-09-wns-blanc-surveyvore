@@ -17,17 +17,16 @@ import {
 } from "@/lib/tools/survey.tools";
 import { sortOptions } from "@/lib/fixtures/data";
 import CardMenu from "@/components/CardMenu/CardMenu";
+import DropdownItem from "@/components/DropdownItem/DropdownItem";
 
 export default function Home() {
   // ----------------------------------States----------------------------------
 
   const [surveys, setSurveys] = useState<Survey[]>([]);
-  const [surveyStates, setSurveyStates] = useState([]);
-  const [selectedState, setSelectedState] = useState("");
-  const [selectedSortOption, setSelectedSortOption] = useState("");
-  const [searchSurveysValue, setSearchSurveysValue] = useState("");
-  const [areFiltersOpen, setAreFiltersOpen] = useState(false);
-  const [areSortedOptionsOpen, setAreSortedOptionsOpen] = useState(false);
+  const [surveyStates, setSurveyStates] = useState<SurveyState[]>([]);
+  const [selectedState, setSelectedState] = useState<string>("");
+  const [selectedSortOption, setSelectedSortOption] = useState<string>("");
+  const [searchSurveysValue, setSearchSurveysValue] = useState<string>("");
 
   // ----------------------------------Queries----------------------------------
   const getStates = useQuery(GET_SURVEY_STATES, {
@@ -94,82 +93,19 @@ export default function Home() {
             />
           </div>
         </label>
-        <div className="filters-container">
-          <button
-            className="button-md-white-outline filter"
-            onClick={() => {
-              setAreFiltersOpen(!areFiltersOpen);
-              setAreSortedOptionsOpen(false);
-            }}>
-            <Icon name="filter" height="1rem" width="1rem" />
-            Filtrer
-          </button>
-          {areFiltersOpen && (
-            <div className="dropdown-wrapper">
-              {surveyStates.map((state: SurveyState) => (
-                <button
-                  key={state.id}
-                  onClick={() => {
-                    setSelectedState(
-                      state.state === selectedState ? "" : state.state
-                    );
-                    setAreFiltersOpen(false);
-                  }}
-                  className="dropdown-item">
-                  <div className={`badge-lg-pale-${state.color}-square`}>
-                    <span className="dot" /> <p>{displayState(state.state)}</p>
-                  </div>
-                  {selectedState === state.state && (
-                    <Icon
-                      name="check-circle"
-                      width="1rem"
-                      height="1rem"
-                      color="purple"
-                    />
-                  )}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-        <div className="filters-container">
-          <button
-            className="button-md-white-outline filter"
-            onClick={() => {
-              setAreSortedOptionsOpen(!areSortedOptionsOpen);
-              setAreFiltersOpen(false);
-            }}>
-            <Icon name="sort-alt" height="1rem" width="1rem" />
-            Trier
-          </button>
-          {areSortedOptionsOpen && (
-            <div className="dropdown-wrapper">
-              {sortOptions.map((option) => (
-                <button
-                  key={option.id}
-                  onClick={() => {
-                    setSelectedSortOption(
-                      option.option === selectedSortOption ? "" : option.option
-                    );
-                  }}
-                  className="dropdown-item">
-                  <div className="option">
-                    <Icon name={option.icon} height="1rem" width="1rem" />
-                    <p>{option.option}</p>
-                  </div>
-                  {selectedSortOption === option.option && (
-                    <Icon
-                      name="check-circle"
-                      width="1rem"
-                      height="1rem"
-                      color="purple"
-                    />
-                  )}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
+        <DropdownItem
+          options={surveyStates}
+          icon="filter"
+          selectedOption={selectedState}
+          setSelectedOption={setSelectedState}
+        />
+
+        <DropdownItem
+          options={sortOptions}
+          icon="sort-alt"
+          selectedOption={selectedSortOption}
+          setSelectedOption={setSelectedSortOption}
+        />
       </section>
       <section className="my-surveys surveys">
         {SortedSurveys.map(

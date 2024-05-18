@@ -1,9 +1,8 @@
 import { IconName } from "./iconName.type";
 
-export type Options = {
+export type Option = {
   id: number;
   option: string;
-  onClick?: Function;
   icon: IconName;
 };
 
