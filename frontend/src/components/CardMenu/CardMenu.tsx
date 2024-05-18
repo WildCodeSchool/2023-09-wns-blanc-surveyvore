@@ -5,6 +5,7 @@ import { Survey } from "@/types/survey.type";
 import { NextRouter, useRouter } from "next/router";
 import { useMutation } from "@apollo/client";
 import { ARCHIVE_SURVEY, DELETE_SURVEY } from "@/lib/queries/survey.queries";
+import useClickOutside from "@/lib/hooks/useClickOutside";
 
 function CardMenu({
   survey,
@@ -18,7 +19,6 @@ function CardMenu({
   const [isCardMenuOpen, setIsCardMenuOpen] = useState(false);
 
   const router: NextRouter = useRouter();
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const [archiveSurvey] = useMutation(ARCHIVE_SURVEY);
   const [deleteSurvey] = useMutation(DELETE_SURVEY);
@@ -67,26 +67,7 @@ function CardMenu({
     }
   }
 
-  const handleClickOutside = useCallback((event: MouseEvent) => {
-    if (
-      dropdownRef.current &&
-      !dropdownRef.current.contains(event.target as Node)
-    ) {
-      setIsCardMenuOpen(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (isCardMenuOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isCardMenuOpen, handleClickOutside]);
+  const { ref } = useClickOutside(isCardMenuOpen, setIsCardMenuOpen);
 
   return (
     <div className="filters-container">
@@ -102,7 +83,7 @@ function CardMenu({
       </button>
       {isCardMenuOpen && (
         <div
-          ref={dropdownRef}
+          ref={ref as React.RefObject<HTMLDivElement>}
           className="dropdown-wrapper"
           onBlur={() => setIsCardMenuOpen(false)}>
           {cardMenuOptions.map((option) => (

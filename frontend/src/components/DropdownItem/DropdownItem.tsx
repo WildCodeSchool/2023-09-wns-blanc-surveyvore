@@ -1,9 +1,10 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import Icon from "../Icon/Icon";
 import { Option } from "@/types/options.type";
 import { SurveyState } from "@/types/surveyState.type";
 import { IconName } from "@/types/iconName.type";
 import { displayState } from "@/lib/tools/survey.tools";
+import useClickOutside from "@/lib/hooks/useClickOutside";
 
 function DropdownItem({
   options,
@@ -17,6 +18,7 @@ function DropdownItem({
   setSelectedOption: (option: string) => void;
 }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const { ref } = useClickOutside(isDropdownOpen, setIsDropdownOpen);
 
   function isSurveyState(option: any): option is SurveyState {
     return (
@@ -48,7 +50,9 @@ function DropdownItem({
         Filtrer
       </button>
       {isDropdownOpen && (
-        <div className="dropdown-wrapper">
+        <div
+          className="dropdown-wrapper"
+          ref={ref as React.RefObject<HTMLDivElement>}>
           {options.map((option: any) => (
             <button
               key={option.id}
