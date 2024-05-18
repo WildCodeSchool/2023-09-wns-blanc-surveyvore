@@ -17,9 +17,18 @@ function DropdownItem({
   selectedOption: string;
   setSelectedOption: (option: string) => void;
 }) {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  //   ------------------------------------------------hooks-----------------------------------------------
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const { ref } = useClickOutside(isDropdownOpen, setIsDropdownOpen);
 
+  //   ----------------------------------------------functions-----------------------------------------------
+
+  /**
+   * Guard function to check if a given option is a SurveyState
+   * @param option
+   * @returns true if option is a SurveyState
+   */
   function isSurveyState(option: any): option is SurveyState {
     return (
       option instanceof Object &&
@@ -38,6 +47,8 @@ function DropdownItem({
 
     setIsDropdownOpen(false);
   }
+
+  //   ----------------------------------------------return------------------------------------------------
 
   return (
     <div className="filters-container">

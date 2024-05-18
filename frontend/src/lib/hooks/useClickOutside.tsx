@@ -1,5 +1,11 @@
 import React, { useCallback, useEffect, useRef } from "react";
 
+/**
+ * Custom hook for closing a modal when the user clicks outside of it
+ * @param isOpen boolean
+ * @param setIsOpen React.Dispatch<React.SetStateAction<boolean>>
+ * @returns a ref which is passed to the element that we wish to be able to close by clicking outside
+ */
 function useClickOutside(
   isOpen: boolean,
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>

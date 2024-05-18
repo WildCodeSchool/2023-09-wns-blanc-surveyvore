@@ -16,12 +16,18 @@ function CardMenu({
   surveys: Survey[];
   setSurveys: React.Dispatch<React.SetStateAction<Survey[]>>;
 }) {
-  const [isCardMenuOpen, setIsCardMenuOpen] = useState(false);
+  //   ------------------------------------------------hooks-----------------------------------------------
 
+  const [isCardMenuOpen, setIsCardMenuOpen] = useState<boolean>(false);
   const router: NextRouter = useRouter();
+  const { ref } = useClickOutside(isCardMenuOpen, setIsCardMenuOpen);
+
+  //   ------------------------------------------------queries-----------------------------------------------
 
   const [archiveSurvey] = useMutation(ARCHIVE_SURVEY);
   const [deleteSurvey] = useMutation(DELETE_SURVEY);
+
+  //   ------------------------------------------------functions-----------------------------------------------
 
   function onClick(
     event: React.MouseEvent<HTMLButtonElement>,
@@ -67,7 +73,7 @@ function CardMenu({
     }
   }
 
-  const { ref } = useClickOutside(isCardMenuOpen, setIsCardMenuOpen);
+  //   ------------------------------------------------return-----------------------------------------------
 
   return (
     <div className="filters-container">

@@ -29,11 +29,16 @@ export default function Home() {
   const [searchSurveysValue, setSearchSurveysValue] = useState<string>("");
 
   // ----------------------------------Queries----------------------------------
-  const getStates = useQuery(GET_SURVEY_STATES, {
-    onCompleted: (data) => setSurveyStates(data.getSurveyStates),
-  });
+  const getStates = useQuery<{ getSurveyStates: SurveyState[] }>(
+    GET_SURVEY_STATES,
+    {
+      onCompleted: (data) => setSurveyStates(data.getSurveyStates),
+    }
+  );
 
-  const [getSurveys, { loading, error }] = useLazyQuery(GET_SURVEY_BY_OWNER);
+  const [getSurveys, { loading, error }] = useLazyQuery<{
+    getSurveysByOwner: Survey[];
+  }>(GET_SURVEY_BY_OWNER);
 
   useEffect(() => {
     getSurveys({
@@ -47,7 +52,7 @@ export default function Home() {
 
   // ----------------------------------Functions----------------------------------
 
-  const filteredSurveys = surveys
+  const filteredSurveys: Survey[] = surveys
     .filter(
       (survey: Survey) =>
         removeAccents(survey.title.toLowerCase()).includes(
@@ -69,11 +74,7 @@ export default function Home() {
 
   const SortedSurveys = sortSurveys(selectedSortOption, filteredSurveys);
 
-  /**
-  |--------------------------------------------------
-  |                     Return
-  |--------------------------------------------------
-  */
+  // ----------------------------------return----------------------------------
 
   return (
     <div className="home-page">
