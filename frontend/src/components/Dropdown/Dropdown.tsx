@@ -8,11 +8,13 @@ import useClickOutside from "@/lib/hooks/useClickOutside";
 
 function DropdownItem({
   options,
+  buttonName,
   icon,
   selectedOption,
   setSelectedOption,
 }: {
   options: Option[] | SurveyState[];
+  buttonName: string;
   icon: IconName;
   selectedOption: string;
   setSelectedOption: (option: string) => void;
@@ -58,7 +60,7 @@ function DropdownItem({
           setIsDropdownOpen(!isDropdownOpen);
         }}>
         <Icon name={icon} height="1rem" width="1rem" />
-        Filtrer
+        {buttonName}
       </button>
       {isDropdownOpen && (
         <div

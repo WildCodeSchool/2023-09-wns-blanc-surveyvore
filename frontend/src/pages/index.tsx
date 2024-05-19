@@ -17,7 +17,7 @@ import {
 } from "@/lib/tools/survey.tools";
 import { sortOptions } from "@/lib/fixtures/data";
 import CardMenu from "@/components/CardMenu/CardMenu";
-import DropdownItem from "@/components/DropdownItem/DropdownItem";
+import DropdownItem from "@/components/Dropdown/Dropdown";
 
 export default function Home() {
   // ----------------------------------States----------------------------------
@@ -96,6 +96,7 @@ export default function Home() {
         </label>
         <DropdownItem
           options={surveyStates}
+          buttonName="Filtrer"
           icon="filter"
           selectedOption={selectedState}
           setSelectedOption={setSelectedState}
@@ -103,6 +104,7 @@ export default function Home() {
 
         <DropdownItem
           options={sortOptions}
+          buttonName="Trier"
           icon="sort-alt"
           selectedOption={selectedSortOption}
           setSelectedOption={setSelectedSortOption}
