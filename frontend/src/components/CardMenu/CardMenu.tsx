@@ -31,49 +31,58 @@ function CardMenu({
 
   console.log("surveys", surveys);
 
-  function onClick(
-    event: React.MouseEvent<HTMLButtonElement>,
-    option: string,
-    survey: Survey
-  ) {
-    event.preventDefault();
-    event.stopPropagation();
-    setIsCardMenuOpen(false);
+  const onClick = useCallback(
+    (
+      event: React.MouseEvent<HTMLButtonElement>,
+      option: string,
+      survey: Survey
+    ) => {
+      event.preventDefault();
+      event.stopPropagation();
+      setIsCardMenuOpen(false);
 
-    switch (option) {
-      case "Modifier":
-        return router.push(`/surveys/${survey.link}`);
+      const canArchive =
+        survey.state.state === "closed" || survey.state.state === "archived";
 
-      case "Archiver":
-        return archiveSurvey({
-          variables: {
-            link: survey.link,
-            archive: survey.archived ? false : true,
-          },
-          onCompleted: (data) => {
-            const index = surveys.findIndex(
-              (survey) => survey.link === data.archiveSurvey.link
-            );
+      switch (option) {
+        case "Modifier":
+          return router.push(`/surveys/${survey.link}`);
 
-            const newSurveys = [...surveys];
-            newSurveys.splice(index, 1, data.archiveSurvey);
+        case "Archiver":
+          return (
+            canArchive &&
+            archiveSurvey({
+              variables: {
+                link: survey.link,
+                archive: survey.archived ? false : true,
+              },
+              onCompleted: (data) => {
+                const index = surveys.findIndex(
+                  (survey) => survey.link === data.archiveSurvey.link
+                );
 
-            setSurveys(newSurveys);
-            console.log("index", index);
-            console.log("newSurveys", newSurveys);
-          },
-        });
+                const newSurveys = [...surveys];
+                newSurveys.splice(index, 1, data.archiveSurvey);
 
-      case "Supprimer":
-        return deleteSurvey({
-          variables: {
-            link: survey.link,
-          },
-          onCompleted: () =>
-            setSurveys(surveys.filter((s) => s.link !== survey.link)),
-        });
-    }
-  }
+                setSurveys(newSurveys);
+                console.log("index", index);
+                console.log("newSurveys", newSurveys);
+              },
+            })
+          );
+
+        case "Supprimer":
+          return deleteSurvey({
+            variables: {
+              link: survey.link,
+            },
+            onCompleted: () =>
+              setSurveys(surveys.filter((s) => s.link !== survey.link)),
+          });
+      }
+    },
+    [survey, archiveSurvey, deleteSurvey, surveys, setSurveys]
+  );
 
   //   ------------------------------------------------return-----------------------------------------------
 
@@ -98,6 +107,14 @@ function CardMenu({
             <button
               key={option.id}
               className="dropdown-item"
+              type="button"
+              value={option.option}
+              name={option.option}
+              disabled={
+                option.option === "Archiver" &&
+                survey.state.state !== "closed" &&
+                survey.state.state !== "archived"
+              }
               onClick={(e) => onClick(e, option.option, survey)}>
               <Icon name={option.icon} height="1rem" width="1rem" />
               {survey.archived && option.option === "Archiver"
