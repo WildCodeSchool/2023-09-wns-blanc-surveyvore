@@ -79,7 +79,7 @@ async function createServer(
 
               return { token: bearer };
             } catch (e) {
-              console.log(e);
+              console.error(e);
               return {};
             }
           }
@@ -89,3 +89,4 @@ async function createServer(
 }
 
 export default createServer;
+

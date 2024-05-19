@@ -26,6 +26,9 @@ export function findSurveysByOwner(user: User): Promise<Survey[] | null> {
       state: true,
       question: true,
     },
+    order: {
+      creationDate: "DESC",
+    },
   });
 }
 

@@ -29,8 +29,6 @@ function CardMenu({
 
   //   ------------------------------------------------functions-----------------------------------------------
 
-  console.log("surveys", surveys);
-
   const onClick = useCallback(
     (
       event: React.MouseEvent<HTMLButtonElement>,
@@ -65,8 +63,6 @@ function CardMenu({
                 newSurveys.splice(index, 1, data.archiveSurvey);
 
                 setSurveys(newSurveys);
-                console.log("index", index);
-                console.log("newSurveys", newSurveys);
               },
             })
           );
