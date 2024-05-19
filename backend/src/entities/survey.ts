@@ -71,7 +71,7 @@ export class Survey extends BaseEntity {
   @Field({ nullable: true })
   archiveDate?: string;
 
-  @Field()
+  @Field(() => User)
   @ManyToOne(() => User, (user) => user.id)
   user: User;
 
@@ -112,4 +112,3 @@ export class Survey extends BaseEntity {
     }
   }
 }
-

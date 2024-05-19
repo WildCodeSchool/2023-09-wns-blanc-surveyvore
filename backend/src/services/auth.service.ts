@@ -68,4 +68,3 @@ export function getMe(token: string) {
   const user = UserService.getByEmail(payload.email);
   return user;
 }
-

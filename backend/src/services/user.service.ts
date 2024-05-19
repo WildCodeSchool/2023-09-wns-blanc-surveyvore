@@ -1,3 +1,4 @@
+import { DeleteResult } from "typeorm";
 import { Role } from "../entities/role";
 import { User } from "../entities/user";
 import * as argon2 from "argon2";
@@ -8,11 +9,15 @@ export async function createUser(
   firstname?: string,
   lastname?: string
 ): Promise<User> {
+  const existingUser = await User.findOne({ where: { email: email } });
+  if (existingUser) {
+    throw new Error("This mail is already used");
+  }
   const newUser = new User();
   newUser.email = email;
   newUser.password = await argon2.hash(password);
-  newUser.firstname = firstname;
-  newUser.lastname = lastname;
+  newUser.firstname = firstname || "";
+  newUser.lastname = lastname || "";
   const role = await Role.findOneBy({ name: "USER" });
   if (role) {
     newUser.role = role;
@@ -31,3 +36,6 @@ export function getByEmail(email: string): Promise<User | null> {
   });
 }
 
+export function deleteUser(email: string): Promise<DeleteResult> {
+  return User.delete({ email: email });
+}
