@@ -37,8 +37,6 @@ export const displayNumberOfQuestions = (survey: Survey): string => {
       return `${survey.question.length} questions`;
     } else if (survey.question.length === 1) {
       return "1 question";
-    } else {
-      return "Aucune question";
     }
   }
   return "Aucune question";

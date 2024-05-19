@@ -82,17 +82,17 @@ export async function archive(
     where: { link: link },
     relations: {
       state: true,
+      question: true,
     },
   });
-
-  console.log(surveyToArchive);
 
   if (surveyToArchive) {
     surveyToArchive.archived = archive;
     surveyToArchive.archiveDate = new Date().getTime().toString();
-    surveyToArchive.state = (await getSurveyStateByName(
-      "archived"
-    )) as SurveyState;
+    surveyToArchive.state =
+      archive === true
+        ? ((await getSurveyStateByName("archived")) as SurveyState)
+        : ((await getSurveyStateByName("closed")) as SurveyState);
 
     return await surveyToArchive.save();
   }

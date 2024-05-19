@@ -51,18 +51,19 @@
           display: grid;
           grid-template-columns: auto auto 1fr;
           gap: 8px;
-
-          .settings {
-            justify-self: flex-end;
-          }
         }
 
-        .settings {
-          width: 2rem;
-          aspect-ratio: 1;
-          border-radius: 8px;
-          &:hover {
-            background-color: var(--grey-100);
+        .filters-container {
+          width: fit-content;
+          justify-self: end;
+
+          .settings {
+            width: 2rem;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            &:hover {
+              background-color: var(--grey-100);
+            }
           }
         }
       }

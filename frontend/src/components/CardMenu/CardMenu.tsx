@@ -29,6 +29,8 @@ function CardMenu({
 
   //   ------------------------------------------------functions-----------------------------------------------
 
+  console.log("surveys", surveys);
+
   function onClick(
     event: React.MouseEvent<HTMLButtonElement>,
     option: string,
@@ -46,7 +48,7 @@ function CardMenu({
         return archiveSurvey({
           variables: {
             link: survey.link,
-            archive: true,
+            archive: survey.archived ? false : true,
           },
           onCompleted: (data) => {
             const index = surveys.findIndex(
@@ -98,7 +100,9 @@ function CardMenu({
               className="dropdown-item"
               onClick={(e) => onClick(e, option.option, survey)}>
               <Icon name={option.icon} height="1rem" width="1rem" />
-              {option.option}
+              {survey.archived && option.option === "Archiver"
+                ? "Restaurer"
+                : option.option}
             </button>
           ))}
         </div>
