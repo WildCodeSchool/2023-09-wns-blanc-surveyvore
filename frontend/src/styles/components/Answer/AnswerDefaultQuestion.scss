@@ -5,11 +5,6 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  @include shadow("xs");
-  background-color: var(--white);
-  padding: 2rem;
-  border-radius: 12px;
-  border: 1px solid var(--grey-200);
 
   .answer-default-question-title {
     @include text("xl", $font: $font-family-accent, $weight: 500);

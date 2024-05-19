@@ -33,9 +33,20 @@
   }
 
   .answer-survey-default-questions-container {
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: 1fr;
     gap: 0.75rem;
+    @include shadow("xs");
+    background-color: var(--white);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid var(--grey-200);
+  }
+
+  @media screen and (min-width: 768px) {
+    .answer-survey-default-questions-container {
+      grid-template-columns: 1fr 1fr;
+    }
   }
 
   .answer-survey-questions-container {

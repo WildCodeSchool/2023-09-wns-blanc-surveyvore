@@ -111,20 +111,22 @@ function AnswerSurvey() {
           </div>
           <p className="answer-survey-description">{description}</p>
         </div>
-        <div className="answer-survey-default-questions-container">
-          {defaultQuestions && defaultQuestions.length > 0 && (
-            defaultQuestions.map((defaultQuestion) => {
+        {defaultQuestions && defaultQuestions.length > 0 && (
+          <div className="answer-survey-default-questions-container">
+            {defaultQuestions.map((defaultQuestion) => {
               if (defaultQuestion.id) {
                 return (
                   <AnswerDefaultQuestion key={defaultQuestion.id} defaultQuestion={defaultQuestion} />
                 )
               }
             })
-          )}
-        </div>
-        <div className="answer-survey-questions-container">
-          {questions && questions.length > 0 && (
-            questions.map((question) => {
+            }
+          </div>
+        )
+        }
+        {questions && questions.length > 0 && (
+          <div className="answer-survey-questions-container">
+            {questions.map((question) => {
               switch (question.type.type) {
                 case "text":
                   return (
@@ -149,10 +151,9 @@ function AnswerSurvey() {
                 default:
                   break;
               }
-            })
-          )
-          }
-        </div>
+            })}
+          </div>
+        )}
       </div>
     </>
   );

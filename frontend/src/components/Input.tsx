@@ -10,6 +10,7 @@ function Input({
     inputClassName,
     labelClassName,
     value,
+    width,
     setValue,
     onBlur,
 }: {
@@ -22,6 +23,7 @@ function Input({
     labelClassName?: string;
     textarea?: boolean;
     value: string;
+    width?: number;
     setValue: React.Dispatch<React.SetStateAction<string>>;
     onBlur?: (e: React.FocusEvent) => void;
 }): JSX.Element {
@@ -42,7 +44,7 @@ function Input({
     }, []);
 
     return (
-        <div className="input-field">
+        <div className={`input-field ${width ? `field--${width}` : ""}`}>
             {labelName && (
                 <label htmlFor={inputName} className={labelClassName}>
                     {labelName}
@@ -57,9 +59,8 @@ function Input({
                     data-testid={inputName}
                     onChange={handleChange}
                     placeholder={placeholder}
-                    className={`textarea ${
-                        inputClassName ? inputClassName : ""
-                    }`}
+                    className={`textarea ${inputClassName ? inputClassName : ""
+                        }`}
                     onBlur={onBlur}
                 />
             ) : (
