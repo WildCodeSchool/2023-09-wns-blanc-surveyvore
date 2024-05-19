@@ -22,15 +22,13 @@ function AnswerDefaultQuestion({ defaultQuestion }: { defaultQuestion: Question 
       break;
   }
   return (
-    <div className="answer-default-question-container">
-      <p className="answer-default-question-title">{defaultQuestion.title}</p>
-      <Input
-        inputName={defaultQuestion.id ? defaultQuestion.id : "id" + Math.random().toString(16).slice(2)} // to delete when id is changed in db
-        placeholder={placeHolderForDefaultQuestion}
-        value={answerDefault}
-        setValue={setAnswerDefault}
-      />
-    </div>
+    <Input
+      labelName={defaultQuestion.title}
+      inputName={defaultQuestion.id ? defaultQuestion.id : "id" + Math.random().toString(16).slice(2)} // to delete when id is changed in db
+      placeholder={placeHolderForDefaultQuestion}
+      value={answerDefault}
+      setValue={setAnswerDefault}
+    />
   )
 }
 

@@ -12,7 +12,10 @@ export function findSurveyByLink(link: string): Promise<Survey | null> {
     },
     relations: {
       state: true,
-      question: true,
+      question: {
+        answer: true,
+        type: true,
+      },
     },
   });
 }
@@ -86,4 +89,3 @@ export async function archive(
     return await surveyToArchive.save();
   }
 }
-

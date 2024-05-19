@@ -1,5 +1,5 @@
 import AnswerCheckboxQuestion from "@/components/Answer/AnswerCheckboxQuestion";
-import AnswerCheckboxesQuestion from "@/components/Answer/AnswerCheckboxesQuestion";
+import AnswerCheckboxesQuestion from "@/components/Answer/todelete_AnswerCheckboxesQuestion";
 import AnswerDateQuestion from "@/components/Answer/AnswerDateQuestion";
 import AnswerDefaultQuestion from "@/components/Answer/AnswerDefaultQuestion";
 import AnswerRadioQuestion from "@/components/Answer/AnswerRadioQuestion";
@@ -14,31 +14,35 @@ import { ReactElement, useEffect, useState } from "react";
 const GET_SURVEY_BY_LINK = gql`
   query Query($surveyLink: String!) {
     getSurveyByLink(surveyLink: $surveyLink) {
-      title
-      private
-      description
-      collectingUserData
-    }
-  }
-`;
-
-const GET_QUESTIONS = gql`
-  query Query($surveyLink: String!) {
-    getQuestions(surveyLink: $surveyLink) {
-      id
-      title
-      description
-      defaultQuestion
-      type {
-        icon
-        id
-        type
-      }
+    archived
+    creationDate
+    description
+    endDate
+    id
+    link
+    private
+    publicationDate
+    question {
       answer {
         content
         id
       }
+      title
+      type {
+        id
+        type
+      }
+      description
+      defaultQuestion
+      id
     }
+    startDate
+    state {
+      state
+      id
+    }
+    title
+  }
   }
 `;
 
@@ -55,8 +59,6 @@ function AnswerSurvey() {
 
   const [getSurveyByLink, { loading, error }] =
     useLazyQuery(GET_SURVEY_BY_LINK);
-  const [getQuestions, { loading: loadingQuestions, error: errorQuestions }] =
-    useLazyQuery(GET_QUESTIONS);
 
   useEffect(() => {
     if (link) {
@@ -68,20 +70,14 @@ function AnswerSurvey() {
           setTitle(data.getSurveyByLink.title);
           setDescription(data.getSurveyByLink.description);
           setIsPrivate(data.getSurveyByLink.private);
-        },
-      });
-      getQuestions({
-        variables: {
-          surveyLink: link,
-        },
-        onCompleted: (data) => {
           let nonDefaultQuestions = [];
           let defaultQuestions = [];
-          for (let i = 0; i < data.getQuestions.length; i++) {
-            if (data.getQuestions[i].defaultQuestion) {
-              defaultQuestions.push(data.getQuestions[i]);
+          for (let i = 0; i < data.getSurveyByLink.question.length; i++) {
+            const question = data.getSurveyByLink.question[i];
+            if (question.defaultQuestion) {
+              defaultQuestions.push(question);
             } else {
-              nonDefaultQuestions.push(data.getQuestions[i]);
+              nonDefaultQuestions.push(question);
             }
           }
           setDefaultQuestions(defaultQuestions);
@@ -89,16 +85,39 @@ function AnswerSurvey() {
         },
       });
     }
-  }, [getQuestions, getSurveyByLink, link]);
+  }, [getSurveyByLink, link]);
 
-  if (loading || loadingQuestions) {
+  if (loading) {
     return <div>Loading...</div>;
   }
 
   if (error) {
     return <div>Error: {error.message}</div>;
-  } else if (errorQuestions) {
-    return <div>Error: {errorQuestions.message}</div>
+  }
+
+  const switchAnswer = (question: Question) => {
+    switch (question.type.type) {
+      case "text":
+        return (
+          <AnswerTextQuestion key={question.id} question={question} />
+        )
+      case "checkboxes":
+      case "checkbox":
+        return (
+          question.answer && question.answer.map((answerOption) => <AnswerCheckboxQuestion key={answerOption.id} answerOption={answerOption} />
+          )
+        )
+      case "radio":
+        return (
+          <AnswerRadioQuestion key={question.id} question={question} />
+        )
+      case "date":
+        return (
+          <AnswerDateQuestion key={question.id} question={question} />
+        )
+      default:
+        break;
+    }
   }
 
   return (
@@ -116,7 +135,9 @@ function AnswerSurvey() {
             {defaultQuestions.map((defaultQuestion) => {
               if (defaultQuestion.id) {
                 return (
-                  <AnswerDefaultQuestion key={defaultQuestion.id} defaultQuestion={defaultQuestion} />
+                  <div key={defaultQuestion.id}>
+                    <AnswerDefaultQuestion defaultQuestion={defaultQuestion} />
+                  </div>
                 )
               }
             })
@@ -127,30 +148,11 @@ function AnswerSurvey() {
         {questions && questions.length > 0 && (
           <div className="answer-survey-questions-container">
             {questions.map((question) => {
-              switch (question.type.type) {
-                case "text":
-                  return (
-                    <AnswerTextQuestion key={question.id} question={question} />
-                  )
-                case "checkboxes":
-                  return (
-                    <AnswerCheckboxesQuestion key={question.id} question={question} />
-                  )
-                case "checkbox":
-                  return (
-                    <AnswerCheckboxQuestion key={question.id} question={question} />
-                  )
-                case "radio":
-                  return (
-                    <AnswerRadioQuestion key={question.id} question={question} />
-                  )
-                case "date":
-                  return (
-                    <AnswerDateQuestion key={question.id} question={question} />
-                  )
-                default:
-                  break;
-              }
+              return <div className="answer-container" key={question.id}>
+                <p className="answer-title">{question.title}</p>
+                {question.description && <p className="answer-description">{question.description}</p>}
+                {switchAnswer(question)}
+              </div>
             })}
           </div>
         )}

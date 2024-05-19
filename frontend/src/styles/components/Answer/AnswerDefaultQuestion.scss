@@ -1,17 +1,5 @@
 @use "../../elements/typography" as *;
-@use "../../elements/shadows" as *;
 
-.answer-default-question-container {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-
-  .answer-default-question-title {
-    @include text("xl", $font: $font-family-accent, $weight: 500);
-  }
-  .answer-default-question-description {
-    white-space: pre-line;
-    @include text("md");
-    color: var(--grey-600);
-  }
+.input-field label {
+  @include text("xl", $font: $font-family-accent, $weight: 500);
 }

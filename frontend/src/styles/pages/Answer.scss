@@ -54,4 +54,25 @@
     flex-direction: column;
     gap: 0.75rem;
   }
+
+  .answer-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    @include shadow("xs");
+    background-color: var(--white);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid var(--grey-200);
+  }
+
+  .answer-title {
+    @include text("xl", $font: $font-family-accent, $weight: 500);
+  }
+
+  .answer-description {
+    white-space: pre-line;
+    @include text("md");
+    color: var(--grey-600);
+  }
 }
