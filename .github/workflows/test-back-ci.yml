@@ -7,7 +7,7 @@ on:
 
 env:
   JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-  POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+  POSTGRES_DB_TEST: ${{ secrets.POSTGRES_DB }}
   POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
   POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
   POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
@@ -40,7 +40,7 @@ jobs:
       - name: Install dependancies
         run: cd backend && npm i
       - name: Execute migrations
-        run: cd backend && npm run migration:up
+        run: cd backend && npm run migration_test:up
       - name: Go to backend and run tests
         run: cd backend && npm test
 
@@ -65,4 +65,3 @@ jobs:
           context: "{{defaultContext}}:backend"
           file: build.Dockerfile
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/surveyvore-backend:latest
-
