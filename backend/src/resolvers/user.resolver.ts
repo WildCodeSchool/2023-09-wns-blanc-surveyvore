@@ -1,4 +1,4 @@
-import { Arg, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { User } from "../entities/user";
 import * as AuthService from "../services/auth.service";
 import * as UserService from "../services/user.service";
@@ -29,5 +29,15 @@ export class UserResolver {
   signIn(@Arg("email") email: string, @Arg("password") password: string) {
     return AuthService.signIn(email, password);
   }
-}
 
+  @Authorized()
+  @Mutation(() => String)
+  async deleteUser(@Ctx("user") user: User) {
+    console.log(user);
+    const userToDelete = await UserService.getByEmail(user.email);
+    if (userToDelete) {
+      await UserService.deleteUser(user.email);
+    }
+    return "OK";
+  }
+}

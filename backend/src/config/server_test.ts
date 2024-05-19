@@ -1,5 +1,4 @@
 import * as dotenv from "dotenv";
-import { dataSource } from "./db";
 import { buildSchema } from "type-graphql";
 import { UserResolver } from "../resolvers/user.resolver";
 import { verifyToken } from "../services/auth.service";
@@ -11,12 +10,15 @@ import { QuestionTypeResolver } from "../resolvers/questionType.resolver";
 import { SurveyResolver } from "../resolvers/survey.resolver";
 import { SurveyStateResolver } from "../resolvers/surveyState.resolver";
 import { ApolloServerPluginLandingPageDisabled } from "apollo-server-core";
+import { dataSourceTest } from "./dbTest";
 
-async function createServer(
+async function createServerTest(
   customContext: any = undefined
 ): Promise<ApolloServer> {
   dotenv.config();
-  await dataSource.initialize();
+  await dataSourceTest.initialize();
+
+  console.log("Starting datasource test ...");
 
   const schema = await buildSchema({
     resolvers: [
@@ -88,4 +90,4 @@ async function createServer(
   });
 }
 
-export default createServer;
+export default createServerTest;
