@@ -1,5 +1,4 @@
 import AnswerCheckboxQuestion from "@/components/Answer/AnswerCheckboxQuestion";
-import AnswerCheckboxesQuestion from "@/components/Answer/todelete_AnswerCheckboxesQuestion";
 import AnswerDateQuestion from "@/components/Answer/AnswerDateQuestion";
 import AnswerDefaultQuestion from "@/components/Answer/AnswerDefaultQuestion";
 import AnswerRadioQuestion from "@/components/Answer/AnswerRadioQuestion";
@@ -104,12 +103,15 @@ function AnswerSurvey() {
       case "checkboxes":
       case "checkbox":
         return (
-          question.answer && question.answer.map((answerOption) => <AnswerCheckboxQuestion key={answerOption.id} answerOption={answerOption} />
-          )
+          <div className="checkboxes-container">
+            {question.answer && question.answer.map((answerOption) => <AnswerCheckboxQuestion key={answerOption.id} answerOption={answerOption} />)}
+          </div>
         )
       case "radio":
         return (
-          <AnswerRadioQuestion key={question.id} question={question} />
+          <div className="radios-container">
+            {question.answer && question.answer.map((answerOption) => <AnswerRadioQuestion key={answerOption.id} answerOption={answerOption} questionId={question.id} />)}
+          </div>
         )
       case "date":
         return (

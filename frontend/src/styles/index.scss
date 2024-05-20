@@ -15,6 +15,8 @@
 @use "../components/Icon/Icon.scss";
 @use "../components/RadioGroup/RadioGroup.scss";
 @use "components/Answer/AnswerDefaultQuestion.scss";
+@use "components/Answer/AnswerCheckbox.scss";
+@use "components/Answer/AnswerRadio.scss";
 
 // Use pages styles
 @use "pages/NewSurvey.scss";

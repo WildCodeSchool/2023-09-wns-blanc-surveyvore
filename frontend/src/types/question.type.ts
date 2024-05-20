@@ -18,4 +18,5 @@ export type QuestionType = {
 export type Answer = {
   id: string;
   content: string;
+  questionId: string;
 };
