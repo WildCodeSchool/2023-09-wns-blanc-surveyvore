@@ -1,5 +1,6 @@
 @use "./typography" as *;
 @use "./shadows" as *;
+@use "./colors" as *;
 
 .input-checkbox {
   label {
@@ -17,8 +18,8 @@
     display: none;
   }
   input[type="checkbox"]:checked + .checkbox {
-    background-color: var(--blue-100);
-    border: 1px solid var(--blue-600);
+    background-color: var(--primary-100);
+    border: 1px solid var(--primary-600);
     position: relative;
   }
 
@@ -35,8 +36,8 @@
       opacity: 0;
     }
     &:hover {
-      background-color: var(--blue-100);
-      border: 1px solid var(--blue-200);
+      background-color: var(--primary-100);
+      border: 1px solid var(--primary-200);
     }
   }
 
@@ -59,6 +60,27 @@
       }
     }
   }
+
+  &--sm2 {
+    input[type="checkbox"]:checked + .checkbox::before {
+      opacity: 1;
+    }
+    .checkbox {
+      width: 18px;
+      height: 18px;
+      border-radius: 5px;
+      &::before {
+        width: 13px;
+        height: 13px;
+        top: 1px;
+        left: 1px;
+
+        background: url("data:image/svg+xml,%3Csvg width='13' height='13' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11.6668 3.5L5.25016 9.91667L2.3335 7' stroke='%23099250' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A")
+          no-repeat;
+      }
+    }
+  }
+
   &--md {
     input[type="checkbox"]:checked + .checkbox::before {
       opacity: 1;

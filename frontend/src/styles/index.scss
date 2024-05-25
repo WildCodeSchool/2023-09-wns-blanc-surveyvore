@@ -17,9 +17,16 @@
 @use "components/Answer/AnswerDefaultQuestion.scss";
 @use "components/Answer/AnswerCheckbox.scss";
 @use "components/Answer/AnswerRadio.scss";
+@use "components/Answer/AnswerDate.scss";
 
 // Use pages styles
 @use "pages/NewSurvey.scss";
 @use "pages/Access.scss";
 @use "pages/Home.scss";
 @use "pages/Answer.scss";
+
+// Use datepicker styles
+// @use "react-datepicker/src/stylesheets/variables.scss";
+// @use "react-datepicker/src/stylesheets/mixins.scss";
+@use "react-datepicker/src/stylesheets/datepicker.scss";
+@use "react-datepicker/src/stylesheets/datepicker-cssmodules.scss";
