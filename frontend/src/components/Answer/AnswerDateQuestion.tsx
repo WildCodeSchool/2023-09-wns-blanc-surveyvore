@@ -1,7 +1,10 @@
 import { Question } from "@/types/question.type";
+import { fr } from "date-fns/locale";
 import { useState } from "react";
-import DatePicker from "react-datepicker";
+import DatePicker, { registerLocale } from "react-datepicker";
 
+
+registerLocale('fr', fr);
 function AnswerDateQuestion({ question }: { question: Question }) {
   console.log(question)
   let typeOfDate: string;
@@ -20,19 +23,23 @@ function AnswerDateQuestion({ question }: { question: Question }) {
   return (
     <>
       <p>{typeOfDate}</p>
-      {typeOfDate === "période" ? <DatePicker
-        selected={startDate}
-        onChange={onChangePeriod}
-        startDate={startDate}
-        endDate={endDate}
-        selectsRange
-        dateFormat="dd/MM/yyyy"
-      /> : <DatePicker
-        selected={startDate}
-        onChange={onChangeDate}
-        startDate={startDate}
-        dateFormat="dd/MM/yyyy"
-      />}
+      <div>
+        {typeOfDate === "période" ? <DatePicker
+          selected={startDate}
+          onChange={onChangePeriod}
+          startDate={startDate}
+          endDate={endDate}
+          selectsRange
+          dateFormat="dd/MM/yyyy"
+          locale="fr"
+        /> : <DatePicker
+          selected={startDate}
+          onChange={onChangeDate}
+          startDate={startDate}
+          dateFormat="dd/MM/yyyy"
+          locale="fr"
+        />}
+      </div>
     </>
   )
 }

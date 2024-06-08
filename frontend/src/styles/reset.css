@@ -134,11 +134,12 @@ table {
 *::after {
   box-sizing: border-box;
 }
-
+input {
+  margin: 0;
+}
 /* reset button when not using sass template */
 button {
   cursor: pointer;
   background: none;
   border: none;
 }
-

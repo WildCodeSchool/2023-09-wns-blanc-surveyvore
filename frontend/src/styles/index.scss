@@ -8,6 +8,7 @@
 @use "elements/dropdown";
 @use "elements/button";
 @use "elements/badge";
+@use "elements/radio";
 
 // Use components styles
 @use "components/DefaultQuestions.scss";
@@ -15,8 +16,6 @@
 @use "../components/Icon/Icon.scss";
 @use "../components/RadioGroup/RadioGroup.scss";
 @use "components/Answer/AnswerDefaultQuestion.scss";
-@use "components/Answer/AnswerCheckbox.scss";
-@use "components/Answer/AnswerRadio.scss";
 @use "components/Answer/AnswerDate.scss";
 
 // Use pages styles
@@ -26,7 +25,5 @@
 @use "pages/Answer.scss";
 
 // Use datepicker styles
-// @use "react-datepicker/src/stylesheets/variables.scss";
-// @use "react-datepicker/src/stylesheets/mixins.scss";
 @use "react-datepicker/src/stylesheets/datepicker.scss";
 @use "react-datepicker/src/stylesheets/datepicker-cssmodules.scss";
