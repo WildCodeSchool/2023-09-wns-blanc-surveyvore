@@ -15,5 +15,9 @@ export type IconName =
   | "search"
   | "dots"
   | "sort-alpha-up"
-  | "sort-alpha-down";
+  | "sort-alpha-down"
+  | "folder-download"
+  | "arrow-left"
+  | "sign-out"
+  | "paper-plane-top";
 

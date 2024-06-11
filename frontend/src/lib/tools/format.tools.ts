@@ -4,7 +4,7 @@ export const removeAccents = (str: string) => {
   return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 };
 
-export const formatDate = (date: Date) => {
-  return format(new Date(date), "dd/MM/yyyy");
+export const formatDate = (timestamp: number) => {
+  return format(new Date(timestamp), "dd/MM/yyyy");
 };
 

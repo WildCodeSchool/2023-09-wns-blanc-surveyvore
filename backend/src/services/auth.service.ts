@@ -58,7 +58,7 @@ export function signJwt(payload: any) {
   }
 
   return jwt.sign(payload, process.env.JWT_SECRET_KEY, {
-    expiresIn: 60 * 60,
+    expiresIn: "1d",
   });
 }
 
@@ -68,3 +68,4 @@ export function getMe(token: string) {
   const user = UserService.getByEmail(payload.email);
   return user;
 }
+

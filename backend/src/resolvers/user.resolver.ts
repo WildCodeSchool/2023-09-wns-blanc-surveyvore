@@ -33,7 +33,6 @@ export class UserResolver {
   @Authorized()
   @Mutation(() => String)
   async deleteUser(@Ctx("user") user: User) {
-    console.log(user);
     const userToDelete = await UserService.getByEmail(user.email);
     if (userToDelete) {
       await UserService.deleteUser(user.email);
@@ -41,3 +40,4 @@ export class UserResolver {
     return "OK";
   }
 }
+

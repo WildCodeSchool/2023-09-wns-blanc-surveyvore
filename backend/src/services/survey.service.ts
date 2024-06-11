@@ -29,6 +29,9 @@ export function findSurveysByOwner(user: User): Promise<Survey[] | null> {
       state: true,
       question: true,
     },
+    order: {
+      creationDate: "DESC",
+    },
   });
 }
 
@@ -83,9 +86,31 @@ export async function archive(
 ): Promise<Survey | undefined> {
   const surveyToArchive = await Survey.findOne({
     where: { link: link },
+    relations: {
+      state: true,
+      question: true,
+    },
   });
+
   if (surveyToArchive) {
     surveyToArchive.archived = archive;
+    surveyToArchive.archiveDate = new Date().getTime().toString();
+    surveyToArchive.state =
+      archive === true
+        ? ((await getSurveyStateByName("archived")) as SurveyState)
+        : ((await getSurveyStateByName("closed")) as SurveyState);
+
     return await surveyToArchive.save();
+  }
+}
+
+export async function softDelete(link: string): Promise<Survey | undefined> {
+  const surveyToSoftDelete = await Survey.findOne({
+    where: { link: link },
+  });
+
+  if (surveyToSoftDelete) {
+    surveyToSoftDelete.deleteDate = new Date().getTime().toString();
+    return await surveyToSoftDelete.save();
   }
 }

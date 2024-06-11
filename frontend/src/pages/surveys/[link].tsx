@@ -162,7 +162,11 @@ function NewSurvey() {
 }
 
 NewSurvey.getLayout = function getLayout(page: ReactElement) {
-  return <NavLayout>{page}</NavLayout>;
+  return (
+    <NavLayout badge backToForms publish signOut>
+      {page}
+    </NavLayout>
+  );
 };
 
 export default NewSurvey;
