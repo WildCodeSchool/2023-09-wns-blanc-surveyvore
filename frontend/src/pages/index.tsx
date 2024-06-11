@@ -153,6 +153,10 @@ export default function Home() {
 }
 
 Home.getLayout = function getLayout(page: ReactElement) {
-  return <NavLayout>{page}</NavLayout>;
+  return (
+    <NavLayout newSurvey profile signOut>
+      {page}
+    </NavLayout>
+  );
 };
 
