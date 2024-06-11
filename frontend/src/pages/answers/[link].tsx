@@ -158,8 +158,8 @@ function AnswerSurvey() {
             })}
           </div>
         )}
+        <button className="button-send-answer button-md-primary-solid"><Icon name="paper-plane-top" />Envoyer la réponse</button>
       </div>
-      <button className="button-md-primary-solid">Envoyer la réponse</button>
     </>
   );
 }

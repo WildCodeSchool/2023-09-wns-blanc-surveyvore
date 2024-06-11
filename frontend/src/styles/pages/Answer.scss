@@ -7,6 +7,13 @@
   flex-direction: column;
   gap: 1.25rem;
 
+  @media screen and (min-width: 480px) {
+    .button-send-answer {
+      width: fit-content;
+      align-self: end;
+    }
+  }
+
   .answer-survey-data-container {
     display: flex;
     flex-direction: column;
@@ -68,7 +75,6 @@
 
       .react-datepicker-wrapper {
         input {
-          // padding: 4px 8px;
           display: flex;
         }
       }
