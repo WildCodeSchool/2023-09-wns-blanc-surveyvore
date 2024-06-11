@@ -1,4 +1,6 @@
 @use "../../styles/elements/shadows" as *;
+@use "../../styles/elements/typography" as *;
+
 .nav-container {
   display: flex;
   justify-content: space-between;
@@ -14,10 +16,6 @@
   right: 0;
   z-index: 100;
 
-  .nav-buttons {
-    display: flex;
-    gap: 0.5rem;
-  }
   .logo {
     height: 100%;
     max-width: 16rem;
@@ -26,6 +24,21 @@
     }
     &.logo-mobile {
       display: block;
+    }
+  }
+  .nav-buttons,
+  .badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .badge {
+    @include text("sm");
+    color: var(--emerald-500);
+
+    .icon--emerald {
+      fill: var(--emerald-500);
     }
   }
 }
@@ -46,3 +59,4 @@
     }
   }
 }
+
