@@ -18,8 +18,6 @@ async function createServerTest(
   dotenv.config();
   await dataSourceTest.initialize();
 
-  console.log("Starting datasource test ...");
-
   const schema = await buildSchema({
     resolvers: [
       QuestionResolver,
@@ -81,7 +79,7 @@ async function createServerTest(
 
               return { token: bearer };
             } catch (e) {
-              console.log(e);
+              console.error(e);
               return {};
             }
           }
@@ -91,3 +89,4 @@ async function createServerTest(
 }
 
 export default createServerTest;
+

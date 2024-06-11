@@ -44,29 +44,32 @@ export class Survey extends BaseEntity {
   @Field()
   collectingUserData: boolean;
 
-  @Column({ nullable: true })
+  @Column({ type: "bigint", nullable: true })
   @Field({ nullable: true })
-  startDate?: Date;
+  startDate?: string;
 
-  @Column({ nullable: true })
+  @Column({ type: "bigint", nullable: true })
   @Field({ nullable: true })
-  endDate?: Date;
+  endDate?: string;
 
-  @Column({ nullable: true })
+  @Column({
+    type: "bigint",
+    nullable: true,
+  })
   @Field({ nullable: true })
-  deleteDate?: Date;
+  deleteDate?: string;
 
-  @Column()
+  @Column({ type: "bigint" })
   @Field()
-  creationDate: Date;
+  creationDate: string;
 
   @Column({ nullable: true })
   @Field({ nullable: true })
   publicationDate?: Date;
 
-  @Column({ nullable: true })
+  @Column({ type: "bigint", nullable: true })
   @Field({ nullable: true })
-  archiveDate?: Date;
+  archiveDate?: string;
 
   @Field(() => User)
   @ManyToOne(() => User, (user) => user.id)
@@ -101,7 +104,7 @@ export class Survey extends BaseEntity {
     super();
     if (datas) {
       this.title = datas.title;
-      this.creationDate = new Date();
+      this.creationDate = new Date().getTime().toString();
       this.collectingUserData = false;
       this.private = false;
       this.archived = false;
