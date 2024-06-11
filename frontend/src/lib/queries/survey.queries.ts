@@ -79,3 +79,9 @@ export const DELETE_SURVEY = gql`
   }
 `;
 
+export const CREATE_SURVEY = gql`
+  mutation Mutation($title: String!) {
+    createSurvey(title: $title)
+  }
+`;
+
