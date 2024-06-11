@@ -56,7 +56,6 @@
     .answer-container {
       display: flex;
       flex-direction: column;
-      // gap: 0.25rem;
       @include shadow("xs");
       background-color: var(--white);
       padding: 2rem;
@@ -69,7 +68,7 @@
 
       .react-datepicker-wrapper {
         input {
-          padding: 4px 8px;
+          // padding: 4px 8px;
           display: flex;
         }
       }

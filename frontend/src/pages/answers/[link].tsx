@@ -159,6 +159,7 @@ function AnswerSurvey() {
           </div>
         )}
       </div>
+      <button className="button-md-primary-solid">Envoyer la réponse</button>
     </>
   );
 }

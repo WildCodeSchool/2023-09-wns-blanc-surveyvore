@@ -4,7 +4,7 @@
 
 html,
 body {
-  font-feature-settings: "tnum" on, "lnum" on;
+  font-feature-settings: "lnum" on;
   font-family: $font-family-base;
   color: var(--grey-900);
 }
@@ -64,4 +64,3 @@ main {
     max-width: 1280px;
   }
 }
-
