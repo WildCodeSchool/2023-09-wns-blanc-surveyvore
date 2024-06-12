@@ -18,6 +18,7 @@ import {
 import { sortOptions } from "@/lib/fixtures/data";
 import CardMenu from "@/components/CardMenu/CardMenu";
 import DropdownItem from "@/components/Dropdown/Dropdown";
+import Modal from "@/components/Modal/Modal";
 
 export default function Home() {
   // ----------------------------------States----------------------------------

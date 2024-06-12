@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import Icon from "../Icon/Icon";
 import { CREATE_SURVEY } from "@/lib/queries/survey.queries";
