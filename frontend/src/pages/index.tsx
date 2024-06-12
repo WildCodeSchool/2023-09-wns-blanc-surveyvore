@@ -29,7 +29,6 @@ export default function Home() {
   const [selectedSortOption, setSelectedSortOption] = useState<string>("");
   const [searchSurveysValue, setSearchSurveysValue] = useState<string>("");
 
-  const [isOpen, setIsOpen] = useState(true);
   // ----------------------------------Queries----------------------------------
   const getStates = useQuery<{ getSurveyStates: SurveyState[] }>(
     GET_SURVEY_STATES,
@@ -150,11 +149,6 @@ export default function Home() {
             )
         )}
       </section>
-      {isOpen && (
-        <Modal setIsOpen={setIsOpen} title="Ajouter un formulaire">
-          <p>prout</p>
-        </Modal>
-      )}
     </div>
   );
 }
