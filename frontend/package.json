@@ -23,6 +23,7 @@
     "react-datepicker": "^6.9.0",
     "react-dom": "^18",
     "sass": "^1.70.0",
+    "sweetalert2": "^11.11.1",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2"
   },

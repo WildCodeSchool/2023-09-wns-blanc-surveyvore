@@ -1,8 +1,8 @@
 import { Question } from "@/types/question.type";
 import Input from "../Input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-function AnswerDefaultQuestion({ defaultQuestion }: { defaultQuestion: Question }) {
+function AnswerDefaultQuestion({ defaultQuestion, setAnswers, answers, isError }: { defaultQuestion: Question, answers: {}, setAnswers: React.Dispatch<React.SetStateAction<{}>>, isError: boolean }) {
   const [answerDefault, setAnswerDefault] = useState<string>("");
   let placeHolderForDefaultQuestion: string = "";
   switch (defaultQuestion.title) {
@@ -21,6 +21,9 @@ function AnswerDefaultQuestion({ defaultQuestion }: { defaultQuestion: Question 
     default:
       break;
   }
+  useEffect(() => {
+    if (defaultQuestion && defaultQuestion.id) setAnswers({ ...answers, [defaultQuestion.id.toString()]: answerDefault });
+  }, [answerDefault])
   return (
     <Input
       labelName={defaultQuestion.title}
@@ -28,6 +31,7 @@ function AnswerDefaultQuestion({ defaultQuestion }: { defaultQuestion: Question 
       placeholder={placeHolderForDefaultQuestion}
       value={answerDefault}
       setValue={setAnswerDefault}
+      inputClassName={isError ? "is-error" : undefined}
     />
   )
 }

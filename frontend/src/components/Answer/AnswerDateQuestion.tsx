@@ -13,9 +13,9 @@ registerLocale('fr', fr);
 function AnswerDateQuestion({ question }: { question: Question }) {
   let typeOfDate: string;
   question.answer && question.answer[0].content ? typeOfDate = question.answer[0].content : typeOfDate = "date";
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [date, setDate] = useState(`${new Date().toLocaleDateString()} - ${new Date().toLocaleDateString()}`);
+  const [date, setDate] = useState(``);
   const onChangePeriod = (dates: any,) => {
     const [start, end] = dates;
     setStartDate(start);
@@ -31,19 +31,16 @@ function AnswerDateQuestion({ question }: { question: Question }) {
       <div>
         {typeOfDate === "période" ? <DatePicker
           selected={startDate}
-          onChange={
-            onChangePeriod
-
-          }
+          onChange={onChangePeriod}
           startDate={startDate}
           endDate={endDate}
           selectsRange
           dateFormat="dd/MM/yyyy"
           locale="fr"
+          placeholderText="Sélectionner une période"
           customInput={<CustomInput
             type="text"
-            inputName="date-input"
-            placeholder={new Date().toLocaleDateString()}
+            inputName={`input-date_${question.id}`}
             value={date}
             setValue={setDate}
           />}
@@ -53,10 +50,10 @@ function AnswerDateQuestion({ question }: { question: Question }) {
           startDate={startDate}
           dateFormat="dd/MM/yyyy"
           locale="fr"
+          placeholderText="Sélectionner une date"
           customInput={<CustomInput
             type="text"
-            inputName="date-input"
-            placeholder={new Date().toLocaleDateString()}
+            inputName={`input-date_${question.id}`}
             value={date}
             setValue={setDate}
           />}

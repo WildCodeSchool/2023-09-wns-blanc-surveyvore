@@ -34,7 +34,6 @@ const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputProps>(({
 }, ref) => {
     const internalRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
     const combinedRef = useCombinedRefs(ref, internalRef);
-    const [widthDataDatepicker, setWidthDataDatePicker] = useState(0);
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>
@@ -46,10 +45,7 @@ const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputProps>(({
         if (focus && combinedRef.current) {
             combinedRef.current.focus();
         }
-        if (inputName === "date-input" && combinedRef.current) {
-            setWidthDataDatePicker(combinedRef.current.scrollWidth);
-        }
-    }, [focus, combinedRef, value, inputName]);
+    }, [focus, combinedRef]);
 
     return (
         <div className={`input-field ${width ? `field--${width}` : ""}`}>
@@ -66,7 +62,7 @@ const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputProps>(({
                     data-testid={inputName}
                     onChange={handleChange}
                     placeholder={placeholder}
-                    className={`textarea ${inputClassName || ""}`}
+                    className={`textarea ${inputClassName || ""} ${inputClassName === "is-error" && "is-error"}`}
                     onBlur={onBlur}
                 />
             ) : (
@@ -83,7 +79,8 @@ const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputProps>(({
                         onChange={handleChange}
                         onBlur={onBlur}
                         onClick={onClick}
-                        {...(inputName === "date-input" && { style: { width: `${widthDataDatepicker}px` } })}
+                        {...(inputName.startsWith("input-date_") && { style: { width: `200px` } })}
+                        {...(inputClassName === "is-error" && { className: "is-error" })}
                     />
                 </div>
             )}

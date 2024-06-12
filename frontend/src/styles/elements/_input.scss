@@ -135,6 +135,10 @@
       flex: 9;
     }
   }
+
+  .is-error {
+    border: 1px solid var(--red-500);
+  }
 }
 
 input:-webkit-autofill,
