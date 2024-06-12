@@ -1,0 +1,49 @@
+@use "../../styles/elements/typography.scss";
+
+.modal-background {
+  position: fixed;
+  display: grid;
+  place-items: center;
+  top: 0;
+  left: 0;
+  width: 100dvw;
+  height: 100dvh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 200;
+
+  .modal {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: calc(100% - 1rem);
+    max-width: 560px;
+    padding: 24px;
+    border-radius: 1rem;
+    background-color: var(--white);
+    border: 1px solid var(--grey-200);
+
+    .modal-header {
+      width: 100%;
+      display: flex;
+      gap: 2rem;
+
+      justify-content: space-between;
+      align-items: flex-start;
+
+      .close {
+        &:hover {
+          color: var(--primary-600);
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .modal-background {
+    .modal {
+      width: max-content;
+    }
+  }
+}
+
