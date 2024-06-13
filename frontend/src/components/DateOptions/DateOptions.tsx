@@ -14,39 +14,26 @@ export default function DateOptions({
 
     const questionOptions: Answer[] = currentQuestion?.answer || [];
 
-    console.log(questions);
-    const handleChange = (value: string) => {
-        setQuestions((currentQuestions) => {
-            return currentQuestions.map((question) => {
-                if (question.id === currentQuestion?.id) {
-                    // Cloner la question actuelle et ses réponses pour éviter des modifications directes
-                    const updatedQuestion = { ...question };
-                    const updatedAnswers = updatedQuestion.answer
-                        ? [...updatedQuestion.answer]
-                        : [];
+    const currentOption =
+        questionOptions.length > 0 ? questionOptions[0].content : null;
 
-                    if (updatedAnswers.length > 0) {
-                        // Modifier le contenu de la première réponse de manière immuable
-                        updatedAnswers[0] = {
-                            ...updatedAnswers[0],
-                            content: value,
-                        };
-                        updatedQuestion.answer = [updatedAnswers[0]];
-                    } else {
-                        // Ajouter une nouvelle réponse si aucune réponse n'existe
-                        const newAnswer = { id: "", content: value };
-                        updatedQuestion.answer = [newAnswer];
-                    }
-
-                    return updatedQuestion;
-                }
-                return question;
-            });
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const updatedQuestions = questions.map((question: Question) => {
+            if (question.id === currentQuestion?.id) {
+                return {
+                    ...question,
+                    answer: [{ id: "", content: e.target.value }],
+                };
+            }
+            return question;
         });
+
+        setQuestions(updatedQuestions);
     };
+
     return (
         <div className="date-options-container">
-            <div className="label">Type de sélection</div>
+            <p className="label">Type de sélection</p>
             <div className="input-radio input-radio--sm">
                 <label htmlFor="date">
                     <input
@@ -54,12 +41,8 @@ export default function DateOptions({
                         id="date"
                         name="date"
                         value="date"
-                        checked={
-                            questionOptions.length > 0
-                                ? questionOptions[0].content === "date"
-                                : true
-                        }
-                        onChange={() => handleChange("date")}
+                        checked={currentOption === "date"}
+                        onChange={handleChange}
                     />
                     <div className="radio"></div>
                     Jour unique
@@ -72,11 +55,8 @@ export default function DateOptions({
                         id="period"
                         name="date"
                         value="period"
-                        checked={
-                            questionOptions.length > 0 &&
-                            questionOptions[0].content === "period"
-                        }
-                        onChange={() => handleChange("period")}
+                        checked={currentOption === "period"}
+                        onChange={handleChange}
                     />
                     <div className="radio"></div>
                     Période

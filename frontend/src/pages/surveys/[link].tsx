@@ -34,6 +34,7 @@ function NewSurvey() {
 
     const [getSurveyByLink, { loading, error }] =
         useLazyQuery(GET_SURVEY_BY_LINK);
+
     const [
         getQuestions,
         { loading: loadingQuestions, error: errorQuestions, refetch },
@@ -50,15 +51,8 @@ function NewSurvey() {
 
             newQuestions.unshift(emptyQuestion);
             setQuestions(newQuestions);
-            console.log("coucou");
         },
     });
-
-    // const [isRefetched, setIsRefetched] = useState(false);
-
-    // function handleRefetch() {
-    //     setIsRefetched(!isRefetched);
-    // }
 
     const emptyQuestion = {
         id: "empty",
@@ -76,9 +70,11 @@ function NewSurvey() {
     useEffect(() => {
         if (link) {
             getSurveyByLink({
+                fetchPolicy: "network-only",
                 variables: {
                     surveyLink: link,
                 },
+
                 onCompleted: (data) => {
                     setTitle(data.getSurveyByLink.title);
                     setDescription(data.getSurveyByLink.description);

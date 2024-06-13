@@ -43,11 +43,7 @@ function NewQuestion({
 
     const [createQuestion] = useMutation(CREATE_QUESTION);
 
-    const [deleteQuestion] = useMutation(DELETE_QUESTION, {
-        onCompleted: () => {
-            getQuestions();
-        },
-    });
+    const [deleteQuestion] = useMutation(DELETE_QUESTION);
 
     const [addQuestionAnswer] = useMutation(ADD_QUESTION_ANSWER);
 
@@ -124,13 +120,27 @@ function NewQuestion({
                     "checkbox"
                 ) {
                     if (question.answer) {
-                        question.answer.map((answer) => {
+                        question.answer.map((answer, index) => {
                             addQuestionAnswer({
                                 variables: {
                                     questionAnswer: {
                                         content: answer.content,
                                         questionId: data.createQuestion.id,
                                     },
+                                },
+                                onCompleted: () => {
+                                    const totalAnswers =
+                                        question.answer?.length || 0;
+
+                                    if (index === totalAnswers - 1) {
+                                        getQuestions();
+                                    }
+                                },
+                                onError: (error) => {
+                                    console.error(
+                                        "Erreur lors de l'ajout de l'option :",
+                                        error.message
+                                    );
                                 },
                             });
                         });
@@ -144,10 +154,18 @@ function NewQuestion({
                                     questionId: data.createQuestion.id,
                                 },
                             },
+                            onCompleted: () => {
+                                getQuestions();
+                            },
+                            onError: (error) => {
+                                console.error(
+                                    "Erreur lors de l'ajout de l'option de date :",
+                                    error.message
+                                );
+                            },
                         });
                     }
                 }
-                getQuestions();
             },
         });
     };
@@ -215,7 +233,12 @@ function NewQuestion({
                     <button
                         className="button-md-grey-outline"
                         onClick={() => {
-                            deleteQuestion({ variables: { id: question.id } });
+                            deleteQuestion({
+                                variables: { id: question.id },
+                                onCompleted: () => {
+                                    getQuestions();
+                                },
+                            });
                         }}
                     >
                         <Icon name="trash" />
