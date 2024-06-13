@@ -1,16 +1,21 @@
 import { useEffect, useRef } from "react";
 import Icon from "../Icon/Icon";
+import useClickOutside from "@/lib/hooks/useClickOutside";
 
 function Modal({
   title,
   children,
   setIsOpen,
+  isOpen,
 }: {
   title: string;
   children: JSX.Element;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isOpen: boolean;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
+  const backgroundRef = useRef<HTMLDivElement>(null);
+
+  const { ref } = useClickOutside(isOpen, setIsOpen);
 
   function handleKeyDown(event: KeyboardEvent) {
     if (event.key === "Escape") {
@@ -18,31 +23,26 @@ function Modal({
     }
   }
 
-  function handleClickOutside() {
-    setIsOpen(false);
-  }
-
   useEffect(() => {
-    ref.current && (ref.current.style.backdropFilter = "blur(5px)");
+    backgroundRef.current &&
+      (backgroundRef.current.style.backdropFilter = "blur(5px)");
 
     document.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      ref.current && (ref.current.style.backdropFilter = "none");
+      backgroundRef.current &&
+        (backgroundRef.current.style.backdropFilter = "none");
 
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [ref]);
+  }, [backgroundRef]);
 
   return (
-    <div
-      ref={ref}
-      className="modal-background"
-      role="button"
-      aria-label="close modal"
-      tabIndex={-1}
-      onClick={handleClickOutside}>
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
+    <div ref={backgroundRef} className="modal-background">
+      <div
+        ref={ref as React.RefObject<HTMLDivElement>}
+        className="modal"
+        onClick={(e) => e.stopPropagation()}>
         <section className="modal-header">
           <p className="text-xl text--medium">{title}</p>
           <button className="close" onClick={() => setIsOpen(false)}>
