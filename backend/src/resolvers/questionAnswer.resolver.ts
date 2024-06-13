@@ -22,4 +22,5 @@ export class QuestionAnswerResolver {
     ): Promise<QuestionAnswer | undefined> {
         return QuestionAnswerService.editQuestionAnswer(id, questionAnswer);
     }
+
 }

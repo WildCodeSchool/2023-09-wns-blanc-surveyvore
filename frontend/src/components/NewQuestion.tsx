@@ -25,25 +25,50 @@ const GET_TYPES = gql`
 `;
 
 const CREATE_QUESTION = gql`
-  mutation Mutation($question: CreateQuestionInputType!) {
-    createQuestion(question: $question) {
-      title
+    mutation Mutation($question: CreateQuestionInputType!) {
+        createQuestion(question: $question) {
+            id
+            type {
+                type
+            }
+        }
     }
-  }
 `;
 
 const EDIT_QUESTION = gql`
-  mutation Mutation($question: EditQuestionInputType!, $id: String!) {
-    editQuestion(question: $question, id: $id) {
-      title
+    mutation Mutation($question: EditQuestionInputType!, $id: String!) {
+        editQuestion(question: $question, id: $id) {
+            id
+            type {
+                type
+            }
+        }
     }
-  }
 `;
 
 const DELETE_QUESTION = gql`
   mutation Mutation($id: String!) {
     deleteQuestion(id: $id)
   }
+`;
+
+const ADD_QUESTION_ANSWER = gql`
+    mutation Mutation($questionAnswer: CreateQuestionAnswerInputType!) {
+        createQuestionAnswer(questionAnswer: $questionAnswer) {
+            content
+        }
+    }
+`;
+
+const EDIT_QUESTION_ANSWER = gql`
+    mutation Mutation(
+        $id: String!
+        $questionAnswer: EditQuestionAnswerInputType!
+    ) {
+        editQuestionAnswer(id: $id, questionAnswer: $questionAnswer) {
+            content
+        }
+    }
 `;
 
 function NewQuestion({
@@ -80,11 +105,15 @@ function NewQuestion({
 
   const [editQuestion] = useMutation(EDIT_QUESTION);
 
-  const [deleteQuestion] = useMutation(DELETE_QUESTION, {
-    onCompleted: () => {
-      refetch();
-    },
-  });
+    const [deleteQuestion] = useMutation(DELETE_QUESTION, {
+        onCompleted: () => {
+            refetch();
+        },
+    });
+
+    const [addQuestionAnswer] = useMutation(ADD_QUESTION_ANSWER);
+
+    const [editQuestionAnswer] = useMutation(EDIT_QUESTION_ANSWER);
 
     const { loading, error } = useQuery(GET_TYPES, {
         onCompleted: (data) => {
@@ -133,14 +162,28 @@ function NewQuestion({
                         title: form.title,
                         description: form.description,
                         type: form.type?.id,
-                        answer: question.answer
-                            ? question.answer.map((answer) => ({
-                                  content: answer.content,
-                              }))
-                            : [],
                     },
                 },
-                onCompleted: () => {
+                onCompleted: (data) => {
+                    if (
+                        data.editQuestion.type.type === "checkboxes" ||
+                        "radio" ||
+                        "checkbox"
+                    ) {
+                        if (question.answer) {
+                            question.answer.map((answer) => {
+                                addQuestionAnswer({
+                                    variables: {
+                                        questionAnswer: {
+                                            content: answer.content,
+                                            questionId: data.editQuestion.id,
+                                        },
+                                    },
+                                });
+                            });
+                        }
+                    }
+
                     refetch();
                 },
             });
@@ -153,14 +196,32 @@ function NewQuestion({
                         type: form.type?.id,
                         survey: surveyLink,
                         defaultQuestion: false,
-                        answer: question.answer
-                            ? question.answer.map((answer) => ({
-                                  content: answer.content,
-                              }))
-                            : [],
+                        // answer: question.answer
+                        //     ? question.answer.map((answer) => ({
+                        //           content: answer.content,
+                        //       }))
+                        //     : [],
                     },
                 },
-                onCompleted: () => {
+                onCompleted: (data) => {
+                    if (
+                        data.createQuestion.type.type === "checkboxes" ||
+                        "radio" ||
+                        "checkbox"
+                    ) {
+                        if (question.answer) {
+                            question.answer.map((answer) => {
+                                addQuestionAnswer({
+                                    variables: {
+                                        questionAnswer: {
+                                            content: answer.content,
+                                            questionId: data.createQuestion.id,
+                                        },
+                                    },
+                                });
+                            });
+                        }
+                    }
                     refetch();
                 },
             });

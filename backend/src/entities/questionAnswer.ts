@@ -27,6 +27,8 @@ export class QuestionAnswer extends BaseEntity {
     content: string;
 
     @Field(() => Question)
-    @ManyToOne(() => Question, (question) => question.id)
+    @ManyToOne(() => Question, (question) => question.id, {
+        onDelete: "CASCADE",
+    })
     question: Question;
 }

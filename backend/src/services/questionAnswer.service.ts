@@ -1,3 +1,4 @@
+import { DeleteResult } from "typeorm";
 import { Question } from "../entities/question";
 import { QuestionAnswer } from "../entities/questionAnswer";
 import { CreateQuestionAnswerInputType } from "../types/CreateQuestionAnswerInputType";
@@ -13,7 +14,6 @@ export async function createQuestionAnswer(
     questionAnswer: CreateQuestionAnswerInputType
 ): Promise<QuestionAnswer> {
     const newQuestionAnswer = new QuestionAnswer(questionAnswer);
-    console.log(questionAnswer);
 
     const question = await Question.findOneBy({
         id: questionAnswer.questionId,
