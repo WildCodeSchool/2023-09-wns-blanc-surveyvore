@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Input from "./Input";
 import QuestionType from "./QuestionType";
 import { gql, useMutation, useQuery } from "@apollo/client";
@@ -8,47 +8,51 @@ import Icon from "./Icon/Icon";
 import { Question } from "@/types/question.type";
 import QuestionOptions from "./QuestionOptions";
 import DateOptions from "./DateOptions/DateOptions";
-import { ADD_QUESTION_ANSWER, CREATE_QUESTION, DELETE_QUESTION, EDIT_QUESTION, EDIT_QUESTION_ANSWER, GET_TYPES } from "@/lib/queries/questions.queries";
-
-/**
- * conservation des données quand on édite une question alors qu'une autre est en cours d'édition mais non validée
- * meme composant pour l'édition et la création (get dans le cas de l'édition et valeurs par défaut en création)
- *
- */
+import {
+    ADD_QUESTION_ANSWER,
+    CREATE_QUESTION,
+    DELETE_QUESTION,
+    EDIT_QUESTION,
+    EDIT_QUESTION_ANSWER,
+    GET_QUESTIONS,
+    GET_TYPES,
+} from "@/lib/queries/questions.queries";
 
 function NewQuestion({
-  setQuestions,
-  question,
-  questions,
-  surveyLink,
-  refetch,
+    setQuestions,
+    question,
+    questions,
+    surveyLink,
+    refetch,
 }: {
-  setQuestions: React.Dispatch<React.SetStateAction<any>>;
-  question: Question;
-  questions: Question[];
-  surveyLink: string;
-  refetch: () => void;
+    setQuestions: React.Dispatch<React.SetStateAction<any>>;
+    question: Question;
+    questions: Question[];
+    surveyLink: string;
+    refetch: () => void;
 }) {
-  const [types, setTypes] = useState<QuestionType[]>([]);
-  const [selectedType, setSelectedType] = useState<
-    RadioElement | undefined | QuestionType
-  >(undefined);
-  const [title, setTitle] = useState(question.title || "");
-  const [description, setDescription] = useState(question.description || "");
+    const [types, setTypes] = useState<QuestionType[]>([]);
+    const [selectedType, setSelectedType] = useState<
+        RadioElement | undefined | QuestionType
+    >(undefined);
 
-  const formRef = useRef<HTMLFormElement>(null);
+    const formRef = useRef<HTMLFormElement>(null);
 
-  const handleClickCancel = () => {
-    const newSetQuestions = [...questions];
-    newSetQuestions
-      .filter((q) => q.id === question.id)
-      .map((q) => (q.isOpen = false));
-    setQuestions(newSetQuestions);
-  };
+    const handleClickCancel = () => {
+        const newSetQuestions = [...questions];
+        newSetQuestions
+            .filter((q) => q.id === question.id)
+            .map((q) => (q.isOpen = false));
+        setQuestions(newSetQuestions);
+    };
 
-  const [createQuestion] = useMutation(CREATE_QUESTION);
+    const [createQuestion] = useMutation(CREATE_QUESTION, {
+        refetchQueries: [GET_QUESTIONS],
+    });
 
-  const [editQuestion] = useMutation(EDIT_QUESTION);
+    const [editQuestion] = useMutation(EDIT_QUESTION, {
+        refetchQueries: [GET_QUESTIONS],
+    });
 
     const [deleteQuestion] = useMutation(DELETE_QUESTION, {
         onCompleted: () => {
@@ -64,35 +68,45 @@ function NewQuestion({
         onCompleted: (data) => {
             setTypes(data.getAllTypes);
 
-      if (question.type.type) {
-        setSelectedType(
-          data.getAllTypes.find(
-            (type: QuestionType) => type.id === question.type?.id
-          )
-        );
-      } else {
-        setSelectedType(data.getAllTypes[0]);
-      }
-    },
-  });
+            if (question.type.type) {
+                setSelectedType(
+                    data.getAllTypes.find(
+                        (type: QuestionType) => type.id === question.type?.id
+                    )
+                );
+            } else {
+                setSelectedType(data.getAllTypes[0]);
+            }
+        },
+    });
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+    useEffect(() => {
+        if (question.type.type) {
+            setSelectedType(
+                types.find(
+                    (type: QuestionType) => type.id === question.type?.id
+                )
+            );
+        }
+    }, [question.isOpen]);
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (formRef.current === null) {
-      console.error("Form ref is not attached to a form element");
-      return;
+    if (loading) {
+        return <div>Loading...</div>;
     }
 
-    const formData = new FormData(formRef.current);
+    if (error) {
+        return <div>Error: {error.message}</div>;
+    }
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        if (formRef.current === null) {
+            console.error("Form ref is not attached to a form element");
+            return;
+        }
+
+        const formData = new FormData(formRef.current);
 
         const form = {
             title: formData.get("question-title"),
@@ -117,20 +131,54 @@ function NewQuestion({
                     ) {
                         if (question.answer) {
                             question.answer.map((answer) => {
+                                if (answer.id) {
+                                    editQuestionAnswer({
+                                        variables: {
+                                            id: answer.id,
+                                            questionAnswer: {
+                                                content: answer.content,
+                                            },
+                                        },
+                                    });
+                                } else {
+                                    addQuestionAnswer({
+                                        variables: {
+                                            questionAnswer: {
+                                                content: answer.content,
+                                                questionId:
+                                                    data.editQuestion.id,
+                                            },
+                                        },
+                                    });
+                                }
+                            });
+                        }
+                    } else if (data.editQuestion.type.type === "date") {
+                        if (question.answer) {
+                            if (question.answer[0].id) {
+                                editQuestionAnswer({
+                                    variables: {
+                                        id: question.answer[0].id,
+                                        questionAnswer: {
+                                            content: question.answer[0].content,
+                                        },
+                                    },
+                                });
+                            } else {
                                 addQuestionAnswer({
                                     variables: {
                                         questionAnswer: {
-                                            content: answer.content,
+                                            content: question.answer[0].content,
                                             questionId: data.editQuestion.id,
                                         },
                                     },
                                 });
-                            });
+                            }
                         }
                     }
+                    refetch();
                 },
             });
-            refetch();
         } else {
             createQuestion({
                 variables: {
@@ -140,11 +188,6 @@ function NewQuestion({
                         type: form.type?.id,
                         survey: surveyLink,
                         defaultQuestion: false,
-                        // answer: question.answer
-                        //     ? question.answer.map((answer) => ({
-                        //           content: answer.content,
-                        //       }))
-                        //     : [],
                     },
                 },
                 onCompleted: (data) => {
@@ -165,23 +208,56 @@ function NewQuestion({
                                 });
                             });
                         }
+                    } else if (data.createQuestion.type.type === "date") {
+                        if (question.answer) {
+                            addQuestionAnswer({
+                                variables: {
+                                    questionAnswer: {
+                                        content: question.answer[0].content,
+                                        questionId: data.createQuestion.id,
+                                    },
+                                },
+                            });
+                        }
                     }
+                    refetch();
                 },
             });
-            refetch();
         }
 
-    question.isOpen = false;
-  };
+        question.isOpen = false;
+    };
 
-  function openCurrentQuestion() {
-    const newSetQuestions = [...questions];
-    newSetQuestions.map((q) => (q.isOpen = false));
-    newSetQuestions
-      .filter((q) => q.id === question.id)
-      .map((q) => (q.isOpen = true));
-    setQuestions(newSetQuestions);
-  }
+    function openCurrentQuestion() {
+        const newSetQuestions = [...questions];
+        newSetQuestions.map((q) => (q.isOpen = false));
+        newSetQuestions
+            .filter((q) => q.id === question.id)
+            .map((q) => (q.isOpen = true));
+        setQuestions(newSetQuestions);
+    }
+
+    function handleTitleChange(value: string) {
+        setQuestions(
+            questions.map((q) => {
+                if (q.id === question.id) {
+                    q.title = value;
+                }
+                return q;
+            })
+        );
+    }
+
+    function handleDescriptionChange(value: string) {
+        setQuestions(
+            questions.map((q) => {
+                if (q.id === question.id) {
+                    q.description = value;
+                }
+                return q;
+            })
+        );
+    }
 
     if (!question.isOpen && question.id !== "empty") {
         return (
@@ -224,16 +300,16 @@ function NewQuestion({
                     type="text"
                     inputName="question-title"
                     placeholder="Titre de la question"
-                    value={title}
-                    setValue={setTitle}
+                    value={question.title}
+                    setValue={handleTitleChange}
                 />
                 <Input
                     textarea
                     inputName="question-description"
                     labelName="Description (facultative)"
                     placeholder="Description de la question"
-                    value={description}
-                    setValue={setDescription}
+                    value={question.description}
+                    setValue={handleDescriptionChange}
                 />
                 <QuestionType
                     types={types}
@@ -287,4 +363,3 @@ function NewQuestion({
 }
 
 export default NewQuestion;
-

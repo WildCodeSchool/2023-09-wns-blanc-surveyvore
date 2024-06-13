@@ -57,3 +57,23 @@ export const EDIT_QUESTION_ANSWER = gql`
         }
     }
 `;
+
+
+export const GET_QUESTIONS = gql`
+    query GetQuestions($surveyLink: String!) {
+        getQuestions(surveyLink: $surveyLink) {
+            id
+            title
+            description
+            type {
+                icon
+                id
+                type
+            }
+            answer {
+                content
+                id
+            }
+        }
+    }
+`;
