@@ -56,7 +56,25 @@ export default function QuestionOptions({
             })
         );
     }
+    function updateQuestions(value: string, index: number) {
+        const updatedQuestions = questions.map((question) => {
+            if (question.id === questionId) {
+                return {
+                    ...question,
+                    answer:
+                        question.answer &&
+                        question.answer.map((option, optionIndex) =>
+                            optionIndex === index
+                                ? { ...option, content: value }
+                                : option
+                        ),
+                };
+            }
+            return question;
+        });
 
+        setQuestions(updatedQuestions);
+    }
     return (
         <div className="options">
             <p className="subtitle">Options</p>
@@ -66,18 +84,9 @@ export default function QuestionOptions({
                         <Input
                             inputName={`option-${index}`}
                             value={option.content}
-                            setValue={(value: string) => {
-                                const options = [...questionOptions];
-                                options[index].content = value;
-                                setQuestions(
-                                    questions.map((question) => {
-                                        if (question.id === questionId) {
-                                            question.answer = options;
-                                        }
-                                        return question;
-                                    })
-                                );
-                            }}
+                            setValue={(value: string) =>
+                                updateQuestions(value, index)
+                            }
                             placeholder="Option"
                         />
                         <button

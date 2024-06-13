@@ -7,6 +7,7 @@ import { IconName } from "@/types/iconName.type";
 import Icon from "./Icon/Icon";
 import { Question } from "@/types/question.type";
 import QuestionOptions from "./QuestionOptions";
+import { id } from "date-fns/locale";
 
 /**
  * conservation des données quand on édite une question alors qu'une autre est en cours d'édition mais non validée
@@ -172,11 +173,11 @@ function NewQuestion({
                     ) {
                         if (question.answer) {
                             question.answer.map((answer) => {
-                                addQuestionAnswer({
+                                editQuestionAnswer({
                                     variables: {
+                                        id: data.editQuestion.id,
                                         questionAnswer: {
                                             content: answer.content,
-                                            questionId: data.editQuestion.id,
                                         },
                                     },
                                 });
