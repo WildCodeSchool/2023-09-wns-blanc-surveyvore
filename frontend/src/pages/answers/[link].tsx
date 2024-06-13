@@ -9,47 +9,57 @@ import { Question } from "@/types/question.type";
 import { QuestionForAnswerPage } from "@/types/questionForAnswerPage.type";
 import { gql, useLazyQuery, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
-import { FormEvent, ReactElement, useEffect, useState } from "react";
+import {
+  FormEvent,
+  ReactElement,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import Swal from "sweetalert2";
 
 const GET_SURVEY_BY_LINK = gql`
   query Query($surveyLink: String!) {
     getSurveyByLink(surveyLink: $surveyLink) {
-    archived
-    creationDate
-    description
-    endDate
-    id
-    link
-    private
-    publicationDate
-    question {
-      answer {
-        content
+      archived
+      creationDate
+      description
+      endDate
+      id
+      link
+      private
+      publicationDate
+      question {
+        answer {
+          content
+          id
+        }
+        title
+        type {
+          id
+          type
+        }
+        description
+        defaultQuestion
+        id
+      }
+      startDate
+      state {
+        state
         id
       }
       title
-      type {
-        id
-        type
-      }
-      description
-      defaultQuestion
-      id
     }
-    startDate
-    state {
-      state
-      id
-    }
-    title
-  }
   }
 `;
 
 function AnswerSurvey() {
-  const [questions, setQuestions] = useState<QuestionForAnswerPage[] | undefined>(undefined);
-  const [defaultQuestions, setDefaultQuestions] = useState<QuestionForAnswerPage[] | undefined>(undefined);
+  const [questions, setQuestions] = useState<
+    QuestionForAnswerPage[] | undefined
+  >(undefined);
+  const [defaultQuestions, setDefaultQuestions] = useState<
+    QuestionForAnswerPage[] | undefined
+  >(undefined);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -76,8 +86,10 @@ function AnswerSurvey() {
           let nonDefaultQuestions = [];
           let defaultQuestions = [];
           for (let i = 0; i < data.getSurveyByLink.question.length; i++) {
-            const question = { ...data.getSurveyByLink.question[i] };
-            question["isError"] = false;
+            const question = {
+              ...data.getSurveyByLink.question[i],
+              isError: false,
+            };
             if (question.defaultQuestion) {
               defaultQuestions.push(question);
             } else {
@@ -91,51 +103,93 @@ function AnswerSurvey() {
     }
   }, [getSurveyByLink, link]);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  const switchAnswer = useCallback(
+    (
+      question: QuestionForAnswerPage,
+      questionList: QuestionForAnswerPage[]
+    ) => {
+      switch (question.type.type) {
+        case "text":
+          return (
+            <AnswerTextQuestion
+              key={question.id}
+              question={question}
+              questions={questionList}
+              setQuestions={
+                setQuestions as React.Dispatch<
+                  React.SetStateAction<QuestionForAnswerPage[]>
+                >
+              }
+            />
+          );
+        case "checkboxes":
+        case "checkbox":
+          return (
+            <div className="checkboxes-container">
+              {question.answer &&
+                question.answer.map((answerOption) => (
+                  <AnswerCheckboxQuestion
+                    key={answerOption.id}
+                    answerOption={answerOption}
+                    questionId={question.id}
+                    questions={questionList}
+                    setQuestions={
+                      setQuestions as React.Dispatch<
+                        React.SetStateAction<QuestionForAnswerPage[]>
+                      >
+                    }
+                  />
+                ))}
+            </div>
+          );
+        case "radio":
+          return (
+            <div className="radios-container">
+              {question.answer &&
+                question.answer.map((answerOption) => (
+                  <AnswerRadioQuestion
+                    key={answerOption.id}
+                    answerOption={answerOption}
+                    questionId={question.id}
+                    questions={questionList}
+                    setQuestions={
+                      setQuestions as React.Dispatch<
+                        React.SetStateAction<QuestionForAnswerPage[]>
+                      >
+                    }
+                  />
+                ))}
+            </div>
+          );
+        case "date":
+          return (
+            <AnswerDateQuestion
+              key={question.id}
+              question={question}
+              questions={questionList}
+              setQuestions={
+                setQuestions as React.Dispatch<
+                  React.SetStateAction<QuestionForAnswerPage[]>
+                >
+              }
+            />
+          );
+        default:
+          break;
+      }
+    },
+    []
+  );
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
-
-  const switchAnswer = (question: Question) => {
-    switch (question.type.type) {
-      case "text":
-        return (
-          <AnswerTextQuestion key={question.id} question={question} />
-        )
-      case "checkboxes":
-      case "checkbox":
-        return (
-          <div className="checkboxes-container">
-            {question.answer && question.answer.map((answerOption) => <AnswerCheckboxQuestion key={answerOption.id} answerOption={answerOption} questionId={question.id} />)}
-          </div>
-        )
-      case "radio":
-        return (
-          <div className="radios-container">
-            {question.answer && question.answer.map((answerOption) => <AnswerRadioQuestion key={answerOption.id} answerOption={answerOption} questionId={question.id} />)}
-          </div>
-        )
-      case "date":
-        return (
-          <AnswerDateQuestion key={question.id} question={question} />
-        )
-      default:
-        break;
-    }
-  }
-
-  const getNumberOfQuestions = (): number => {
+  const getNumberOfQuestions = useCallback((): number => {
     let questionsTotalNumber: number = 0;
     let questionsNonDefaultNumber: number = 0;
     let questionsDefaulNumber: number = 0;
     if (questions) questionsNonDefaultNumber = questions.length;
     if (defaultQuestions) questionsDefaulNumber = defaultQuestions.length;
     questionsTotalNumber = questionsNonDefaultNumber + questionsDefaulNumber;
-    return questionsTotalNumber
-  }
+    return questionsTotalNumber;
+  }, [defaultQuestions, questions]);
 
   const Toast = Swal.mixin({
     toast: true,
@@ -146,41 +200,130 @@ function AnswerSurvey() {
     didOpen: (toast) => {
       toast.onmouseenter = Swal.stopTimer;
       toast.onmouseleave = Swal.resumeTimer;
-    }
+    },
   });
 
-  const onSubmit = (event: FormEvent) => {
-    event.preventDefault();
-    const formData = new FormData(event.target as HTMLFormElement);
-    const answersInForm: { [key: string]: string } = {};
-    const unansweredQuestions: Array<string> = [];
-    for (const key of formData.keys()) {
-      if (formData.get(key)) {
-        answersInForm[key] = JSON.stringify(formData.getAll(key));
-      } else {
-        unansweredQuestions.push(key);
-      }
-    }
-    console.log(unansweredQuestions)
-    if (getNumberOfQuestions() === Object.keys(answersInForm).length) {
-      console.log("every answer completed");
-    } else {
-      console.log(`${Object.keys(answersInForm).length}/${getNumberOfQuestions()} answers completed`);
-      Toast.fire({
-        icon: "error",
-        title: "Les champs ne sont pas tous remplis"
+  const onSubmit = useCallback(
+    (event: FormEvent) => {
+      event.preventDefault();
+      const formData = new FormData(event.target as HTMLFormElement);
+      const answersInForm: { [key: string]: string } = {};
+      const unansweredQuestions: Array<string> = [];
+
+      const formElement = event.target as HTMLFormElement;
+      // Get all input elements
+      const inputs = formElement.querySelectorAll("input");
+
+      // Keep track of radio button and checkbox groups
+      const radioGroups = new Set<string>();
+      const checkboxGroups = new Set<string>();
+
+      // Collect all radio groups
+      inputs.forEach((input) => {
+        if (input.type === "radio") {
+          radioGroups.add(input.name);
+        }
+        if (input.type === "checkbox") {
+          checkboxGroups.add(input.name);
+        }
       });
-      unansweredQuestions.forEach((question) => {
-        console.log({ questions })
-        if (questions) {
-          for (let i = 0; i < questions.length; i++) {
-            if (questions[i].id === question) {
-              questions[i].isError = true;
+
+      // Check formData for all keys and radio groups
+      for (const key of formData.keys()) {
+        if (formData.get(key)) {
+          answersInForm[key] = JSON.stringify(formData.getAll(key));
+          radioGroups.delete(key); // Remove from radio groups if answered
+          checkboxGroups.delete(key); // Remove from checkbox groups if answered
+        } else {
+          unansweredQuestions.push(key);
+        }
+      }
+
+      // Check any remaining radio groups
+      radioGroups.forEach((group) => {
+        const radios = formElement.querySelectorAll(`input[name="${group}"]`);
+        let isChecked = false;
+        radios.forEach((radio) => {
+          if ((radio as HTMLInputElement).checked) {
+            isChecked = true;
+          }
+        });
+        if (!isChecked) {
+          unansweredQuestions.push(group);
+        }
+      });
+
+      // Check any remaining checkbox groups
+      checkboxGroups.forEach((group) => {
+        const checkboxes = formElement.querySelectorAll(
+          `input[name="${group}"]`
+        );
+        let isChecked = false;
+        checkboxes.forEach((checkbox) => {
+          if ((checkbox as HTMLInputElement).checked) {
+            isChecked = true;
+          }
+        });
+        if (!isChecked) {
+          unansweredQuestions.push(group);
+        }
+      });
+
+      if (getNumberOfQuestions() === Object.keys(answersInForm).length) {
+        console.log("every answer completed");
+        for (let i = 0; i < Object.keys(answersInForm).length; i++) {
+          const element = Object.keys(answersInForm)[i];
+          console.log(element);
+        }
+      } else {
+        console.log(
+          `${
+            Object.keys(answersInForm).length
+          }/${getNumberOfQuestions()} answers completed`
+        );
+        Toast.fire({
+          icon: "error",
+          title: "Les champs ne sont pas tous remplis",
+        });
+
+        unansweredQuestions.forEach((question) => {
+          let questionId: string = question;
+          let questionsCopy = [...(questions as QuestionForAnswerPage[])];
+          let defaultQuestionsCopy = [
+            ...(defaultQuestions as QuestionForAnswerPage[]),
+          ];
+          if (questionsCopy) {
+            if (question.startsWith("input-date_"))
+              questionId = question.split("_")[1];
+            for (let i = 0; i < questionsCopy.length; i++) {
+              if (questionsCopy[i].id === questionId) {
+                questionsCopy[i]["isError"] = true;
+                setQuestions(questionsCopy);
+              }
             }
           }
-        }
-      })
-    }
+          if (defaultQuestionsCopy) {
+            if (question.startsWith("question_"))
+              questionId = question.split("_")[1];
+            for (let i = 0; i < defaultQuestionsCopy.length; i++) {
+              if (defaultQuestionsCopy[i].id === questionId) {
+                defaultQuestionsCopy[i].isError = true;
+                setDefaultQuestions(defaultQuestionsCopy);
+              }
+            }
+          }
+        });
+      }
+    },
+    [questions, defaultQuestions, getNumberOfQuestions]
+  );
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
   }
 
   return (
@@ -200,27 +343,49 @@ function AnswerSurvey() {
                 if (defaultQuestion.id) {
                   return (
                     <div key={defaultQuestion.id}>
-                      <AnswerDefaultQuestion defaultQuestion={defaultQuestion} setAnswers={setAnswers} answers={answers} isError={defaultQuestion.isError} />
+                      <AnswerDefaultQuestion
+                        defaultQuestion={defaultQuestion}
+                        setAnswers={setAnswers}
+                        answers={answers}
+                        isError={defaultQuestion.isError}
+                        defaultQuestions={defaultQuestions}
+                        setDefaultQuestions={setDefaultQuestions}
+                      />
                     </div>
-                  )
+                  );
                 }
-              })
-              }
-            </div>
-          )
-          }
-          {questions && questions.length > 0 && (
-            <div className="answer-survey-questions-container">
-              {questions.map((question) => {
-                return <div className="answer-container" key={question.id}>
-                  <p className="answer-title">{question.title}</p>
-                  {question.description && <p className="answer-description">{question.description}</p>}
-                  {switchAnswer(question)}
-                </div>
               })}
             </div>
           )}
-          <button className="button-send-answer button-md-primary-solid"><Icon name="paper-plane-top" />Envoyer la réponse</button>
+          {questions && questions.length > 0 && (
+            <div className="answer-survey-questions-container">
+              {questions.map((question) => {
+                return (
+                  <div
+                    id={question.id}
+                    className={`answer-container ${
+                      question.isError ? "is-error" : ""
+                    }`}
+                    key={question.id}
+                  >
+                    <p className="answer-title">
+                      {question.title} {question.isError}
+                    </p>
+                    {question.description && (
+                      <p className="answer-description">
+                        {question.description}
+                      </p>
+                    )}
+                    {switchAnswer(question, questions)}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+          <button className="button-send-answer button-md-primary-solid">
+            <Icon name="paper-plane-top" />
+            Envoyer la réponse
+          </button>
         </div>
       </form>
     </>

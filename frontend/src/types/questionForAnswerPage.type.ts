@@ -1,7 +1,7 @@
 import { IconName } from "./iconName.type";
 
 export type QuestionForAnswerPage = {
-  id: string | undefined;
+  id: string;
   title: string;
   type: QuestionType;
   description: string;

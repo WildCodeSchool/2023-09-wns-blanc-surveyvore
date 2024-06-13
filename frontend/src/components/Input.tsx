@@ -62,11 +62,11 @@ const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputProps>(({
                     data-testid={inputName}
                     onChange={handleChange}
                     placeholder={placeholder}
-                    className={`textarea ${inputClassName || ""} ${inputClassName === "is-error" && "is-error"}`}
+                    className={`textarea ${inputClassName || ""}`}
                     onBlur={onBlur}
                 />
             ) : (
-                <div className={`input ${inputClassName || ""}`}>
+                <div id={`div-${inputName}`} className={`input ${inputClassName || ""}`}>
                     <input
                         ref={combinedRef as React.RefObject<HTMLInputElement>}
                         type={type}
@@ -80,7 +80,6 @@ const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputProps>(({
                         onBlur={onBlur}
                         onClick={onClick}
                         {...(inputName.startsWith("input-date_") && { style: { width: `200px` } })}
-                        {...(inputClassName === "is-error" && { className: "is-error" })}
                     />
                 </div>
             )}
