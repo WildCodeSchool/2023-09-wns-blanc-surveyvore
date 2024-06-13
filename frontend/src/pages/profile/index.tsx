@@ -1,16 +1,25 @@
 import Input from "@/components/Input";
 import NavLayout from "@/layouts/NavLayout";
-import { GET_ME } from "@/lib/queries/user.queries";
-import { useQuery } from "@apollo/client";
+import { GET_ME, UPDATE_USER } from "@/lib/queries/user.queries";
+import { useMutation, useQuery } from "@apollo/client";
 import React, { ReactElement, useEffect, useState } from "react";
 
 function Profile() {
+  // ----------------------Queries & Mutations----------------------
+
   const { loading, error, data } = useQuery(GET_ME, {
     fetchPolicy: "network-only",
     variables: {
       token: localStorage.getItem("token"),
     },
   });
+
+  const [updateMe] = useMutation(UPDATE_USER, {
+    refetchQueries: [GET_ME],
+  });
+
+  // ------------------------States & Hooks-------------------------
+
   const [firstname, setFirstname] = useState<string>("");
   const [lastname, setLastname] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -21,9 +30,8 @@ function Profile() {
     "TestDeMémoirePourLesNoobs"
   );
 
-  const [readOnlyPersonalInfo, setReadOnlyPersonalInfo] =
-    useState<boolean>(true);
-  const [readOnlyPassword, setReadOnlyPassword] = useState<boolean>(true);
+  const [editPersonalData, setEditPersonalData] = useState<boolean>(false);
+  const [editPassword, setEditPassword] = useState<boolean>(false);
 
   useEffect(() => {
     if (data) {
@@ -33,18 +41,75 @@ function Profile() {
     }
   }, [data]);
 
+  // -------------------------Handlers------------------------------
+
+  async function handleSubmitPersonalData(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    const submitButton = (e.nativeEvent as any).submitter;
+
+    if (submitButton.textContent === "Modifier") {
+      setEditPersonalData(true);
+    } else if (submitButton.textContent === "Enregistrer") {
+      try {
+        if (
+          email !== data.getMe.email ||
+          firstname !== data.getMe.firstname ||
+          lastname !== data.getMe.lastname
+        ) {
+          console.log("something changed");
+
+          await updateMe({
+            variables: {
+              firstname: firstname,
+              lastname: lastname,
+              email: email,
+            },
+          });
+          setEditPersonalData(false);
+        }
+        console.log("nothing changed");
+      } catch (error) {
+        throw { error: error };
+      }
+    }
+  }
+
+  async function handleSubmitPassword(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    const submitButton = (e.nativeEvent as any).submitter;
+
+    if (submitButton.textContent === "Modifier") {
+      setEditPassword(true);
+    } else if (submitButton.textContent === "Enregistrer") {
+      try {
+        await updateMe({
+          variables: {
+            password: previousPassword,
+            newPassword: newPassword,
+          },
+        });
+        setEditPassword(false);
+      } catch (error) {
+        throw { error: error };
+      }
+    }
+  }
+
+  // --------------------------Returns-----------------------------
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error {error.message}</p>;
 
   return (
-    <form className="edit-profile">
-      <section className="personal-infos">
+    <div className="edit-profile">
+      <form className="personal-infos" onSubmit={handleSubmitPersonalData}>
         <Input
           type="text"
           labelName="Firstname"
           inputName="firstname"
           value={firstname}
-          readOnly={readOnlyPersonalInfo}
+          readOnly={!editPersonalData}
           setValue={setFirstname}
         />
         <Input
@@ -52,35 +117,49 @@ function Profile() {
           labelName="Lastname"
           inputName="lastname"
           value={lastname}
-          readOnly={readOnlyPersonalInfo}
+          readOnly={!editPersonalData}
           setValue={setLastname}
         />
         <Input
           type="email"
           labelName="Email"
-          inputName="email"
+          inputName="username"
           value={email}
-          readOnly={readOnlyPersonalInfo}
+          readOnly={!editPersonalData}
           setValue={setEmail}
         />
-        <button
-          type="submit"
-          className="button-md-primary-outline"
-          onClick={(e) => {
-            e.preventDefault();
-            setReadOnlyPersonalInfo(!readOnlyPersonalInfo);
-          }}>
-          {readOnlyPersonalInfo ? "Modifier" : "Enregistrer"}
-        </button>
-      </section>
+        <div className="buttons">
+          <button
+            name="save-personal-infos"
+            type="submit"
+            className="button-md-primary-solid">
+            {editPersonalData ? "Enregistrer" : "Modifier"}
+          </button>
+          {editPersonalData && (
+            <button
+              name="cancel-personal-infos"
+              type="button"
+              className="button-md-primary-outline"
+              onClick={() => {
+                setEditPersonalData(false);
+                setFirstname(data.getMe.firstname);
+                setLastname(data.getMe.lastname);
+                setEmail(data.getMe.email);
+              }}>
+              Annuler
+            </button>
+          )}
+        </div>
+      </form>
 
-      <section className="change-password">
+      <form className="change-password" onSubmit={handleSubmitPassword}>
+        <input type="hidden" name="username" value={email} />
         <Input
           type="password"
           labelName="Ancien mot de passe"
           inputName="previousPassword"
           value={previousPassword}
-          readOnly={readOnlyPassword}
+          readOnly={!editPassword}
           setValue={setPreviousPassword}
         />
         <Input
@@ -88,7 +167,7 @@ function Profile() {
           labelName="Nouveau mot de passe"
           inputName="newPassword"
           value={newPassword}
-          readOnly={readOnlyPassword}
+          readOnly={!editPassword}
           setValue={setNewPassword}
         />
         <Input
@@ -96,20 +175,33 @@ function Profile() {
           labelName="Confirmer le mot de passe"
           inputName="confirmPassword"
           value={confirmPassword}
-          readOnly={readOnlyPassword}
+          readOnly={!editPassword}
           setValue={setConfirmPassword}
         />
-        <button
-          type="submit"
-          className="button-md-primary-outline"
-          onClick={(e) => {
-            e.preventDefault();
-            setReadOnlyPassword(!readOnlyPassword);
-          }}>
-          {readOnlyPassword ? "Modifier" : "Enregistrer"}
-        </button>
-      </section>
-    </form>
+        <div className="buttons">
+          <button
+            name="save-password"
+            type="submit"
+            className="button-md-primary-solid">
+            {editPassword ? "Enregistrer" : "Modifier"}
+          </button>
+          {editPassword && (
+            <button
+              name="cancel-password"
+              type="button"
+              className="button-md-primary-outline"
+              onClick={() => {
+                setEditPassword(false);
+                setPreviousPassword("TuTenSouviensTu");
+                setNewPassword("réfléchisUnPeu");
+                setConfirmPassword("TestDeMémoirePourLesNoobs");
+              }}>
+              Annuler
+            </button>
+          )}
+        </div>
+      </form>
+    </div>
   );
 }
 

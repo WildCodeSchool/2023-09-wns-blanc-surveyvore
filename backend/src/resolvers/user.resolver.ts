@@ -41,18 +41,21 @@ export class UserResolver {
     @Arg("password", { nullable: true }) password?: string,
     @Arg("newPassword", { nullable: true }) newPassword?: string
   ) {
-    const userToUpdate = await UserService.getByEmail(user.email);
-    if (userToUpdate) {
-      await UserService.updateUser(
-        user,
-        email,
-        firstname,
-        lastname,
-        password,
-        newPassword
-      );
+    try {
+      const userToUpdate = await UserService.getByEmail(user.email);
+      if (userToUpdate) {
+        return await UserService.updateUser(
+          user,
+          email,
+          firstname,
+          lastname,
+          password,
+          newPassword
+        );
+      }
+    } catch (error) {
+      throw error;
     }
-    return "OK";
   }
 
   @Authorized()

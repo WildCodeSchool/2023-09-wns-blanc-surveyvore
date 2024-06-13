@@ -35,7 +35,7 @@ export async function updateUser(
   lastname?: string,
   password?: string,
   newPassword?: string
-): Promise<User | null> {
+): Promise<string> {
   try {
     if (user) {
       user.firstname = firstname || user.firstname;
@@ -70,7 +70,9 @@ export async function updateUser(
         }
       }
 
-      return user.save();
+      await user.save();
+
+      return "OK";
     }
     throw new Error("Cet utilisateur n'existe pas");
   } catch (e) {
