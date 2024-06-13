@@ -3,6 +3,7 @@ import { useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import Icon from "../Icon/Icon";
 import { CREATE_SURVEY } from "@/lib/queries/survey.queries";
+import { useEffect, useState } from "react";
 
 function NavHeader({
   newSurvey,
@@ -21,13 +22,21 @@ function NavHeader({
   publish?: boolean;
   signInOrSignUp?: boolean;
 }) {
+  const [isConnected, setIsConnected] = useState(false);
   const router = useRouter();
+
   const [createSurvey] = useMutation(CREATE_SURVEY, {
     variables: { title: "Formulaire sans titre" },
     onCompleted: (data) => {
       router.push(`/surveys/${data.createSurvey}`);
     },
   });
+
+  useEffect(() => {
+    setIsConnected(Boolean(localStorage.getItem("token")));
+  }, [router.pathname]);
+
+  console.log(isConnected);
 
   const handleSignOut = () => {
     localStorage.removeItem("token");
@@ -50,12 +59,12 @@ function NavHeader({
       </Link>
       {badge && (
         <div className="badge">
-          <Icon name="check-circle" color="emerald" width="16" />
+          <Icon name="check-circle" width="16" />
           Votre formulaire est sauvegardé automatiquement
         </div>
       )}
       <div className="nav-buttons">
-        {backToForms && (
+        {isConnected && backToForms && (
           <button
             className="button-md-grey-outline"
             onClick={() => router.push("/")}>
@@ -63,7 +72,7 @@ function NavHeader({
             <span className="hidden-mobile">Mes formulaires</span>
           </button>
         )}
-        {newSurvey && (
+        {newSurvey && router.pathname !== "/answers" && isConnected && (
           <button
             className="button-md-primary-solid"
             onClick={() => createSurvey()}>
@@ -71,25 +80,34 @@ function NavHeader({
             <span className="hidden-mobile">Nouveau formulaire</span>
           </button>
         )}
-        {profile && (
+        {newSurvey && router.pathname === "/answers" && !isConnected && (
+          <button
+            className="button-md-primary-solid"
+            onClick={() => createSurvey()}>
+            <Icon name="plus" />
+            <span className="hidden-mobile">Nouveau formulaire</span>
+          </button>
+        )}
+
+        {isConnected && profile && (
           <button className="button-md-grey-outline">
             <Icon name="user" />
             <span className="hidden-mobile">Mon profil</span>
           </button>
         )}
-        {publish && (
+        {isConnected && publish && (
           <button className="button-md-primary-solid">
             <Icon name="paper-plane-top" />
             <span className="hidden-mobile">Publier</span>
           </button>
         )}
-        {signInOrSignUp && (
+        {!isConnected && signInOrSignUp && (
           <button className="button-md-grey-outline">
             <Icon name="user" />
             <span className="hidden-mobile">Inscription/Connexion</span>
           </button>
         )}
-        {signOut && (
+        {isConnected && signOut && (
           <button className="button-md-grey-outline" onClick={handleSignOut}>
             <Icon name="sign-out" />
           </button>
