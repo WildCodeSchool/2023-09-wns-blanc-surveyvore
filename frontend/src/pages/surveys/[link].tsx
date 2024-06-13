@@ -37,7 +37,22 @@ function NewSurvey() {
     const [
         getQuestions,
         { loading: loadingQuestions, error: errorQuestions, refetch },
-    ] = useLazyQuery(GET_QUESTIONS, { fetchPolicy: "network-only" });
+    ] = useLazyQuery(GET_QUESTIONS, {
+        fetchPolicy: "network-only",
+        variables: {
+            surveyLink: link,
+        },
+        onCompleted: (data) => {
+            let newQuestions = data.getQuestions.map((question: any) => ({
+                isOpen: false,
+                ...question,
+            }));
+
+            newQuestions.unshift(emptyQuestion);
+            setQuestions(newQuestions);
+            console.log("coucou");
+        },
+    });
 
     // const [isRefetched, setIsRefetched] = useState(false);
 
@@ -71,28 +86,9 @@ function NewSurvey() {
                     setIsPrivate(data.getSurveyByLink.private);
                 },
             });
-            getQuestions({
-                variables: {
-                    surveyLink: link,
-                },
-
-                onCompleted: (data) => {
-                    let newQuestions = data.getQuestions.map(
-                        (question: any) => {
-                            return {
-                                isOpen: false,
-                                ...question,
-                            };
-                        }
-                    );
-
-                    newQuestions.unshift(emptyQuestion);
-                    setQuestions(newQuestions);
-                },
-            });
+            getQuestions();
         }
     }, [link]);
-
 
     if (loading) {
         return <div>Loading...</div>;
@@ -128,8 +124,7 @@ function NewSurvey() {
                         setQuestions={setQuestions}
                         questions={questions}
                         surveyLink={link}
-                        // refetch={refetchQuestions}
-                        refetch={refetch}
+                        getQuestions={getQuestions}
                     />
                 ))
             )}

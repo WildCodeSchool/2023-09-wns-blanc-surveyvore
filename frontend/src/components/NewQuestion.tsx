@@ -23,14 +23,15 @@ function NewQuestion({
     question,
     questions,
     surveyLink,
-    refetch,
+    getQuestions,
 }: {
     setQuestions: React.Dispatch<React.SetStateAction<any>>;
     question: Question;
     questions: Question[];
     surveyLink: string;
-    refetch: () => void;
+    getQuestions: () => void;
 }) {
+    // ----------------------------------States----------------------------------
     const [types, setTypes] = useState<QuestionType[]>([]);
     const [selectedType, setSelectedType] = useState<
         RadioElement | undefined | QuestionType
@@ -38,31 +39,17 @@ function NewQuestion({
 
     const formRef = useRef<HTMLFormElement>(null);
 
-    const handleClickCancel = () => {
-        const newSetQuestions = [...questions];
-        newSetQuestions
-            .filter((q) => q.id === question.id)
-            .map((q) => (q.isOpen = false));
-        setQuestions(newSetQuestions);
-    };
+    // ----------------------------------Queries----------------------------------
 
-    const [createQuestion] = useMutation(CREATE_QUESTION, {
-        refetchQueries: [GET_QUESTIONS],
-    });
-
-    const [editQuestion] = useMutation(EDIT_QUESTION, {
-        refetchQueries: [GET_QUESTIONS],
-    });
+    const [createQuestion] = useMutation(CREATE_QUESTION);
 
     const [deleteQuestion] = useMutation(DELETE_QUESTION, {
         onCompleted: () => {
-            refetch();
+            getQuestions();
         },
     });
 
     const [addQuestionAnswer] = useMutation(ADD_QUESTION_ANSWER);
-
-    const [editQuestionAnswer] = useMutation(EDIT_QUESTION_ANSWER);
 
     const { loading, error } = useQuery(GET_TYPES, {
         onCompleted: (data) => {
@@ -80,6 +67,16 @@ function NewQuestion({
         },
     });
 
+    // ----------------------------------Functions----------------------------------
+
+    const handleClickCancel = () => {
+        const newSetQuestions = [...questions];
+        newSetQuestions
+            .filter((q) => q.id === question.id)
+            .map((q) => (q.isOpen = false));
+        setQuestions(newSetQuestions);
+    };
+
     useEffect(() => {
         if (question.type.type) {
             setSelectedType(
@@ -89,14 +86,6 @@ function NewQuestion({
             );
         }
     }, [question.isOpen]);
-
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-
-    if (error) {
-        return <div>Error: {error.message}</div>;
-    }
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -113,119 +102,54 @@ function NewQuestion({
             description: formData.get("question-description"),
             type: selectedType,
         };
+
         if (question.id !== "empty") {
-            editQuestion({
-                variables: {
-                    id: question.id,
-                    question: {
-                        title: form.title,
-                        description: form.description,
-                        type: form.type?.id,
-                    },
+            deleteQuestion({ variables: { id: question.id } });
+        }
+
+        createQuestion({
+            variables: {
+                question: {
+                    title: form.title,
+                    description: form.description,
+                    type: form.type?.id,
+                    survey: surveyLink,
+                    defaultQuestion: false,
                 },
-                onCompleted: (data) => {
-                    if (
-                        data.editQuestion.type.type === "checkboxes" ||
-                        "radio" ||
-                        "checkbox"
-                    ) {
-                        if (question.answer) {
-                            question.answer.map((answer) => {
-                                if (answer.id) {
-                                    editQuestionAnswer({
-                                        variables: {
-                                            id: answer.id,
-                                            questionAnswer: {
-                                                content: answer.content,
-                                            },
-                                        },
-                                    });
-                                } else {
-                                    addQuestionAnswer({
-                                        variables: {
-                                            questionAnswer: {
-                                                content: answer.content,
-                                                questionId:
-                                                    data.editQuestion.id,
-                                            },
-                                        },
-                                    });
-                                }
-                            });
-                        }
-                    } else if (data.editQuestion.type.type === "date") {
-                        if (question.answer) {
-                            if (question.answer[0].id) {
-                                editQuestionAnswer({
-                                    variables: {
-                                        id: question.answer[0].id,
-                                        questionAnswer: {
-                                            content: question.answer[0].content,
-                                        },
-                                    },
-                                });
-                            } else {
-                                addQuestionAnswer({
-                                    variables: {
-                                        questionAnswer: {
-                                            content: question.answer[0].content,
-                                            questionId: data.editQuestion.id,
-                                        },
-                                    },
-                                });
-                            }
-                        }
-                    }
-                    refetch();
-                },
-            });
-        } else {
-            createQuestion({
-                variables: {
-                    question: {
-                        title: form.title,
-                        description: form.description,
-                        type: form.type?.id,
-                        survey: surveyLink,
-                        defaultQuestion: false,
-                    },
-                },
-                onCompleted: (data) => {
-                    if (
-                        data.createQuestion.type.type === "checkboxes" ||
-                        "radio" ||
-                        "checkbox"
-                    ) {
-                        if (question.answer) {
-                            question.answer.map((answer) => {
-                                addQuestionAnswer({
-                                    variables: {
-                                        questionAnswer: {
-                                            content: answer.content,
-                                            questionId: data.createQuestion.id,
-                                        },
-                                    },
-                                });
-                            });
-                        }
-                    } else if (data.createQuestion.type.type === "date") {
-                        if (question.answer) {
+            },
+            onCompleted: (data) => {
+                if (
+                    data.createQuestion.type.type === "checkboxes" ||
+                    "radio" ||
+                    "checkbox"
+                ) {
+                    if (question.answer) {
+                        question.answer.map((answer) => {
                             addQuestionAnswer({
                                 variables: {
                                     questionAnswer: {
-                                        content: question.answer[0].content,
+                                        content: answer.content,
                                         questionId: data.createQuestion.id,
                                     },
                                 },
                             });
-                        }
+                        });
                     }
-                    refetch();
-                },
-            });
-        }
-
-        question.isOpen = false;
+                } else if (data.createQuestion.type.type === "date") {
+                    if (question.answer) {
+                        addQuestionAnswer({
+                            variables: {
+                                questionAnswer: {
+                                    content: question.answer[0].content,
+                                    questionId: data.createQuestion.id,
+                                },
+                            },
+                        });
+                    }
+                }
+                getQuestions();
+            },
+        });
     };
 
     function openCurrentQuestion() {
@@ -259,6 +183,16 @@ function NewQuestion({
         );
     }
 
+    // ----------------------------------return----------------------------------
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>Error: {error.message}</div>;
+    }
+
     if (!question.isOpen && question.id !== "empty") {
         return (
             <section className="survey-section-closed">
@@ -280,9 +214,9 @@ function NewQuestion({
                     </button>
                     <button
                         className="button-md-grey-outline"
-                        onClick={() =>
-                            deleteQuestion({ variables: { id: question.id } })
-                        }
+                        onClick={() => {
+                            deleteQuestion({ variables: { id: question.id } });
+                        }}
                     >
                         <Icon name="trash" />
                     </button>
