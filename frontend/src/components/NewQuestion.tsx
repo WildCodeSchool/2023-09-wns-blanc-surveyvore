@@ -6,7 +6,7 @@ import { RadioElement } from "./RadioGroup/RadioGroup";
 import { IconName } from "@/types/iconName.type";
 import Icon from "./Icon/Icon";
 import { Question } from "@/types/question.type";
-import CheckboxesQuestionType from "./QuestionTypes/CheckboxesQuestionType";
+import QuestionOptions from "./QuestionOptions";
 
 /**
  * conservation des données quand on édite une question alors qu'une autre est en cours d'édition mais non validée
@@ -86,9 +86,9 @@ function NewQuestion({
     },
   });
 
-  const { loading, error } = useQuery(GET_TYPES, {
-    onCompleted: (data) => {
-      setTypes(data.getAllTypes);
+    const { loading, error } = useQuery(GET_TYPES, {
+        onCompleted: (data) => {
+            setTypes(data.getAllTypes);
 
       if (question.type.type) {
         setSelectedType(
@@ -120,41 +120,51 @@ function NewQuestion({
 
     const formData = new FormData(formRef.current);
 
-    const form = {
-      title: formData.get("question-title"),
-      description: formData.get("question-description"),
-      type: selectedType,
-    };
-    if (question.id !== "empty") {
-      editQuestion({
-        variables: {
-          id: question.id,
-          question: {
-            title: form.title,
-            description: form.description,
-            type: form.type?.id,
-          },
-        },
-        onCompleted: () => {
-          refetch();
-        },
-      });
-    } else {
-      createQuestion({
-        variables: {
-          question: {
-            title: form.title,
-            description: form.description,
-            type: form.type?.id,
-            survey: surveyLink,
-            defaultQuestion: false,
-          },
-        },
-        onCompleted: () => {
-          refetch();
-        },
-      });
-    }
+        const form = {
+            title: formData.get("question-title"),
+            description: formData.get("question-description"),
+            type: selectedType,
+        };
+        if (question.id !== "empty") {
+            editQuestion({
+                variables: {
+                    id: question.id,
+                    question: {
+                        title: form.title,
+                        description: form.description,
+                        type: form.type?.id,
+                        answer: question.answer
+                            ? question.answer.map((answer) => ({
+                                  content: answer.content,
+                              }))
+                            : [],
+                    },
+                },
+                onCompleted: () => {
+                    refetch();
+                },
+            });
+        } else {
+            createQuestion({
+                variables: {
+                    question: {
+                        title: form.title,
+                        description: form.description,
+                        type: form.type?.id,
+                        survey: surveyLink,
+                        defaultQuestion: false,
+                        answer: question.answer
+                            ? question.answer.map((answer) => ({
+                                  content: answer.content,
+                              }))
+                            : [],
+                    },
+                },
+                onCompleted: () => {
+                    refetch();
+                },
+            });
+        }
 
     question.isOpen = false;
   };
@@ -168,82 +178,98 @@ function NewQuestion({
     setQuestions(newSetQuestions);
   }
 
-  if (!question.isOpen && question.id !== "empty") {
-    return (
-      <section className="survey-section-closed">
-        <div className="header">
-          <Icon
-            name={question.type?.icon as IconName}
-            width="1.125rem"
-            height="1.125rem"
-            color="current"
-          />
-          <p className="text-xl">{question.title}</p>
-        </div>
-        <div className="actions">
-          <button
-            className="button-md-primary-outline"
-            onClick={() => openCurrentQuestion()}>
-            <Icon name="pen-clip" />
-          </button>
-          <button
-            className="button-md-grey-outline"
-            onClick={() => deleteQuestion({ variables: { id: question.id } })}>
-            <Icon name="trash" />
-          </button>
-        </div>
-      </section>
-    );
-  } else {
-    return (
-      <form ref={formRef} className="survey-section" onSubmit={handleSubmit}>
-        <Input
-          type="text"
-          inputName="question-title"
-          placeholder="Titre de la question"
-          value={title}
-          setValue={setTitle}
-        />
-        <Input
-          textarea
-          inputName="question-description"
-          labelName="Description (facultative)"
-          placeholder="Description de la question"
-          value={description}
-          setValue={setDescription}
-        />
-        <QuestionType
-          types={types}
-          selectedType={selectedType}
-          setSelectedType={setSelectedType}
-          questionId={question.id || "empty"}
-        />
-        {selectedType && selectedType.type === "checkboxes" && (
-          <CheckboxesQuestionType
-            questions={questions}
-            setQuestions={setQuestions}
-            questionId={question.id || "empty"}
-          />
-        )}
-        <div className="actions">
-          <button
-            className="button-md-grey-outline"
-            onClick={() => handleClickCancel()}>
-            Annuler
-          </button>
-          {question.id !== "empty" ? (
-            <button className="button-md-primary-solid" type="submit">
-              Enregistrer
-            </button>
-          ) : (
-            <button className="button-md-primary-solid" type="submit">
-              Ajouter
-            </button>
-          )}
-        </div>
-      </form>
-    );
-  }
+    if (!question.isOpen && question.id !== "empty") {
+        return (
+            <section className="survey-section-closed">
+                <div className="header">
+                    <Icon
+                        name={question.type?.icon as IconName}
+                        width="1.125rem"
+                        height="1.125rem"
+                        color="current"
+                    />
+                    <p className="text-xl">{question.title}</p>
+                </div>
+                <div className="actions">
+                    <button
+                        className="button-md-primary-outline"
+                        onClick={() => openCurrentQuestion()}
+                    >
+                        <Icon name="pen-clip" />
+                    </button>
+                    <button
+                        className="button-md-grey-outline"
+                        onClick={() =>
+                            deleteQuestion({ variables: { id: question.id } })
+                        }
+                    >
+                        <Icon name="trash" />
+                    </button>
+                </div>
+            </section>
+        );
+    } else {
+        return (
+            <form
+                ref={formRef}
+                className="survey-section"
+                onSubmit={handleSubmit}
+            >
+                <Input
+                    type="text"
+                    inputName="question-title"
+                    placeholder="Titre de la question"
+                    value={title}
+                    setValue={setTitle}
+                />
+                <Input
+                    textarea
+                    inputName="question-description"
+                    labelName="Description (facultative)"
+                    placeholder="Description de la question"
+                    value={description}
+                    setValue={setDescription}
+                />
+                <QuestionType
+                    types={types}
+                    selectedType={selectedType}
+                    setSelectedType={setSelectedType}
+                    questionId={question.id || "empty"}
+                />
+                {selectedType &&
+                    (selectedType as QuestionType).type === "checkboxes" && (
+                        <QuestionOptions
+                            questions={questions}
+                            setQuestions={setQuestions}
+                            questionId={question.id || "empty"}
+                        />
+                    )}
+                <div className="actions">
+                    <button
+                        className="button-md-grey-outline"
+                        onClick={() => handleClickCancel()}
+                    >
+                        Annuler
+                    </button>
+                    {question.id !== "empty" ? (
+                        <button
+                            className="button-md-primary-solid"
+                            type="submit"
+                        >
+                            Enregistrer
+                        </button>
+                    ) : (
+                        <button
+                            className="button-md-primary-solid"
+                            type="submit"
+                        >
+                            Ajouter
+                        </button>
+                    )}
+                </div>
+            </form>
+        );
+    }
 }
 
 export default NewQuestion;

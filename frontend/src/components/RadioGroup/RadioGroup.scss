@@ -2,42 +2,51 @@
 
 .radio-group {
     display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-    .radio-element {
-        flex-grow: 1;
-        flex-shrink: 0;
-        width: 100%;
-        input {
-            display: none;
-            &:checked + label {
-                color: var(--primary-800);
-                border: 2px solid var(--primary-500);
-                background-color: var(--primary-50);
-            }
-        }
+    flex-direction: column;
+    gap: 6px;
+    .label {
+        @include text("sm", $font: $font-family-accent, $weight: 500);
+        color: var(--grey-700);
+    }
+    .radio-group-container {
         display: flex;
-        flex-direction: column;
-
-        label {
-            padding: 0.75rem;
-            color: var(--grey-800);
-            border: 2px solid var(--grey-200);
-            border-radius: 0.5rem;
-            height: 100%;
-            cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            .header {
-                display: flex;
-                align-items: center;
-                gap: 0.5rem;
-                .title {
-                    @include text("md", $weight: 500);
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        .radio-element {
+            flex-grow: 1;
+            flex-shrink: 0;
+            width: 100%;
+            input {
+                display: none;
+                &:checked + label {
+                    color: var(--primary-800);
+                    border: 2px solid var(--primary-500);
+                    background-color: var(--primary-50);
                 }
             }
-            .description {
-                margin-left: 1.5rem;
-                @include text("xs");
+            display: flex;
+            flex-direction: column;
+
+            label {
+                padding: 0.75rem;
+                color: var(--grey-800);
+                border: 2px solid var(--grey-200);
+                border-radius: 0.5rem;
+                height: 100%;
+                cursor: pointer;
+                transition: all 0.2s ease-in-out;
+                .header {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                    .title {
+                        @include text("md", $weight: 500);
+                    }
+                }
+                .description {
+                    margin-left: 1.5rem;
+                    @include text("xs");
+                }
             }
         }
     }
@@ -45,11 +54,13 @@
 
 @media screen and (min-width: 768px) {
     .radio-group {
-        .radio-element {
-            width: auto;
-            flex-basis: auto;
-            flex-grow: 1;
-            max-width: 30%;
+        .radio-group-container {
+            .radio-element {
+                width: auto;
+                flex-basis: auto;
+                flex-grow: 1;
+                max-width: 30%;
+            }
         }
     }
 }

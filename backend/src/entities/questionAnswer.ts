@@ -11,6 +11,13 @@ import { Question } from "./question";
 @Entity()
 @ObjectType()
 export class QuestionAnswer extends BaseEntity {
+    constructor(datas: { content: string } | null = null) {
+        super();
+        if (datas) {
+            this.content = datas.content;
+        }
+    }
+
     @PrimaryGeneratedColumn("uuid")
     @Field()
     id: string;

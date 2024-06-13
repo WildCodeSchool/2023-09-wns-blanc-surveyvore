@@ -39,11 +39,13 @@ function QuestionType({
     isChecked: selectedType?.id === type.id,
   }));
 
-  return (
-    <div className="">
-      <RadioGroup elements={elements} name={`question-type-${questionId}`} />
-    </div>
-  );
+    return (
+            <RadioGroup
+                elements={elements}
+                name={`question-type-${questionId}`}
+                label="Type de question"
+            />
+    );
 }
 
 export default QuestionType;
