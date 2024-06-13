@@ -20,5 +20,7 @@ export type IconName =
   | "arrow-left"
   | "sign-out"
   | "paper-plane-top"
-  | "cross";
+  | "cross"
+  | "eye"
+  | "eye-crossed";
 

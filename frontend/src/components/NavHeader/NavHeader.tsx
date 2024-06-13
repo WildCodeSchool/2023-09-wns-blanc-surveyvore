@@ -72,10 +72,10 @@ function NavHeader({
           </button>
         )}
         {profile && (
-          <button className="button-md-grey-outline">
+          <Link href="/profile" className="button-md-grey-outline">
             <Icon name="user" />
             <span className="hidden-mobile">Mon profil</span>
-          </button>
+          </Link>
         )}
         {publish && (
           <button className="button-md-primary-solid">

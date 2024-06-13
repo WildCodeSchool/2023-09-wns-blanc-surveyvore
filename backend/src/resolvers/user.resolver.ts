@@ -10,11 +10,6 @@ export class UserResolver {
     return UserService.getByEmail(email);
   }
 
-  @Query(() => User)
-  getMe(@Arg("token") token: string): Promise<User | null> {
-    return AuthService.getMe(token);
-  }
-
   @Mutation(() => User)
   createUser(
     @Arg("email") email: string,
@@ -28,6 +23,36 @@ export class UserResolver {
   @Mutation(() => String)
   signIn(@Arg("email") email: string, @Arg("password") password: string) {
     return AuthService.signIn(email, password);
+  }
+
+  @Authorized()
+  @Query(() => User)
+  getMe(@Arg("token") token: string): Promise<User | null> {
+    return AuthService.getMe(token);
+  }
+
+  @Authorized()
+  @Mutation(() => String)
+  async updateUser(
+    @Ctx("user") user: User,
+    @Arg("email", { nullable: true }) email?: string,
+    @Arg("firstname", { nullable: true }) firstname?: string,
+    @Arg("lastname", { nullable: true }) lastname?: string,
+    @Arg("password", { nullable: true }) password?: string,
+    @Arg("newPassword", { nullable: true }) newPassword?: string
+  ) {
+    const userToUpdate = await UserService.getByEmail(user.email);
+    if (userToUpdate) {
+      await UserService.updateUser(
+        user,
+        email,
+        firstname,
+        lastname,
+        password,
+        newPassword
+      );
+    }
+    return "OK";
   }
 
   @Authorized()

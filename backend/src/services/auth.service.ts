@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import * as UserService from "./user.service";
 import * as argon2 from "argon2";
+import { Payload } from "../types/PayloadType";
 
 /**
  * Return the token payload from the token in parameter.
@@ -19,21 +20,25 @@ export async function signIn(email: string, password: string): Promise<string> {
   try {
     // Récupérer l'utilisateur dans la bdd suivant l'email
     const userFromDB = await UserService.getByEmail(email);
+
+    if (!userFromDB) {
+      throw new Error("UserNot found!");
+    }
     // Vérifier que ce sont les même mots de passe
-    if (userFromDB && (await verifyPassword(password, userFromDB.password))) {
-      // Créer un nouveau token => signer un token
-      const token = signJwt({
+    if (await verifyPassword(password, userFromDB.password)) {
+      const payload: Payload = {
         email: userFromDB.email,
         role: userFromDB.role,
         id: userFromDB.id,
-      });
+      };
+      // Créer un nouveau token => signer un token
+      const token = signJwt(payload);
       // Renvoyer le token
       return token;
-    } else {
-      throw new Error();
     }
-  } catch (e) {
     throw new Error("Invalid Auth");
+  } catch (e) {
+    throw e;
   }
 }
 
@@ -63,7 +68,7 @@ export function signJwt(payload: any) {
 }
 
 export function getMe(token: string) {
-  const payload: any = verifyToken(token);
+  const payload = verifyToken(token) as Payload;
 
   const user = UserService.getByEmail(payload.email);
   return user;
