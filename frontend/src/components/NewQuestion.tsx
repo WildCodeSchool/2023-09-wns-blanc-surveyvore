@@ -7,7 +7,7 @@ import { IconName } from "@/types/iconName.type";
 import Icon from "./Icon/Icon";
 import { Question } from "@/types/question.type";
 import QuestionOptions from "./QuestionOptions";
-import { id } from "date-fns/locale";
+import DateOptions from "./DateOptions/DateOptions";
 
 /**
  * conservation des données quand on édite une question alors qu'une autre est en cours d'édition mais non validée
@@ -173,21 +173,20 @@ function NewQuestion({
                     ) {
                         if (question.answer) {
                             question.answer.map((answer) => {
-                                editQuestionAnswer({
+                                addQuestionAnswer({
                                     variables: {
-                                        id: data.editQuestion.id,
                                         questionAnswer: {
                                             content: answer.content,
+                                            questionId: data.editQuestion.id,
                                         },
                                     },
                                 });
                             });
                         }
                     }
-
-                    refetch();
                 },
             });
+            refetch();
         } else {
             createQuestion({
                 variables: {
@@ -223,9 +222,9 @@ function NewQuestion({
                             });
                         }
                     }
-                    refetch();
                 },
             });
+            refetch();
         }
 
     question.isOpen = false;
@@ -299,8 +298,17 @@ function NewQuestion({
                     questionId={question.id || "empty"}
                 />
                 {selectedType &&
-                    (selectedType as QuestionType).type === "checkboxes" && (
+                    ((selectedType as QuestionType).type === "checkboxes" ||
+                        (selectedType as QuestionType).type === "radio") && (
                         <QuestionOptions
+                            questions={questions}
+                            setQuestions={setQuestions}
+                            questionId={question.id || "empty"}
+                        />
+                    )}
+                {selectedType &&
+                    (selectedType as QuestionType).type === "date" && (
+                        <DateOptions
                             questions={questions}
                             setQuestions={setQuestions}
                             questionId={question.id || "empty"}
