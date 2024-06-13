@@ -1,6 +1,5 @@
 import { Answer, Question } from "@/types/question.type";
 import Input from "./Input";
-import { useState } from "react";
 import Icon from "./Icon/Icon";
 
 export default function QuestionOptions({

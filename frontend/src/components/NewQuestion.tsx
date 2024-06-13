@@ -8,69 +8,13 @@ import Icon from "./Icon/Icon";
 import { Question } from "@/types/question.type";
 import QuestionOptions from "./QuestionOptions";
 import DateOptions from "./DateOptions/DateOptions";
+import { ADD_QUESTION_ANSWER, CREATE_QUESTION, DELETE_QUESTION, EDIT_QUESTION, EDIT_QUESTION_ANSWER, GET_TYPES } from "@/lib/queries/questions.queries";
 
 /**
  * conservation des données quand on édite une question alors qu'une autre est en cours d'édition mais non validée
  * meme composant pour l'édition et la création (get dans le cas de l'édition et valeurs par défaut en création)
  *
  */
-
-const GET_TYPES = gql`
-  query Query {
-    getAllTypes {
-      id
-      type
-      icon
-    }
-  }
-`;
-
-const CREATE_QUESTION = gql`
-    mutation Mutation($question: CreateQuestionInputType!) {
-        createQuestion(question: $question) {
-            id
-            type {
-                type
-            }
-        }
-    }
-`;
-
-const EDIT_QUESTION = gql`
-    mutation Mutation($question: EditQuestionInputType!, $id: String!) {
-        editQuestion(question: $question, id: $id) {
-            id
-            type {
-                type
-            }
-        }
-    }
-`;
-
-const DELETE_QUESTION = gql`
-  mutation Mutation($id: String!) {
-    deleteQuestion(id: $id)
-  }
-`;
-
-const ADD_QUESTION_ANSWER = gql`
-    mutation Mutation($questionAnswer: CreateQuestionAnswerInputType!) {
-        createQuestionAnswer(questionAnswer: $questionAnswer) {
-            content
-        }
-    }
-`;
-
-const EDIT_QUESTION_ANSWER = gql`
-    mutation Mutation(
-        $id: String!
-        $questionAnswer: EditQuestionAnswerInputType!
-    ) {
-        editQuestionAnswer(id: $id, questionAnswer: $questionAnswer) {
-            content
-        }
-    }
-`;
 
 function NewQuestion({
   setQuestions,
