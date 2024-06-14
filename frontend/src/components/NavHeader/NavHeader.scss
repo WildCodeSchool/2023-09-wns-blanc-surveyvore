@@ -2,83 +2,86 @@
 @use "../../styles/elements/typography" as *;
 
 .nav-container {
-  --height: 5rem;
+    --height: 5rem;
 
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5rem 1rem;
-  background-color: var(--white);
-  @include shadow("xs", "error");
-  border-bottom: 1px solid var(--grey-200);
-  height: var(--height);
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
-
-  .logo {
-    height: 100%;
-    max-width: 16rem;
-    &.logo-desktop {
-      display: none;
-    }
-    &.logo-mobile {
-      display: block;
-    }
-  }
-  .nav-buttons,
-  .badge {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 0.5rem;
-  }
-
-  .badge {
-    @include text("sm");
-    color: var(--emerald-500);
-    position: absolute;
-    top: calc(100% + 1px);
+    padding: 0.5rem 1rem;
+    background-color: var(--white);
+    @include shadow("xs", "error");
+    border-bottom: 1px solid var(--grey-200);
+    height: var(--height);
+    position: fixed;
+    top: 0;
     left: 0;
-    width: 100%;
-    height: calc(var(--height) / 2);
-    display: flex;
-    justify-content: center;
-    background-color: inherit;
-    border-bottom: inherit;
-    box-shadow: inherit;
-  }
+    right: 0;
+    z-index: 100;
+
+    .logo {
+        height: 100%;
+        max-width: 16rem;
+        &.logo-desktop {
+            display: none;
+        }
+        &.logo-mobile {
+            display: block;
+        }
+    }
+    .nav-buttons,
+    .badge {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .nav-buttons {
+        flex-shrink: 0;
+    }
+
+    .badge {
+        @include text("sm");
+        color: var(--emerald-500);
+        position: absolute;
+        top: calc(100% + 1px);
+        left: 0;
+        width: 100%;
+        height: calc(var(--height) / 2);
+        display: flex;
+        justify-content: center;
+        background-color: inherit;
+        border-bottom: inherit;
+        box-shadow: inherit;
+    }
 }
 
 .main-nav {
-  --margin: 5rem;
-  margin-top: calc(var(--margin) * 1.5);
+    --margin: 5rem;
+    margin-top: calc(var(--margin) * 1.5);
 }
 
 @media screen and (min-width: 768px) {
-  .nav-container {
-    .logo {
-      &.logo-desktop {
-        display: block;
-      }
-      &.logo-mobile {
-        display: none;
-      }
+    .nav-container {
+        .logo {
+            &.logo-desktop {
+                display: block;
+            }
+            &.logo-mobile {
+                display: none;
+            }
+        }
     }
-  }
 }
 @media screen and (min-width: 1024px) {
-  .nav-container {
-    .badge {
-      position: static;
-      box-shadow: none;
-      border: none;
-      background-color: transparent;
+    .nav-container {
+        .badge {
+            position: static;
+            box-shadow: none;
+            border: none;
+            background-color: transparent;
+        }
     }
-  }
-  .main-nav {
-    margin-top: var(--margin);
-  }
+    .main-nav {
+        margin-top: var(--margin);
+    }
 }
-

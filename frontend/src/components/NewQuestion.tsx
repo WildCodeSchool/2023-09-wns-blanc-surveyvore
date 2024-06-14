@@ -144,6 +144,8 @@ function NewQuestion({
                                 },
                             });
                         });
+                    } else {
+                        getQuestions();
                     }
                 } else if (data.createQuestion.type.type === "date") {
                     if (question.answer) {
@@ -164,6 +166,8 @@ function NewQuestion({
                                 );
                             },
                         });
+                    } else {
+                        getQuestions();
                     }
                 } else {
                     getQuestions();
@@ -202,7 +206,6 @@ function NewQuestion({
             })
         );
     }
-    
 
     // ----------------------------------return----------------------------------
 
