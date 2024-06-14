@@ -148,14 +148,6 @@ function NewSurvey() {
                 <div>Loading...</div>
             ) : (
                 <>
-                    <NewQuestion
-                        question={emptyQuestion[0]}
-                        setQuestions={setEmptyQuestion}
-                        questions={emptyQuestion}
-                        surveyLink={link}
-                        getQuestions={getQuestions}
-                        index={totalQuestions + 1}
-                    />
                     <Reorder.Group
                         axis="y"
                         values={questions}
@@ -184,6 +176,15 @@ function NewSurvey() {
                             );
                         })}
                     </Reorder.Group>
+
+                    <NewQuestion
+                        question={emptyQuestion[0]}
+                        setQuestions={setEmptyQuestion}
+                        questions={emptyQuestion}
+                        surveyLink={link}
+                        getQuestions={getQuestions}
+                        index={totalQuestions + 1}
+                    />
                 </>
             )}
         </div>

@@ -1,20 +1,9 @@
 import Input from "./Input";
 import Toggle from "./Toggle";
-import { gql, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import RadioGroup, { RadioElement } from "./RadioGroup/RadioGroup";
-
-const EDIT_SURVEY = gql`
-    mutation Mutation($survey: EditSurveyInputType!, $editSurveyLink: String!) {
-        editSurvey(survey: $survey, link: $editSurveyLink) {
-            title
-            description
-            collectingUserData
-            private
-            link
-        }
-    }
-`;
+import { EDIT_SURVEY } from "@/lib/queries/survey.queries";
 
 function NewSurveyHeader({
     setCollectingData,
