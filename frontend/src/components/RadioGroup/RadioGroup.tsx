@@ -10,32 +10,47 @@ export type RadioElement = {
     isChecked: boolean;
 };
 
-export default function RadioGroup({ elements, name }: { elements: RadioElement[], name: string }) {
+export default function RadioGroup({
+    elements,
+    name,
+    label,
+}: {
+    elements: RadioElement[];
+    name: string;
+    label?: string;
+}) {
     return (
         <div className="radio-group">
-            {elements.map((element) => (
-                <div className="radio-element" key={name+ "-" +element.id}>
-                    <input
-                        type="radio"
-                        name={name}
-                        id={name+ "-" +element.id}
-                        value={element.title}
-                        onChange={element.onClick}
-                        checked={element.isChecked}
-                    />
-                    <label htmlFor={name+ "-" +element.id}>
-                        <div className="header">
-                            <Icon
-                                name={element.icon}
-                                width="1rem"
-                                height="1rem"
-                            />
-                            <p className="title">{element.title}</p>
-                        </div>
-                        <p className="description">{element.description}</p>
-                    </label>
-                </div>
-            ))}
+            {label && <div className="label">{label}</div>}
+
+            <div className="radio-group-container">
+                {elements.map((element) => (
+                    <div
+                        className="radio-element"
+                        key={name + "-" + element.id}
+                    >
+                        <input
+                            type="radio"
+                            name={name}
+                            id={name + "-" + element.id}
+                            value={element.title}
+                            onChange={element.onClick}
+                            checked={element.isChecked}
+                        />
+                        <label htmlFor={name + "-" + element.id}>
+                            <div className="header">
+                                <Icon
+                                    name={element.icon}
+                                    width="1rem"
+                                    height="1rem"
+                                />
+                                <p className="title">{element.title}</p>
+                            </div>
+                            <p className="description">{element.description}</p>
+                        </label>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 }

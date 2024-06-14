@@ -11,6 +11,7 @@ import { QuestionTypeResolver } from "../resolvers/questionType.resolver";
 import { SurveyResolver } from "../resolvers/survey.resolver";
 import { SurveyStateResolver } from "../resolvers/surveyState.resolver";
 import { ApolloServerPluginLandingPageDisabled } from "apollo-server-core";
+import { QuestionAnswerResolver } from "../resolvers/questionAnswer.resolver";
 import { AnswerResolver } from "../resolvers/answer.resolver";
 
 async function createServer(
@@ -26,6 +27,7 @@ async function createServer(
       SurveyResolver,
       SurveyStateResolver,
       UserResolver,
+      QuestionAnswerResolver,
       AnswerResolver,
     ],
     validate: { forbidUnknownValues: false },
