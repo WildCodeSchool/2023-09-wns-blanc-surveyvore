@@ -1,0 +1,88 @@
+@use "./typography" as *;
+@use "./shadows" as *;
+@use "./colors" as *;
+
+.input-radio {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  label {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+    cursor: pointer;
+    @include text("sm");
+    color: var(--grey-700);
+    font-weight: 500;
+  }
+  input[type="radio"] {
+    display: none;
+  }
+  input[type="radio"]:checked + .radio {
+    background-color: var(--primary-100);
+    border: 1px solid var(--primary-600);
+    position: relative;
+  }
+
+  .radio {
+    background-color: var(--white);
+    border: 1px solid var(--grey-200);
+    position: relative;
+    cursor: pointer;
+    transition: background 0.25s ease-out;
+    &::before {
+      content: "";
+      position: absolute;
+      transition: opacity 0.25s ease-out;
+      opacity: 0;
+    }
+    &:hover {
+      background-color: var(--primary-100);
+      border: 1px solid var(--primary-200);
+    }
+  }
+
+  &--sm {
+    input[type="radio"]:checked + .radio::before {
+      opacity: 1;
+    }
+    .radio {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      &::before {
+        width: 8px;
+        height: 8px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: var(--primary-600);
+        border-radius: 50%;
+      }
+    }
+  }
+
+  &--md {
+    input[type="radio"]:checked + .radio::before {
+      opacity: 1;
+    }
+    .radio {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      &::before {
+        width: 14px;
+        height: 14px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: var(--primary-600);
+        border-radius: 50%;
+      }
+    }
+  }
+}

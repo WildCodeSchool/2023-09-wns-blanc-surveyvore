@@ -8,12 +8,14 @@
 @use "elements/dropdown";
 @use "elements/button";
 @use "elements/badge";
+@use "elements/radio";
 
 // Use components styles
 @use "components/DefaultQuestions.scss";
 @use "../components/NavHeader/NavHeader.scss";
 @use "../components/Icon/Icon.scss";
 @use "../components/RadioGroup/RadioGroup.scss";
+@use "../components/DateOptions/DateOptions.scss";
 @use "../components/Dropdown/Dropdown.scss"; // Use pages styles
 @use "../components/Modal/Modal.scss";
 @use "pages/NewSurvey.scss";

@@ -4,9 +4,10 @@ export type Question = {
     id: string | undefined;
     title: string;
     type: QuestionType;
+    sort: number;
     description: string;
     isOpen: boolean;
-    answers: Answer[] | undefined;
+    answer: Answer[] | undefined;
 };
 
 export type QuestionType = {

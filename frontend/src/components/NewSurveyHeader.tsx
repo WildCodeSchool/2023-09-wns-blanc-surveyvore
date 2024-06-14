@@ -4,8 +4,6 @@ import { gql, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import RadioGroup, { RadioElement } from "./RadioGroup/RadioGroup";
 
-// TODO: gérer les états de loading pendant la mutation et les er  reurs
-
 const EDIT_SURVEY = gql`
     mutation Mutation($survey: EditSurveyInputType!, $editSurveyLink: String!) {
         editSurvey(survey: $survey, link: $editSurveyLink) {
@@ -46,7 +44,7 @@ function NewSurveyHeader({
             title: "Public",
             icon: "unlock",
             description: "Il sera accessible à tout le monde.",
-            onClick: () => setIsPrivate(false),
+            onClick: () => onPrivateClick(false),
             isChecked: !isPrivate,
         },
         {
@@ -55,7 +53,7 @@ function NewSurveyHeader({
             icon: "lock",
             description:
                 "Il ne sera visible que par les personnes que vous invitez.",
-            onClick: () => setIsPrivate(true),
+            onClick: () => onPrivateClick(true),
             isChecked: isPrivate,
         },
     ];
@@ -99,6 +97,7 @@ function NewSurveyHeader({
                 },
             },
         });
+        setIsPrivate(isPrivate);
     };
 
     return (

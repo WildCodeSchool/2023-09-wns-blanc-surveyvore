@@ -1,6 +1,4 @@
 import { Field, InputType } from "type-graphql";
-import { Survey } from "../entities/survey";
-import { QuestionType } from "../entities/questionType";
 
 @InputType()
 export class CreateQuestionInputType {
@@ -18,4 +16,7 @@ export class CreateQuestionInputType {
 
   @Field()
   survey: string;
+
+  @Field()
+  sort: number;
 }
