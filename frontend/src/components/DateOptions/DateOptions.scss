@@ -1,0 +1,11 @@
+@use "../../styles/elements/typography" as *;
+
+.date-options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    .label {
+        @include text("sm", $font: $font-family-accent, $weight: 500);
+        color: var(--grey-700);
+    }
+}

@@ -6,7 +6,7 @@ export type Question = {
     type: QuestionType;
     description: string;
     isOpen: boolean;
-    answers: Answer[] | undefined;
+    answer: Answer[] | undefined;
 };
 
 export type QuestionType = {

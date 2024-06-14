@@ -11,6 +11,13 @@ import { Question } from "./question";
 @Entity()
 @ObjectType()
 export class QuestionAnswer extends BaseEntity {
+    constructor(datas: { content: string } | null = null) {
+        super();
+        if (datas) {
+            this.content = datas.content;
+        }
+    }
+
     @PrimaryGeneratedColumn("uuid")
     @Field()
     id: string;
@@ -20,6 +27,8 @@ export class QuestionAnswer extends BaseEntity {
     content: string;
 
     @Field(() => Question)
-    @ManyToOne(() => Question, (question) => question.id)
+    @ManyToOne(() => Question, (question) => question.id, {
+        onDelete: "CASCADE",
+    })
     question: Question;
 }

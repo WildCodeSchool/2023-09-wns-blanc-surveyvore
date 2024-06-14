@@ -22,7 +22,7 @@ function Input({
     labelClassName?: string;
     textarea?: boolean;
     value: string;
-    setValue: React.Dispatch<React.SetStateAction<string>>;
+    setValue: (value: string) => void;
     onBlur?: (e: React.FocusEvent) => void;
 }): JSX.Element {
     const handleChange = (
