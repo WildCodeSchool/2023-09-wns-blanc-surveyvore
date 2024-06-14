@@ -14,6 +14,9 @@ export async function getQuestionsBySurveyLink(
             survey: true,
             answer: true,
         },
+        order: {
+            sort: "ASC",
+        },
     });
 }
 
@@ -49,7 +52,8 @@ export async function editQuestion(
     const questionToEdit = await getQuestionById(id);
     if (questionToEdit) {
         question.title && (questionToEdit.title = question.title);
-        question.description && (questionToEdit.description = question.description);
+        question.description &&
+            (questionToEdit.description = question.description);
         question.type && (questionToEdit.type.id = question.type);
         question.sort && (questionToEdit.sort = question.sort);
 

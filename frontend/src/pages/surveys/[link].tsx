@@ -2,13 +2,12 @@ import DefaultQuestions from "@/components/DefaultQuestions";
 import NewQuestion from "@/components/NewQuestion";
 import NewSurveyHeader from "@/components/NewSurveyHeader";
 import NavLayout from "@/layouts/NavLayout";
-import { GET_QUESTIONS } from "@/lib/queries/questions.queries";
+import { EDIT_QUESTION, GET_QUESTIONS } from "@/lib/queries/questions.queries";
 import { Question } from "@/types/question.type";
-import { gql, useLazyQuery } from "@apollo/client";
+import { gql, useLazyQuery, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import { ReactElement, useEffect, useState } from "react";
 import { Reorder } from "framer-motion";
-import { se } from "date-fns/locale";
 
 const GET_SURVEY_BY_LINK = gql`
     query Query($surveyLink: String!) {
@@ -25,6 +24,21 @@ function NewSurvey() {
     const [questions, setQuestions] = useState<Question[] | undefined>(
         undefined
     );
+
+    const [emptyQuestion, setEmptyQuestion] = useState<Question[]>([
+        {
+            id: "empty",
+            title: "Nouvelle question",
+            description: "",
+            type: {
+                icon: "",
+                id: "",
+                type: "",
+            },
+            answer: [],
+            isOpen: true,
+        },
+    ]);
 
     const [title, setTitle] = useState("Formulaire sans titre");
     const [description, setDescription] = useState("");
@@ -46,28 +60,46 @@ function NewSurvey() {
             surveyLink: link,
         },
         onCompleted: (data) => {
+            setEmptyQuestion([
+                {
+                    id: "empty",
+                    title: "Nouvelle question",
+                    description: "",
+                    type: {
+                        icon: "",
+                        id: "",
+                        type: "",
+                    },
+                    answer: [],
+                    isOpen: true,
+                },
+            ]);
             let newQuestions = data.getQuestions.map((question: any) => ({
                 isOpen: false,
                 ...question,
             }));
-
-            newQuestions.unshift(emptyQuestion);
             setQuestions(newQuestions);
         },
     });
 
-    const emptyQuestion = {
-        id: "empty",
-        title: "Nouvelle question",
-        description: "",
-        type: {
-            icon: "",
-            id: "",
-            type: "",
-        },
-        answer: [],
-        isOpen: true,
-    };
+    const [editQuestion] = useMutation(EDIT_QUESTION);
+    const totalQuestions = questions ? questions.length : 0;
+
+    async function handleQuestionsReorder(questions: Question[]) {
+        setQuestions(questions);
+        await Promise.all(
+            questions.map((question, index) => {
+                return editQuestion({
+                    variables: {
+                        id: question.id,
+                        question: {
+                            sort: index + 1,
+                        },
+                    },
+                });
+            })
+        );
+    }
 
     useEffect(() => {
         if (link) {
@@ -115,30 +147,44 @@ function NewSurvey() {
             {loadingQuestions || !questions ? (
                 <div>Loading...</div>
             ) : (
-                <Reorder.Group
-                    axis="y"
-                    values={questions}
-                    onReorder={setQuestions}
-                    style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 10,
-                    }}
-                >
-                    {questions.map((question) => {
-                        return (
-                            <Reorder.Item key={question.id} value={question}>
-                                <NewQuestion
-                                    question={question}
-                                    setQuestions={setQuestions}
-                                    questions={questions}
-                                    surveyLink={link}
-                                    getQuestions={getQuestions}
-                                />
-                            </Reorder.Item>
-                        );
-                    })}
-                </Reorder.Group>
+                <>
+                    <NewQuestion
+                        question={emptyQuestion[0]}
+                        setQuestions={setEmptyQuestion}
+                        questions={emptyQuestion}
+                        surveyLink={link}
+                        getQuestions={getQuestions}
+                        index={totalQuestions + 1}
+                    />
+                    <Reorder.Group
+                        axis="y"
+                        values={questions}
+                        onReorder={handleQuestionsReorder}
+                        style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 10,
+                        }}
+                    >
+                        {questions.map((question, index) => {
+                            return (
+                                <Reorder.Item
+                                    key={question.id}
+                                    value={question}
+                                >
+                                    <NewQuestion
+                                        question={question}
+                                        setQuestions={setQuestions}
+                                        questions={questions}
+                                        surveyLink={link}
+                                        getQuestions={getQuestions}
+                                        index={index}
+                                    />
+                                </Reorder.Item>
+                            );
+                        })}
+                    </Reorder.Group>
+                </>
             )}
         </div>
     );

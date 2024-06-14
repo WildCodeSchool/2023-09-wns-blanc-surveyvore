@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Input from "./Input";
 import QuestionType from "./QuestionType";
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { RadioElement } from "./RadioGroup/RadioGroup";
 import { IconName } from "@/types/iconName.type";
 import Icon from "./Icon/Icon";
@@ -12,9 +12,6 @@ import {
     ADD_QUESTION_ANSWER,
     CREATE_QUESTION,
     DELETE_QUESTION,
-    EDIT_QUESTION,
-    EDIT_QUESTION_ANSWER,
-    GET_QUESTIONS,
     GET_TYPES,
 } from "@/lib/queries/questions.queries";
 
@@ -24,12 +21,14 @@ function NewQuestion({
     questions,
     surveyLink,
     getQuestions,
+    index,
 }: {
     setQuestions: React.Dispatch<React.SetStateAction<any>>;
     question: Question;
     questions: Question[];
     surveyLink: string;
     getQuestions: () => void;
+    index: number;
 }) {
     // ----------------------------------States----------------------------------
     const [types, setTypes] = useState<QuestionType[]>([]);
@@ -111,13 +110,14 @@ function NewQuestion({
                     type: form.type?.id,
                     survey: surveyLink,
                     defaultQuestion: false,
+                    sort: index,
                 },
             },
             onCompleted: (data) => {
                 if (
                     data.createQuestion.type.type === "checkboxes" ||
-                    "radio" ||
-                    "checkbox"
+                    data.createQuestion.type.type === "radio" ||
+                    data.createQuestion.type.type === "checkbox"
                 ) {
                     if (question.answer) {
                         question.answer.map((answer, index) => {
@@ -165,6 +165,8 @@ function NewQuestion({
                             },
                         });
                     }
+                } else {
+                    getQuestions();
                 }
             },
         });
@@ -200,6 +202,7 @@ function NewQuestion({
             })
         );
     }
+    
 
     // ----------------------------------return----------------------------------
 
