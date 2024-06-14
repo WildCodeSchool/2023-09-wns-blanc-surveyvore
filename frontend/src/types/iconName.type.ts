@@ -19,5 +19,6 @@ export type IconName =
   | "folder-download"
   | "arrow-left"
   | "sign-out"
-  | "paper-plane-top";
+  | "paper-plane-top"
+  | "cross";
 
