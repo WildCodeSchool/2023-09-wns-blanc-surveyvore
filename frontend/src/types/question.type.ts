@@ -4,6 +4,7 @@ export type Question = {
     id: string | undefined;
     title: string;
     type: QuestionType;
+    sort: number;
     description: string;
     isOpen: boolean;
     answer: Answer[] | undefined;

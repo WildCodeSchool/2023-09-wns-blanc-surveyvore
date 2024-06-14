@@ -16,4 +16,7 @@ export class CreateQuestionInputType {
 
   @Field()
   survey: string;
+
+  @Field()
+  sort: number;
 }
