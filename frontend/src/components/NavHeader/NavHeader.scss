@@ -33,6 +33,10 @@
     gap: 0.5rem;
   }
 
+  .nav-buttons {
+    flex-shrink: 0;
+  }
+
   .badge {
     @include text("sm");
     color: var(--emerald-500);
