@@ -269,11 +269,19 @@ function AnswerSurvey() {
         }
       });
 
+      // check if all questions are answered
       if (getNumberOfQuestions() === Object.keys(answersInForm).length) {
         console.log("every answer completed");
-        for (let i = 0; i < Object.keys(answersInForm).length; i++) {
-          const element = Object.keys(answersInForm)[i];
-          console.log(element);
+        for (const [key, value] of Object.entries(answersInForm)) {
+          console.log(`${key}: ${value}`);
+          if (value && JSON.parse(value).length === 0) {
+            console.error("Answer is empty");
+          } else {
+            const answersInValue = JSON.parse(value);
+            for (let i = 0; i < answersInValue.length; i++) {
+              const answer = answersInValue[i];
+            }
+          }
         }
       } else {
         console.log(
@@ -368,9 +376,7 @@ function AnswerSurvey() {
                     }`}
                     key={question.id}
                   >
-                    <p className="answer-title">
-                      {question.title} {question.isError}
-                    </p>
+                    <p className="answer-title">{question.title}</p>
                     {question.description && (
                       <p className="answer-description">
                         {question.description}
