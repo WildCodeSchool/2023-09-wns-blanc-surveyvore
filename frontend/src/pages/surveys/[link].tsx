@@ -7,6 +7,8 @@ import { Question } from "@/types/question.type";
 import { gql, useLazyQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { ReactElement, useEffect, useState } from "react";
+import { Reorder } from "framer-motion";
+import { se } from "date-fns/locale";
 
 const GET_SURVEY_BY_LINK = gql`
     query Query($surveyLink: String!) {
@@ -113,16 +115,30 @@ function NewSurvey() {
             {loadingQuestions || !questions ? (
                 <div>Loading...</div>
             ) : (
-                questions.map((question) => (
-                    <NewQuestion
-                        key={question.id}
-                        question={question}
-                        setQuestions={setQuestions}
-                        questions={questions}
-                        surveyLink={link}
-                        getQuestions={getQuestions}
-                    />
-                ))
+                <Reorder.Group
+                    axis="y"
+                    values={questions}
+                    onReorder={setQuestions}
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 10,
+                    }}
+                >
+                    {questions.map((question) => {
+                        return (
+                            <Reorder.Item key={question.id} value={question}>
+                                <NewQuestion
+                                    question={question}
+                                    setQuestions={setQuestions}
+                                    questions={questions}
+                                    surveyLink={link}
+                                    getQuestions={getQuestions}
+                                />
+                            </Reorder.Item>
+                        );
+                    })}
+                </Reorder.Group>
             )}
         </div>
     );

@@ -23,6 +23,7 @@ export async function createQuestion(questionData: {
     description: string;
     defaultQuestion: boolean;
     type: string;
+    sort: number;
 }): Promise<Question> {
     const newQuestion = new Question(questionData);
 
@@ -47,9 +48,10 @@ export async function editQuestion(
 ): Promise<Question | undefined> {
     const questionToEdit = await getQuestionById(id);
     if (questionToEdit) {
-        questionToEdit.title = question.title;
-        questionToEdit.type.id = question.type;
-        questionToEdit.description = question.description;
+        question.title && (questionToEdit.title = question.title);
+        question.description && (questionToEdit.description = question.description);
+        question.type && (questionToEdit.type.id = question.type);
+        question.sort && (questionToEdit.sort = question.sort);
 
         return questionToEdit.save();
     }

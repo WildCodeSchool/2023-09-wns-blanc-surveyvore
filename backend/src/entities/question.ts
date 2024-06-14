@@ -19,6 +19,7 @@ export class Question extends BaseEntity {
             title: string;
             description: string;
             defaultQuestion: boolean;
+            sort: number;
         } | null = null
     ) {
         super();
@@ -26,6 +27,7 @@ export class Question extends BaseEntity {
             this.title = datas.title;
             this.description = datas.description;
             this.defaultQuestion = datas.defaultQuestion;
+            this.sort = datas.sort;
         }
     }
 
@@ -45,13 +47,17 @@ export class Question extends BaseEntity {
     @Field()
     defaultQuestion: boolean;
 
+    @Column()
+    @Field()
+    sort: number;
+
     @Field()
     @ManyToOne(() => QuestionType, (questionType) => questionType.type)
     type: QuestionType;
 
-  @Field(() => Survey)
-  @ManyToOne(() => Survey, (survey) => survey.link)
-  survey: Survey;
+    @Field(() => Survey)
+    @ManyToOne(() => Survey, (survey) => survey.link)
+    survey: Survey;
 
     @Field(() => [QuestionAnswer], { nullable: true })
     @OneToMany(

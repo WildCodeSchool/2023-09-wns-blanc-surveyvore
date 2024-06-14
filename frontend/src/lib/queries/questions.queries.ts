@@ -1,14 +1,13 @@
 import { gql } from "@apollo/client";
 
-
 export const GET_TYPES = gql`
-  query GetAllTypes {
-    getAllTypes {
-      id
-      type
-      icon
+    query GetAllTypes {
+        getAllTypes {
+            id
+            type
+            icon
+        }
     }
-  }
 `;
 
 export const CREATE_QUESTION = gql`
@@ -34,13 +33,15 @@ export const EDIT_QUESTION = gql`
 `;
 
 export const DELETE_QUESTION = gql`
-  mutation DeleteQuestion($id: String!) {
-    deleteQuestion(id: $id)
-  }
+    mutation DeleteQuestion($id: String!) {
+        deleteQuestion(id: $id)
+    }
 `;
 
 export const ADD_QUESTION_ANSWER = gql`
-    mutation CreateQuestionAnswer($questionAnswer: CreateQuestionAnswerInputType!) {
+    mutation CreateQuestionAnswer(
+        $questionAnswer: CreateQuestionAnswerInputType!
+    ) {
         createQuestionAnswer(questionAnswer: $questionAnswer) {
             content
         }
@@ -58,13 +59,13 @@ export const EDIT_QUESTION_ANSWER = gql`
     }
 `;
 
-
 export const GET_QUESTIONS = gql`
     query GetQuestions($surveyLink: String!) {
         getQuestions(surveyLink: $surveyLink) {
             id
             title
             description
+            sort
             type {
                 icon
                 id
