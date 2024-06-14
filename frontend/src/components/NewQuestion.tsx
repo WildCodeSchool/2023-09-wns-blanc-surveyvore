@@ -116,8 +116,7 @@ function NewQuestion({
             onCompleted: (data) => {
                 if (
                     data.createQuestion.type.type === "checkboxes" ||
-                    data.createQuestion.type.type === "radio" ||
-                    data.createQuestion.type.type === "checkbox"
+                    data.createQuestion.type.type === "radio"
                 ) {
                     if (question.answer) {
                         question.answer.map((answer, index) => {
