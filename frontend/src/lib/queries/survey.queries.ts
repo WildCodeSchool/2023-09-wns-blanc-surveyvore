@@ -85,3 +85,15 @@ export const CREATE_SURVEY = gql`
   }
 `;
 
+
+export const EDIT_SURVEY = gql`
+    mutation Mutation($survey: EditSurveyInputType!, $editSurveyLink: String!) {
+        editSurvey(survey: $survey, link: $editSurveyLink) {
+            title
+            description
+            collectingUserData
+            private
+            link
+        }
+    }
+`;
