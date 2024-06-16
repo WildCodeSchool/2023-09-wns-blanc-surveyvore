@@ -17,6 +17,11 @@ export function findSurveyByLink(link: string): Promise<Survey | null> {
         type: true,
       },
     },
+    order: {
+      question: {
+        sort: "ASC",
+      },
+    },
   });
 }
 

@@ -1,4 +1,5 @@
 import AnswerCheckboxQuestion from "@/components/Answer/AnswerCheckboxQuestion";
+import AnswerCheckboxesQuestion from "@/components/Answer/AnswerCheckboxesQuestion";
 import AnswerDateQuestion from "@/components/Answer/AnswerDateQuestion";
 import AnswerDefaultQuestion from "@/components/Answer/AnswerDefaultQuestion";
 import AnswerRadioQuestion from "@/components/Answer/AnswerRadioQuestion";
@@ -42,6 +43,7 @@ const GET_SURVEY_BY_LINK = gql`
         description
         defaultQuestion
         id
+        sort
       }
       startDate
       state {
@@ -60,6 +62,7 @@ function AnswerSurvey() {
   const [defaultQuestions, setDefaultQuestions] = useState<
     QuestionForAnswerPage[] | undefined
   >(undefined);
+  const [checkboxQuestion, setCheckboxQuestion] = useState<string[]>([]);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -85,6 +88,7 @@ function AnswerSurvey() {
           setIsPrivate(data.getSurveyByLink.private);
           let nonDefaultQuestions = [];
           let defaultQuestions = [];
+          let checkboxQuestion = [];
           for (let i = 0; i < data.getSurveyByLink.question.length; i++) {
             const question = {
               ...data.getSurveyByLink.question[i],
@@ -95,9 +99,13 @@ function AnswerSurvey() {
             } else {
               nonDefaultQuestions.push(question);
             }
+            if (question.type.type === "checkbox") {
+              checkboxQuestion.push(question.id);
+            }
           }
           setDefaultQuestions(defaultQuestions);
           setQuestions(nonDefaultQuestions);
+          setCheckboxQuestion(checkboxQuestion);
         },
       });
     }
@@ -123,12 +131,11 @@ function AnswerSurvey() {
             />
           );
         case "checkboxes":
-        case "checkbox":
           return (
             <div className="checkboxes-container">
               {question.answer &&
                 question.answer.map((answerOption) => (
-                  <AnswerCheckboxQuestion
+                  <AnswerCheckboxesQuestion
                     key={answerOption.id}
                     answerOption={answerOption}
                     questionId={question.id}
@@ -140,6 +147,21 @@ function AnswerSurvey() {
                     }
                   />
                 ))}
+            </div>
+          );
+        case "checkbox":
+          return (
+            <div className="checkbox-container">
+              <AnswerCheckboxQuestion
+                key={question.id}
+                question={question}
+                questions={questionList}
+                setQuestions={
+                  setQuestions as React.Dispatch<
+                    React.SetStateAction<QuestionForAnswerPage[]>
+                  >
+                }
+              />
             </div>
           );
         case "radio":
@@ -224,13 +246,18 @@ function AnswerSurvey() {
           radioGroups.add(input.name);
         }
         if (input.type === "checkbox") {
-          checkboxGroups.add(input.name);
+          for (let i = 0; i < checkboxQuestion.length; i++) {
+            if (checkboxQuestion[i] !== input.name) {
+              checkboxGroups.add(input.name);
+            }
+          }
         }
       });
 
-      // Check formData for all keys and radio groups
+      // Check formData for all keys and radio groups and checkboxes groups
       for (const key of formData.keys()) {
-        if (formData.get(key)) {
+        let isUniqueCheckbox = false;
+        if (formData.get(key) && isUniqueCheckbox) {
           answersInForm[key] = JSON.stringify(formData.getAll(key));
           radioGroups.delete(key); // Remove from radio groups if answered
           checkboxGroups.delete(key); // Remove from checkbox groups if answered
@@ -273,7 +300,6 @@ function AnswerSurvey() {
       if (getNumberOfQuestions() === Object.keys(answersInForm).length) {
         console.log("every answer completed");
         for (const [key, value] of Object.entries(answersInForm)) {
-          console.log(`${key}: ${value}`);
           if (value && JSON.parse(value).length === 0) {
             console.error("Answer is empty");
           } else {
@@ -376,12 +402,15 @@ function AnswerSurvey() {
                     }`}
                     key={question.id}
                   >
-                    <p className="answer-title">{question.title}</p>
-                    {question.description && (
-                      <p className="answer-description">
-                        {question.description}
-                      </p>
+                    {question.type.type !== "checkbox" && (
+                      <p className="answer-title">{question.title}</p>
                     )}
+                    {question.type.type !== "checkbox" &&
+                      question.description && (
+                        <p className="answer-description">
+                          {question.description}
+                        </p>
+                      )}
                     {switchAnswer(question, questions)}
                   </div>
                 );

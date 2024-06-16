@@ -8,6 +8,7 @@ export type QuestionForAnswerPage = {
   isOpen: boolean;
   answer: Answer[] | undefined;
   isError: boolean;
+  sort: number;
 };
 
 export type QuestionType = {
