@@ -7,11 +7,11 @@ import * as argon2 from "argon2";
  * @param token token to verify
  * @returns
  */
-export async function verifyToken(token: string) {
+export function verifyToken(token: string) {
   if (process.env.JWT_SECRET_KEY === undefined) {
     throw new Error();
   }
-  const payload = await jwt.verify(token, process.env.JWT_SECRET_KEY);
+  const payload = jwt.verify(token, process.env.JWT_SECRET_KEY);
   return payload;
 }
 
@@ -62,9 +62,9 @@ export function signJwt(payload: any) {
   });
 }
 
-export function getMe(token: string) {
+export async function getMe(token: string) {
   const payload: any = verifyToken(token);
 
-  const user = UserService.getByEmail(payload.email);
+  const user = await UserService.getByEmail(payload.email);
   return user;
 }
