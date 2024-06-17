@@ -6,6 +6,7 @@ import AnswerRadioQuestion from "@/components/Answer/AnswerRadioQuestion";
 import AnswerTextQuestion from "@/components/Answer/AnswerTextQuestion";
 import Icon from "@/components/Icon/Icon";
 import NavLayout from "@/layouts/NavLayout";
+import { delay } from "@/lib/tools/delay.tools";
 import { Question } from "@/types/question.type";
 import { QuestionForAnswerPage } from "@/types/questionForAnswerPage.type";
 import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client";
@@ -74,6 +75,8 @@ const POST_ANSWER = gql`
     }
   }
 `;
+
+const TIME_TOAST = 3000;
 
 function AnswerSurvey() {
   const [questions, setQuestions] = useState<
@@ -241,7 +244,7 @@ function AnswerSurvey() {
     toast: true,
     position: "bottom-end",
     showConfirmButton: false,
-    timer: 3000,
+    timer: TIME_TOAST,
     timerProgressBar: true,
     didOpen: (toast) => {
       toast.onmouseenter = Swal.stopTimer;
@@ -326,6 +329,7 @@ function AnswerSurvey() {
       // check if all questions are answered
       if (getNumberOfQuestions() === Object.keys(answersInForm).length) {
         console.log("every answer completed");
+        let answersPosted: boolean = false;
         for (let [key, value] of Object.entries(answersInForm)) {
           if (value && JSON.parse(value).length === 0) {
             console.error("Answer is empty");
@@ -348,7 +352,6 @@ function AnswerSurvey() {
               } else {
                 contentToSend = answer;
               }
-              console.log(token, answer, key);
               try {
                 await postAnswer({
                   variables: {
@@ -358,11 +361,22 @@ function AnswerSurvey() {
                     content: contentToSend,
                   },
                 });
+                answersPosted = true;
               } catch (error) {
                 console.error("Error posting answer:", error);
               }
             }
           }
+        }
+        if (answersPosted) {
+          Toast.fire({
+            icon: "success",
+            title: "Votre formulaire a bien été envoyé.",
+          });
+          await delay(TIME_TOAST);
+          router.push("/");
+        } else {
+          console.error("No answers posted");
         }
       } else {
         console.log(
