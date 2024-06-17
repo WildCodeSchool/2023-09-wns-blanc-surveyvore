@@ -8,7 +8,7 @@ import Icon from "@/components/Icon/Icon";
 import NavLayout from "@/layouts/NavLayout";
 import { Question } from "@/types/question.type";
 import { QuestionForAnswerPage } from "@/types/questionForAnswerPage.type";
-import { gql, useLazyQuery, useQuery } from "@apollo/client";
+import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import {
   FormEvent,
@@ -55,6 +55,26 @@ const GET_SURVEY_BY_LINK = gql`
   }
 `;
 
+const POST_ANSWER = gql`
+  mutation CreateAnswer(
+    $user: String!
+    $answer: String!
+    $question: String!
+    $content: String!
+  ) {
+    createAnswer(
+      user: $user
+      answer: $answer
+      question: $question
+      content: $content
+    ) {
+      question {
+        id
+      }
+    }
+  }
+`;
+
 function AnswerSurvey() {
   const [questions, setQuestions] = useState<
     QuestionForAnswerPage[] | undefined
@@ -72,6 +92,10 @@ function AnswerSurvey() {
 
   const router = useRouter();
   const { link } = router.query as { link: string };
+
+  let userAnswering: string = "";
+  const token = localStorage.getItem("token");
+  if (token) userAnswering = token;
 
   const [getSurveyByLink, { loading, error }] =
     useLazyQuery(GET_SURVEY_BY_LINK);
@@ -225,8 +249,10 @@ function AnswerSurvey() {
     },
   });
 
+  const [postAnswer] = useMutation(POST_ANSWER);
+
   const onSubmit = useCallback(
-    (event: FormEvent) => {
+    async (event: FormEvent) => {
       event.preventDefault();
       const formData = new FormData(event.target as HTMLFormElement);
       const answersInForm: { [key: string]: string } = {};
@@ -240,7 +266,7 @@ function AnswerSurvey() {
       const radioGroups = new Set<string>();
       const checkboxGroups = new Set<string>();
 
-      // Collect all radio groups
+      // Collect all radio groups and checkbxo group
       inputs.forEach((input) => {
         if (input.type === "radio") {
           radioGroups.add(input.name);
@@ -249,6 +275,8 @@ function AnswerSurvey() {
           for (let i = 0; i < checkboxQuestion.length; i++) {
             if (checkboxQuestion[i] !== input.name) {
               checkboxGroups.add(input.name);
+            } else {
+              answersInForm[input.name] = JSON.stringify(["no_answer"]);
             }
           }
         }
@@ -256,8 +284,7 @@ function AnswerSurvey() {
 
       // Check formData for all keys and radio groups and checkboxes groups
       for (const key of formData.keys()) {
-        let isUniqueCheckbox = false;
-        if (formData.get(key) && isUniqueCheckbox) {
+        if (formData.get(key)) {
           answersInForm[key] = JSON.stringify(formData.getAll(key));
           radioGroups.delete(key); // Remove from radio groups if answered
           checkboxGroups.delete(key); // Remove from checkbox groups if answered
@@ -299,13 +326,41 @@ function AnswerSurvey() {
       // check if all questions are answered
       if (getNumberOfQuestions() === Object.keys(answersInForm).length) {
         console.log("every answer completed");
-        for (const [key, value] of Object.entries(answersInForm)) {
+        for (let [key, value] of Object.entries(answersInForm)) {
           if (value && JSON.parse(value).length === 0) {
             console.error("Answer is empty");
           } else {
             const answersInValue = JSON.parse(value);
             for (let i = 0; i < answersInValue.length; i++) {
               const answer = answersInValue[i];
+              if (
+                key.startsWith("input-date_") ||
+                key.startsWith("question_")
+              ) {
+                key = key.split("_")[1];
+              }
+              const regexUUID =
+                /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+              let answerToSend: string = "";
+              let contentToSend: string = "";
+              if (answer.match(regexUUID)) {
+                answerToSend = answer;
+              } else {
+                contentToSend = answer;
+              }
+              console.log(token, answer, key);
+              try {
+                await postAnswer({
+                  variables: {
+                    user: token,
+                    answer: answerToSend,
+                    question: key,
+                    content: contentToSend,
+                  },
+                });
+              } catch (error) {
+                console.error("Error posting answer:", error);
+              }
             }
           }
         }

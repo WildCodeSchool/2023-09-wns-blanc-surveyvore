@@ -19,7 +19,7 @@ export class UserAnswer extends BaseEntity {
 
   @Column({ nullable: true })
   @Field({ nullable: true })
-  content: string;
+  content?: string;
 
   @ManyToOne(() => Question, (question) => question.id)
   @Field()

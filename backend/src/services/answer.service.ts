@@ -2,7 +2,7 @@ import { Question } from "../entities/question";
 import { QuestionAnswer } from "../entities/questionAnswer";
 import { User } from "../entities/user";
 import { UserAnswer } from "../entities/userAnswer";
-import { getByEmailWithoutData } from "./user.service";
+import { getMe } from "./auth.service";
 
 export async function addAnswer(answerData: {
   content?: string;
@@ -12,7 +12,7 @@ export async function addAnswer(answerData: {
 }): Promise<UserAnswer> {
   const newAnswer = new UserAnswer();
 
-  if (answerData.content) {
+  if (answerData.content && answerData.content.length > 0) {
     newAnswer.content = answerData.content;
   }
 
@@ -21,18 +21,24 @@ export async function addAnswer(answerData: {
     newAnswer.question = question;
   }
 
-  const option = await QuestionAnswer.findOneBy({
-    id: answerData.answer,
-  });
-  if (option) {
-    newAnswer.answer = option;
+  if (answerData.answer && answerData.answer.length > 0) {
+    const option = await QuestionAnswer.findOneBy({
+      id: answerData.answer,
+    });
+    if (option) {
+      newAnswer.answer = option;
+    }
   }
-
-  const user =
-    answerData.user && (await getByEmailWithoutData(answerData.user));
-  if (user) {
-    newAnswer.user = user;
+  const user = answerData.user;
+  let userAnswering: User | null;
+  if (user && user.length > 0) {
+    userAnswering = await getMe(user);
+    console.log("line 38 :", userAnswering);
+    if (userAnswering) {
+      newAnswer.user = userAnswering;
+    }
   }
+  console.log("line 44 :", newAnswer.user);
 
   return newAnswer.save();
 }

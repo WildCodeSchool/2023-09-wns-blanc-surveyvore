@@ -6,10 +6,10 @@ import * as AnswerService from "../services/answer.service";
 export class AnswerResolver {
   @Mutation(() => UserAnswer)
   createAnswer(
-    @Arg("content") content: string,
     @Arg("question") question: string,
-    @Arg("answer") answer: string,
-    @Arg("user") user: string
+    @Arg("user") user?: string,
+    @Arg("content") content?: string,
+    @Arg("answer") answer?: string
   ): Promise<UserAnswer> {
     return AnswerService.addAnswer({ content, question, answer, user });
   }
