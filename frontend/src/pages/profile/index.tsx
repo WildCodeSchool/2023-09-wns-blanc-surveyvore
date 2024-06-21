@@ -1,17 +1,19 @@
+import Icon from "@/components/Icon/Icon";
 import Input from "@/components/Input";
 import Modal from "@/components/Modal/Modal";
+import PasswordValidationList from "@/components/PasswordValidationList";
 import NavLayout from "@/layouts/NavLayout";
+import { passwordValidationMessages } from "@/lib/fixtures/data";
 import { GET_ME, UPDATE_USER } from "@/lib/queries/user.queries";
-import { validatePassword } from "@/lib/tools/user.tools";
+import {
+  PasswordValidationProps,
+  validatePassword,
+} from "@/lib/tools/user.tools";
 import { useMutation, useQuery } from "@apollo/client";
 import React, { ReactElement, useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
-// affichage des infos mots de passes façon checklist
-// disable les inputs plutot que readonly
 // transition buttons
-
-// toast de modif des infos de l'utilisateur
-// toast de modification du mot de passe
 
 // bouton de suppression du profil
 // modale de confirmation pour la suppression du profil
@@ -19,6 +21,12 @@ import React, { ReactElement, useEffect, useState } from "react";
 type ModalProps = {
   isOpen: boolean;
   content: string;
+};
+
+type ErrorMessage = {
+  target: string;
+  type: string;
+  message: string;
 };
 
 function Profile() {
@@ -37,9 +45,11 @@ function Profile() {
 
   // ------------------------States & Hooks-------------------------
 
-  const [firstname, setFirstname] = useState<string>("");
-  const [lastname, setLastname] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
+  const [personalData, setPersonalData] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+  });
   const [previousPassword, setPreviousPassword] =
     useState<string>("TuTenSouviensTu");
   const [newPassword, setNewPassword] = useState<string>("réfléchisUnPeu");
@@ -50,8 +60,13 @@ function Profile() {
   const [editPersonalData, setEditPersonalData] = useState<boolean>(false);
   const [editPassword, setEditPassword] = useState<boolean>(false);
 
-  const [messages, setMessages] = useState<any>({});
-  const [changePasswordMessages, setChangePasswordMessages] = useState<any>({});
+  const [messages, setMessages] = useState<ErrorMessage[]>([]);
+  const [changePasswordMessages, setChangePasswordMessages] = useState<
+    ErrorMessage[]
+  >([]);
+  const [passwordValidations, setPasswordValidations] = useState<
+    PasswordValidationProps[]
+  >(passwordValidationMessages);
 
   const [modal, setModal] = useState<ModalProps>({
     isOpen: false,
@@ -61,28 +76,67 @@ function Profile() {
 
   useEffect(() => {
     if (data) {
-      setFirstname(data.getMe.firstname);
-      setLastname(data.getMe.lastname);
-      setEmail(data.getMe.email);
+      setPersonalData({
+        firstname: data.getMe.firstname,
+        lastname: data.getMe.lastname,
+        email: data.getMe.email,
+      });
     }
   }, [data]);
 
+  console.log(personalData);
+
   useEffect(() => {
-    validatePassword(newPassword, setChangePasswordMessages);
-  }, [newPassword, confirmPassword]);
+    validatePassword(newPassword, setPasswordValidations, passwordValidations);
+
+    if (newPassword === confirmPassword) {
+      setChangePasswordMessages((prev) => [
+        ...prev.filter((el) => el.target !== "newPassword"),
+      ]);
+    }
+  }, [newPassword, confirmPassword, previousPassword]);
+
+  useEffect(() => {
+    if (changePasswordMessages.find((el) => el.target === "previousPassword")) {
+      setChangePasswordMessages((prev) => [
+        ...prev.filter((el) => el.target !== "previousPassword"),
+      ]);
+    }
+  }, [previousPassword]);
+
+  const { firstname, lastname, email } = personalData;
 
   useEffect(() => {
     if (
-      messages.content === "Aucun champ n'a été modifié." &&
+      messages.find((el) => el.message === "Aucun champ n'a été modifié.") &&
       (firstname === data.getMe.firstname ||
         lastname === data.getMe.lastname ||
         email === data.getMe.email)
     ) {
     }
-    setMessages({});
+    setMessages([]);
   }, [firstname, lastname, email]);
 
   // -------------------------Handlers------------------------------
+
+  const updatePersonalData = (
+    key: "firstname" | "lastname" | "email",
+    value: string
+  ) => {
+    setPersonalData((prevState) => ({
+      ...prevState,
+      [key]: value,
+    }));
+  };
+
+  function toast(icon: "success" | "error", title: string) {
+    Swal.fire({
+      icon: icon,
+      title: title,
+      showConfirmButton: false,
+      timer: 1500,
+    });
+  }
 
   async function handleSubmitPersonalData(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -112,8 +166,10 @@ function Profile() {
               isOpen: false,
               content: "",
             });
+            toast("success", "Modifié avec succes !");
           } catch (error: any) {
-            setMessages({ error: error.message });
+            setMessages((prev: any) => [...prev, { error: error.message }]);
+            toast("error", "Une erreur s'est produite !");
             throw { error: error };
           }
         });
@@ -130,12 +186,23 @@ function Profile() {
             },
           });
           setEditPersonalData(false);
+          toast("success", "Modifié avec succes !");
         } catch (error: any) {
-          setMessages({ error: error.message });
+          setMessages((prev: any) => [
+            ...prev,
+            { target: "user", error: error.message },
+          ]);
           throw { error: error };
         }
       } else {
-        setMessages({ warning: "Aucun champ n'a été modifié." });
+        setMessages((prev: any) => [
+          ...prev,
+          {
+            target: email,
+            type: "warning",
+            message: "Aucun champ n'a été modifié.",
+          },
+        ]);
       }
     }
   }
@@ -149,10 +216,14 @@ function Profile() {
       setEditPassword(true);
     } else if (submitButton.textContent === "Enregistrer") {
       if (newPassword !== confirmPassword) {
-        setChangePasswordMessages((previousMessages: any) => ({
+        setChangePasswordMessages((previousMessages: any) => [
           ...previousMessages,
-          warning: "Les nouveaux mots de passe ne sont pas identiques.",
-        }));
+          {
+            target: "newPassword",
+            type: "warning",
+            message: "Les nouveaux mots de passe ne sont pas identiques.",
+          },
+        ]);
         return;
       }
 
@@ -170,11 +241,16 @@ function Profile() {
             },
           });
           setEditPassword(false);
+          toast("success", "Modifié avec succes !");
         } catch (error: any) {
-          setChangePasswordMessages((previousMessages: any) => ({
+          setChangePasswordMessages((previousMessages: any) => [
             ...previousMessages,
-            error: error.message,
-          }));
+            {
+              target: "previousPassword",
+              type: "error",
+              message: error.message,
+            },
+          ]);
           throw { error: error };
         }
       });
@@ -194,29 +270,33 @@ function Profile() {
           labelName="Firstname"
           inputName="firstname"
           value={firstname}
-          readOnly={!editPersonalData}
-          setValue={setFirstname}
+          disabled={!editPersonalData}
+          setValue={(value: string) => updatePersonalData("firstname", value)}
         />
         <Input
           type="text"
           labelName="Lastname"
           inputName="lastname"
           value={lastname}
-          readOnly={!editPersonalData}
-          setValue={setLastname}
+          disabled={!editPersonalData}
+          setValue={(value: string) => updatePersonalData("lastname", value)}
         />
         <Input
           type="email"
           labelName="Email"
-          inputName="username"
+          inputName="email"
           value={email}
-          readOnly={!editPersonalData}
-          setValue={setEmail}
+          disabled={!editPersonalData}
+          setValue={(value: string) => updatePersonalData("email", value)}
         />
         {messages &&
-          Object.entries(messages).map(([key, value], index) => (
-            <div key={index} className={`messages ${key}`}>
-              <p>{value as string}</p>
+          messages.map((el, index: number) => (
+            <div key={index} className={`message ${el.type}`}>
+              <Icon
+                name={el.type === "warning" ? "warning" : "cross"}
+                width="16"
+              />
+              <p>{el.message as string}</p>
             </div>
           ))}
         <div className="buttons">
@@ -236,10 +316,12 @@ function Profile() {
               className="button-md-primary-outline"
               onClick={() => {
                 setEditPersonalData(false);
-                setFirstname(data.getMe.firstname);
-                setLastname(data.getMe.lastname);
-                setEmail(data.getMe.email);
-                setMessages({});
+                setPersonalData({
+                  firstname: data.getMe.firstname,
+                  lastname: data.getMe.lastname,
+                  email: data.getMe.email,
+                });
+                setMessages([]);
               }}>
               Annuler
             </button>
@@ -254,7 +336,7 @@ function Profile() {
           labelName="Ancien mot de passe"
           inputName="previousPassword"
           value={previousPassword}
-          readOnly={!editPassword}
+          disabled={!editPassword}
           setValue={setPreviousPassword}
         />
         <Input
@@ -262,7 +344,7 @@ function Profile() {
           labelName="Nouveau mot de passe"
           inputName="newPassword"
           value={newPassword}
-          readOnly={!editPassword}
+          disabled={!editPassword}
           setValue={setNewPassword}
         />
         <Input
@@ -270,14 +352,17 @@ function Profile() {
           labelName="Confirmer le mot de passe"
           inputName="confirmPassword"
           value={confirmPassword}
-          readOnly={!editPassword}
+          disabled={!editPassword}
           setValue={setConfirmPassword}
         />
+        {editPassword && (
+          <PasswordValidationList validations={passwordValidations} />
+        )}
         {changePasswordMessages &&
           editPassword &&
-          Object.entries(changePasswordMessages).map(([key, value], index) => (
-            <div key={index} className={`messages ${key}`}>
-              <p>{value as string}</p>
+          changePasswordMessages.map((error, index) => (
+            <div key={index} className={`messages ${error.type}`}>
+              <p>{error.message as string}</p>
             </div>
           ))}
         <div className="buttons">
@@ -286,9 +371,7 @@ function Profile() {
             type="submit"
             className="button-md-primary-solid"
             disabled={
-              editPassword &&
-              Object.entries(changePasswordMessages).length > 0 &&
-              true
+              editPassword && changePasswordMessages.length > 0 && true
             }>
             {editPassword ? "Enregistrer" : "Modifier"}
           </button>
@@ -302,7 +385,7 @@ function Profile() {
                 setPreviousPassword("TuTenSouviensTu");
                 setNewPassword("réfléchisUnPeu");
                 setConfirmPassword("TestDeMémoirePourLesNoobs");
-                setChangePasswordMessages({});
+                setChangePasswordMessages([]);
               }}>
               Annuler
             </button>

@@ -1,53 +1,52 @@
 import React from "react";
 
+export type PasswordValidationProps = {
+  validationName: string;
+  isValid: boolean;
+  message: string;
+};
+
 export function validatePassword(
   password: string,
-  setMessages: React.Dispatch<React.SetStateAction<any>>
+  setPasswordValidation: React.Dispatch<
+    React.SetStateAction<PasswordValidationProps[]>
+  >,
+  passwordValidation: PasswordValidationProps[]
 ): boolean {
-  const hasLowercase = /[a-z]/.test(password);
-  const hasUppercase = /[A-Z]/.test(password);
-  const hasNumber = /[0-9]/.test(password);
-  const hasSymbol = /[@$!%*#?&]/.test(password);
-  const isValid = hasLowercase && hasUppercase && hasNumber && hasSymbol;
+  const validations = [
+    {
+      name: "minLength",
+      condition: password.length >= 6,
+    },
+    {
+      name: "hasUpperCase",
+      condition: /[A-Z]/.test(password),
+    },
+    {
+      name: "hasLowerCase",
+      condition: /[a-z]/.test(password),
+    },
+    {
+      name: "hasNumber",
+      condition: /[0-9]/.test(password),
+    },
+    {
+      name: "hasSpecialChar",
+      condition: /[@$!%*#?&]/.test(password),
+    },
+  ];
 
-  if (!hasLowercase) {
-    setMessages((previousMessages: any) => ({
-      ...previousMessages,
-      warning: "Le mot de passe doit contenir au moins une lettre minuscule.",
-    }));
-    return false;
-  }
-  if (!hasUppercase) {
-    setMessages((previousMessages: any) => ({
-      ...previousMessages,
-      warning: "Le mot de passe doit contenir au moins une lettre majuscule.",
-    }));
-    return false;
-  }
-  if (!hasNumber) {
-    setMessages((previousMessages: any) => ({
-      ...previousMessages,
-      warning: "Le mot de passe doit contenir au moins un chiffre.",
-    }));
-    return false;
-  }
-  if (!hasSymbol) {
-    setMessages((previousMessages: any) => ({
-      ...previousMessages,
-      warning:
-        "Le mot de passe doit contenir au moins un caractère spécial (@, $, !, %, *, #, ?, &).",
-    }));
-    return false;
-  }
-  if (password.length < 6) {
-    setMessages((previousMessages: any) => ({
-      ...previousMessages,
-      warning: "Le mot de passe doit contenir au moins 6 caractères.",
-    }));
-    return false;
-  }
+  const updatedValidations = passwordValidation.map((validation) => {
+    const matchingValidation = validations.find(
+      (v) => v.name === validation.validationName
+    );
+    return matchingValidation
+      ? { ...validation, isValid: matchingValidation.condition }
+      : validation;
+  });
 
-  setMessages({});
-  return isValid;
+  setPasswordValidation(updatedValidations);
+
+  return updatedValidations.every((validation) => validation.isValid);
 }
 

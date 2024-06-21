@@ -3,7 +3,7 @@ import Icon from "./Icon/Icon";
 
 function Input({
   focus,
-  readOnly,
+  disabled,
   type,
   inputName,
   textarea,
@@ -16,7 +16,7 @@ function Input({
   onBlur,
 }: {
   focus?: boolean;
-  readOnly?: boolean;
+  disabled?: boolean;
   type?: string;
   inputName: string;
   placeholder?: string;
@@ -25,7 +25,9 @@ function Input({
   labelClassName?: string;
   textarea?: boolean;
   value: string;
-  setValue: React.Dispatch<React.SetStateAction<string>>;
+  setValue:
+    | React.Dispatch<React.SetStateAction<string>>
+    | ((value: string) => void);
   onBlur?: (e: React.FocusEvent) => void;
 }): JSX.Element {
   const [showPassword, setShowPassword] = useState(false);
@@ -65,7 +67,10 @@ function Input({
           onBlur={onBlur}
         />
       ) : (
-        <div className={`input ${inputClassName ? inputClassName : ""}`}>
+        <div
+          className={`input ${inputClassName ? inputClassName : ""} ${
+            disabled ? "disabled" : ""
+          }`}>
           <input
             ref={ref as React.RefObject<HTMLInputElement>}
             type={type === "password" && showPassword ? "text" : type}
@@ -74,7 +79,7 @@ function Input({
             placeholder={placeholder}
             autoComplete={type === "password" ? "current-password" : ""}
             value={value}
-            readOnly={readOnly}
+            disabled={disabled}
             data-testid={inputName}
             onChange={handleChange}
             onBlur={onBlur}

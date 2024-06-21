@@ -33,7 +33,9 @@
       gap: calc(var(--padding) / 2);
     }
 
-    .messages {
+    .message {
+      display: flex;
+      gap: var(--padding);
       border-radius: 8px;
       padding: calc(var(--padding) / 2) var(--padding);
       &.warning {
@@ -49,9 +51,38 @@
       }
 
       &.info {
-        background-color: var(--info-50);
-        border: 1px solid var(--info-200);
-        color: var(--info-700);
+        background-color: var(--blue-50);
+        border: 1px solid var(--blue-200);
+        color: var(--blue-700);
+      }
+    }
+
+    .password-validation {
+      display: flex;
+      flex-direction: column;
+      border-radius: 8px;
+      padding: var(--padding);
+      gap: calc(var(--padding) / 2);
+      background-color: var(--error-50);
+      border: 1px solid var(--error-200);
+      color: var(--error-700);
+      &.validation-complete {
+        background-color: var(--success-50);
+        border: 1px solid var(--success-200);
+        color: var(--success-700);
+      }
+      > li {
+        display: flex;
+        gap: var(--padding);
+        @include text("sm");
+
+        &.valid {
+          color: var(--success-700);
+        }
+
+        &.invalid {
+          color: var(--error-700);
+        }
       }
     }
   }
@@ -59,6 +90,13 @@
     display: flex;
     justify-content: flex-end;
     gap: calc(var(--padding) / 2);
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .edit-profile {
+    max-width: 50%;
+    margin: 0 auto;
   }
 }
 

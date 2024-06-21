@@ -22,5 +22,6 @@ export type IconName =
   | "paper-plane-top"
   | "cross"
   | "eye"
-  | "eye-crossed";
+  | "eye-crossed"
+  | "warning";
 

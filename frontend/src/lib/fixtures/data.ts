@@ -39,3 +39,33 @@ export const cardMenuOptions: Option[] = [
   },
 ];
 
+// Array of validation messages for password
+export const passwordValidationMessages = [
+  {
+    validationName: "hasLowerCase",
+    isValid: false,
+    message: "Le mot de passe doit contenir au moins une lettre minuscule.",
+  },
+  {
+    validationName: "hasUpperCase",
+    isValid: false,
+    message: "Le mot de passe doit contenir au moins une lettre majuscule.",
+  },
+  {
+    validationName: "hasNumber",
+    isValid: false,
+    message: "Le mot de passe doit contenir au moins un chiffre.",
+  },
+  {
+    validationName: "hasSpecialChar",
+    isValid: false,
+    message:
+      "Le mot de passe doit contenir au moins un caractère spécial (@, $, !, %, *, #, ?, &).",
+  },
+  {
+    validationName: "minLength",
+    isValid: false,
+    message: "Le mot de passe doit contenir au moins 6 caractères.",
+  },
+];
+
