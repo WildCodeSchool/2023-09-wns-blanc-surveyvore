@@ -116,8 +116,7 @@ function NewQuestion({
             onCompleted: (data) => {
                 if (
                     data.createQuestion.type.type === "checkboxes" ||
-                    data.createQuestion.type.type === "radio" ||
-                    data.createQuestion.type.type === "checkbox"
+                    data.createQuestion.type.type === "radio"
                 ) {
                     if (question.answer) {
                         question.answer.map((answer, index) => {
@@ -144,6 +143,8 @@ function NewQuestion({
                                 },
                             });
                         });
+                    } else {
+                        getQuestions();
                     }
                 } else if (data.createQuestion.type.type === "date") {
                     if (question.answer) {
@@ -164,6 +165,8 @@ function NewQuestion({
                                 );
                             },
                         });
+                    } else {
+                        getQuestions();
                     }
                 } else {
                     getQuestions();
@@ -202,7 +205,6 @@ function NewQuestion({
             })
         );
     }
-    
 
     // ----------------------------------return----------------------------------
 
