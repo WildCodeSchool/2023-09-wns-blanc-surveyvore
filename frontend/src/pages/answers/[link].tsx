@@ -79,6 +79,11 @@ const POST_ANSWER = gql`
 
 const TIME_TOAST = 3000;
 
+type ModalProps = {
+  isOpen: boolean;
+  content: string;
+};
+
 function AnswerSurvey() {
   const [questions, setQuestions] = useState<
     QuestionForAnswerPage[] | undefined
@@ -97,7 +102,10 @@ function AnswerSurvey() {
   const router = useRouter();
   const { link } = router.query as { link: string };
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [modal, setModal] = useState<ModalProps>({
+    isOpen: false,
+    content: "",
+  });
 
   let userAnswering: string = "";
   const token = localStorage.getItem("token");
@@ -331,21 +339,11 @@ function AnswerSurvey() {
 
       // check if all questions are answered
       if (getNumberOfQuestions() === Object.keys(answersInForm).length) {
-        // modal to confirm sending answers
-        // console.log("return modal");
-        // return (
-        //   <Modal
-        //     title="Validation d'envoi des réponses"
-        //     setIsOpen={setIsOpen}
-        //     isOpen={isOpen}
-        //   >
-        //     <p>Êtes vous sur de vouloir envoyer vos réponses ?</p>
-        //     <button className="button-send-answer button-md-primary-solid">
-        //       <Icon name="paper-plane-top" />
-        //       Envoyer
-        //     </button>
-        //   </Modal>
-        // );
+        setModal({
+          isOpen: true,
+          content: "Êtes-vous certain de vouloir envoyer vos réponses ?",
+        });
+        return true;
         console.log("every answer completed");
         let answersPosted: boolean = false;
         for (let [key, value] of Object.entries(answersInForm)) {
@@ -510,6 +508,32 @@ function AnswerSurvey() {
           </button>
         </div>
       </form>
+      {modal.isOpen && (
+        <Modal
+          title={modal.content}
+          isOpen={modal.isOpen}
+          setIsOpen={() => setModal({ isOpen: false, content: "" })}
+        >
+          <div className="buttons">
+            <button
+              type="button"
+              onClick={() => {
+                // pendingAction();
+                setModal({ isOpen: false, content: "" });
+              }}
+              className="button-md-error-solid"
+            >
+              Confirmer
+            </button>
+            <button
+              onClick={() => setModal({ isOpen: false, content: "" })}
+              className="button-md-primary-outline"
+            >
+              Annuler
+            </button>
+          </div>
+        </Modal>
+      )}
     </>
   );
 }
