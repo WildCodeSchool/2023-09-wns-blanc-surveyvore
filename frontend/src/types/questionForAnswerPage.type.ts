@@ -1,13 +1,14 @@
 import { IconName } from "./iconName.type";
 
-export type Question = {
+export type QuestionForAnswerPage = {
   id: string;
   title: string;
   type: QuestionType;
-  sort: number;
   description: string;
   isOpen: boolean;
   answer: Answer[] | undefined;
+  isError: boolean;
+  sort: number;
 };
 
 export type QuestionType = {

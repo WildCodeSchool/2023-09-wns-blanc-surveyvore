@@ -15,6 +15,11 @@ export class UserResolver {
     return AuthService.getMe(token);
   }
 
+  @Query(() => String)
+  getUser(@Arg("email") email: string): Promise<User | null> {
+    return UserService.getByEmailWithoutData(email);
+  }
+
   @Mutation(() => User)
   createUser(
     @Arg("email") email: string,
@@ -40,4 +45,3 @@ export class UserResolver {
     return "OK";
   }
 }
-

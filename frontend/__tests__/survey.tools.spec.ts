@@ -47,7 +47,7 @@ describe("displayNumberOfQuestions Fn", () => {
           },
           description: "Description 1",
           isOpen: true,
-          answers: undefined,
+          answer: undefined,
         },
         {
           id: "kfhqsfh",
@@ -59,7 +59,7 @@ describe("displayNumberOfQuestions Fn", () => {
           },
           description: "Description 2",
           isOpen: true,
-          answers: undefined,
+          answer: undefined,
         },
       ],
     };
@@ -80,4 +80,3 @@ describe("displayNumberOfQuestions Fn", () => {
     expect(displayNumberOfQuestions(survey_test_2)).toBe("Aucune question");
   });
 });
-

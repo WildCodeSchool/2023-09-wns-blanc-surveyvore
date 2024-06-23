@@ -1,0 +1,122 @@
+@use "../elements/typography" as *;
+@use "../elements/shadows" as *;
+@use "../elements/colors" as *;
+
+.answer-survey-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  @media screen and (min-width: 480px) {
+    .button-send-answer {
+      width: fit-content;
+      align-self: end;
+    }
+  }
+
+  .answer-survey-data-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    @include shadow("xs");
+    background-color: var(--white);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid var(--grey-200);
+
+    .answer-survey-title-container {
+      display: flex;
+      gap: 1rem;
+      .answer-survey-title {
+        @include title("sm", $font: $font-family-accent, $weight: 500);
+      }
+    }
+
+    .answer-survey-description {
+      white-space: pre-line;
+      @include text("lg");
+      color: var(--grey-600);
+    }
+  }
+
+  .answer-survey-default-questions-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    @include shadow("xs");
+    background-color: var(--white);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid var(--grey-200);
+  }
+
+  @media screen and (min-width: 768px) {
+    .answer-survey-default-questions-container {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .answer-survey-questions-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    .answer-container {
+      display: flex;
+      flex-direction: column;
+      @include shadow("xs");
+      background-color: var(--white);
+      padding: 2rem;
+      border-radius: 12px;
+      border: 1px solid var(--grey-200);
+
+      & > *:not(:last-child, .react-datepicker-wrapper) {
+        margin-bottom: 0.25rem;
+      }
+
+      .react-datepicker-wrapper {
+        input {
+          display: flex;
+        }
+      }
+
+      .react-datepicker-popper {
+        .react-datepicker__day--in-selecting-range {
+          background-color: var(--primary-100);
+        }
+        .react-datepicker__day--selected,
+        .react-datepicker__day--in-range {
+          background-color: var(--primary-600);
+        }
+        .react-datepicker__day:hover {
+          background-color: var(--primary-200);
+        }
+      }
+
+      .checkboxes-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .radios-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
+
+    .is-error {
+      border: 1px solid var(--red-600);
+    }
+  }
+
+  .answer-title {
+    @include text("xl", $font: $font-family-accent, $weight: 500);
+  }
+
+  .answer-description {
+    white-space: pre-line;
+    @include text("md");
+    color: var(--grey-600);
+  }
+}

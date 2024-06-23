@@ -17,19 +17,19 @@ export class UserAnswer extends BaseEntity {
   @Field()
   id: string;
 
-  @Column()
-  @Field()
-  content: string;
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  content?: string;
 
   @ManyToOne(() => Question, (question) => question.id)
   @Field()
   question: Question;
 
   @ManyToOne(() => QuestionAnswer, (questionAnswer) => questionAnswer.id)
-  @Field()
-  answer: QuestionAnswer;
+  @Field({ nullable: true })
+  answer?: QuestionAnswer;
 
   @ManyToOne(() => User, (user) => user.id)
-  @Field()
-  user: User;
+  @Field({ nullable: true })
+  user?: User;
 }

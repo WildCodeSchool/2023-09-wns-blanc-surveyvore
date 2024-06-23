@@ -1,0 +1,11 @@
+@use "../../elements/typography" as *;
+
+.checkbox-plus-description {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  label {
+    @include text("lg", $font: $font-family-accent, $weight: 500);
+  }
+}

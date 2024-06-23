@@ -11,8 +11,8 @@ export function verifyToken(token: string) {
   if (process.env.JWT_SECRET_KEY === undefined) {
     throw new Error();
   }
-
-  return jwt.verify(token, process.env.JWT_SECRET_KEY);
+  const payload = jwt.verify(token, process.env.JWT_SECRET_KEY);
+  return payload;
 }
 
 export async function signIn(email: string, password: string): Promise<string> {
@@ -62,10 +62,9 @@ export function signJwt(payload: any) {
   });
 }
 
-export function getMe(token: string) {
+export async function getMe(token: string) {
   const payload: any = verifyToken(token);
 
-  const user = UserService.getByEmail(payload.email);
+  const user = await UserService.getByEmail(payload.email);
   return user;
 }
-

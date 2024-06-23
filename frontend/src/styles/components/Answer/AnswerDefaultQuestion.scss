@@ -1,0 +1,5 @@
+@use "../../elements/typography" as *;
+
+.input-field label {
+  @include text("xl", $font: $font-family-accent, $weight: 500);
+}
