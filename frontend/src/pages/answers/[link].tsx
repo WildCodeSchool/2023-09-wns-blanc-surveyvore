@@ -106,6 +106,7 @@ function AnswerSurvey() {
     isOpen: false,
     content: "",
   });
+  const [pendingAction, setPendingAction] = useState<() => void>(() => {});
 
   let userAnswering: string = "";
   const token = localStorage.getItem("token");
@@ -339,61 +340,62 @@ function AnswerSurvey() {
 
       // check if all questions are answered
       if (getNumberOfQuestions() === Object.keys(answersInForm).length) {
+        console.log("every answer completed");
         setModal({
           isOpen: true,
           content: "Êtes-vous certain de vouloir envoyer vos réponses ?",
         });
-        return true;
-        console.log("every answer completed");
-        let answersPosted: boolean = false;
-        for (let [key, value] of Object.entries(answersInForm)) {
-          if (value && JSON.parse(value).length === 0) {
-            console.error("Answer is empty");
-          } else {
-            const answersInValue = JSON.parse(value);
-            for (let i = 0; i < answersInValue.length; i++) {
-              const answer = answersInValue[i];
-              if (
-                key.startsWith("input-date_") ||
-                key.startsWith("question_")
-              ) {
-                key = key.split("_")[1];
-              }
-              const regexUUID =
-                /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
-              let answerToSend: string = "";
-              let contentToSend: string = "";
-              if (answer.match(regexUUID)) {
-                answerToSend = answer;
-              } else {
-                contentToSend = answer;
-              }
-              try {
-                await postAnswer({
-                  variables: {
-                    user: token,
-                    answer: answerToSend,
-                    question: key,
-                    content: contentToSend,
-                  },
-                });
-                answersPosted = true;
-              } catch (error) {
-                console.error("Error posting answer:", error);
+        setPendingAction(() => async () => {
+          let answersPosted: boolean = false;
+          for (let [key, value] of Object.entries(answersInForm)) {
+            if (value && JSON.parse(value).length === 0) {
+              console.error("Answer is empty");
+            } else {
+              const answersInValue = JSON.parse(value);
+              for (let i = 0; i < answersInValue.length; i++) {
+                const answer = answersInValue[i];
+                if (
+                  key.startsWith("input-date_") ||
+                  key.startsWith("question_")
+                ) {
+                  key = key.split("_")[1];
+                }
+                const regexUUID =
+                  /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+                let answerToSend: string = "";
+                let contentToSend: string = "";
+                if (answer.match(regexUUID)) {
+                  answerToSend = answer;
+                } else {
+                  contentToSend = answer;
+                }
+                try {
+                  await postAnswer({
+                    variables: {
+                      user: userAnswering,
+                      answer: answerToSend,
+                      question: key,
+                      content: contentToSend,
+                    },
+                  });
+                  answersPosted = true;
+                } catch (error) {
+                  console.error("Error posting answer:", error);
+                }
               }
             }
           }
-        }
-        if (answersPosted) {
-          Toast.fire({
-            icon: "success",
-            title: "Votre formulaire a bien été envoyé.",
-          });
-          await delay(TIME_TOAST);
-          router.push("/");
-        } else {
-          console.error("No answers posted");
-        }
+          if (answersPosted) {
+            Toast.fire({
+              icon: "success",
+              title: "Votre formulaire a bien été envoyé.",
+            });
+            await delay(TIME_TOAST);
+            router.push("/");
+          } else {
+            console.error("No answers posted");
+          }
+        });
       } else {
         console.log(
           `${
@@ -518,7 +520,7 @@ function AnswerSurvey() {
             <button
               type="button"
               onClick={() => {
-                // pendingAction();
+                pendingAction();
                 setModal({ isOpen: false, content: "" });
               }}
               className="button-md-error-solid"

@@ -11,7 +11,6 @@ export async function addAnswer(answerData: {
   user?: string;
 }): Promise<UserAnswer> {
   const newAnswer = new UserAnswer();
-
   if (answerData.content && answerData.content.length > 0) {
     newAnswer.content = answerData.content;
   }
@@ -33,12 +32,10 @@ export async function addAnswer(answerData: {
   let userAnswering: User | null;
   if (user && user.length > 0) {
     userAnswering = await getMe(user);
-    console.log("line 38 :", userAnswering);
     if (userAnswering) {
       newAnswer.user = userAnswering;
     }
   }
-  console.log("line 44 :", newAnswer.user);
 
   return newAnswer.save();
 }
