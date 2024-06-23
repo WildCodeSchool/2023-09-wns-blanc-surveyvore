@@ -5,6 +5,7 @@ import AnswerDefaultQuestion from "@/components/Answer/AnswerDefaultQuestion";
 import AnswerRadioQuestion from "@/components/Answer/AnswerRadioQuestion";
 import AnswerTextQuestion from "@/components/Answer/AnswerTextQuestion";
 import Icon from "@/components/Icon/Icon";
+import Modal from "@/components/Modal/Modal";
 import NavLayout from "@/layouts/NavLayout";
 import { delay } from "@/lib/tools/delay.tools";
 import { Question } from "@/types/question.type";
@@ -95,6 +96,8 @@ function AnswerSurvey() {
 
   const router = useRouter();
   const { link } = router.query as { link: string };
+
+  const [isOpen, setIsOpen] = useState(false);
 
   let userAnswering: string = "";
   const token = localStorage.getItem("token");
@@ -328,6 +331,21 @@ function AnswerSurvey() {
 
       // check if all questions are answered
       if (getNumberOfQuestions() === Object.keys(answersInForm).length) {
+        // modal to confirm sending answers
+        // console.log("return modal");
+        // return (
+        //   <Modal
+        //     title="Validation d'envoi des réponses"
+        //     setIsOpen={setIsOpen}
+        //     isOpen={isOpen}
+        //   >
+        //     <p>Êtes vous sur de vouloir envoyer vos réponses ?</p>
+        //     <button className="button-send-answer button-md-primary-solid">
+        //       <Icon name="paper-plane-top" />
+        //       Envoyer
+        //     </button>
+        //   </Modal>
+        // );
         console.log("every answer completed");
         let answersPosted: boolean = false;
         for (let [key, value] of Object.entries(answersInForm)) {
